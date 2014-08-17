@@ -79,11 +79,12 @@ def find_nearby_stops(x, y):
                     y=float(result["coords"].split(",")[1]),
                     code=result["details"]["code"],
                     short_code=result["details"]["shortCode"],
-                    lines=[dict(line=parse_line(line),
-                                destination=parse_destination(destination),
-                                ) for line, destination in
-                                map(lambda x: x.split(":", 1),
-                                    result["details"]["lines"])],
+                    lines=unique_lines(
+                        [dict(line=parse_line(line),
+                              destination=parse_destination(destination),
+                              ) for line, destination in
+                              map(lambda x: x.split(":", 1),
+                                  result["details"]["lines"])]),
 
                     ) for result in output]
 
@@ -116,11 +117,12 @@ def find_stops(name, x, y):
                     y=float(result["coords"].split(",")[1]),
                     code=result["details"]["code"],
                     short_code=result["details"]["shortCode"],
-                    lines=[dict(line=parse_line(line),
-                                destination=parse_destination(destination),
-                                ) for line, destination in
-                                map(lambda x: x.split(":", 1),
-                                    result["details"]["lines"])],
+                    lines=unique_lines(
+                        [dict(line=parse_line(line),
+                              destination=parse_destination(destination),
+                              ) for line, destination in
+                              map(lambda x: x.split(":", 1),
+                                  result["details"]["lines"])]),
 
                     ) for result in output]
 
@@ -164,3 +166,11 @@ def parse_time_left(departure):
     if departure < now:
         departure += 24*60
     return departure - now
+
+def unique_lines(lines):
+    """Return `lines` with duplicates discarded."""
+    ulines = []
+    for line in lines:
+        if line not in ulines:
+            ulines.append(line)
+    return ulines
