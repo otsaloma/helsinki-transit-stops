@@ -58,25 +58,33 @@ def find_departures(code):
 def find_nearby_stops(x, y):
     """Return a list of stops near given coordinates."""
     url = ("http://api.reittiopas.fi/hsl/prod/"
-           "?request=stops_area"
+           "?request=reverse_geocode"
            "&user=helsinki-transit-stops"
            "&pass=38220661"
            "&format=json"
            "&epsg_in=4326"
            "&epsg_out=4326"
            "&lang=fi"
-           "&center_coordinate={x:.5f},{y:.5f}"
-           "&diameter=2000")
+           "&coordinate={x:.5f},{y:.5f}"
+           "&limit=50"
+           "&radius=1000"
+           "&result_contains=stop")
 
     url = url.format(x=x, y=y)
     output = json.loads(hts.http.request_url(url, "utf_8"))
-    results = [dict(name=result["name"],
-                    address=result["address"],
+    results = [dict(name=result["name"].split(",")[0],
+                    address=result["details"]["address"],
                     city=result["city"],
                     x=float(result["coords"].split(",")[0]),
                     y=float(result["coords"].split(",")[1]),
-                    code=result["code"],
-                    short_code=result["codeShort"],
+                    code=result["details"]["code"],
+                    short_code=result["details"]["shortCode"],
+                    lines=[dict(line=parse_line(line),
+                                destination=parse_destination(destination),
+                                ) for line, destination in
+                                map(lambda x: x.split(":", 1),
+                                    result["details"]["lines"])],
+
                     ) for result in output]
 
     for result in results:
