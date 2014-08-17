@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Transit Stops
+Exec=sailfish-qml harbour-helsinki-transit-stops
+Icon=harbour-helsinki-transit-stops
+Type=Application
+X-Nemo-Application-Type=silica-qt5

@@ -1,0 +1,15 @@
+Installation
+============
+
+To install, run command
+
+    make PREFIX=... install
+
+Uninstallation
+==============
+
+To uninstall, remove files and directories
+
+    .../share/harbour-helsinki-transit-stops/
+    .../share/applications/harbour-helsinki-transit-stops.desktop
+    .../share/icons/hicolor/86x86/apps/harbour-helsinki-transit-stops.png
