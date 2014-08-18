@@ -17,6 +17,7 @@
  */
 
 import QtQuick 2.0
+import QtPositioning 5.0
 import Sailfish.Silica 1.0
 import "."
 
@@ -25,5 +26,10 @@ ApplicationWindow {
     allowedOrientations: Orientation.All
     cover: undefined
     initialPage: MenuPage { id: menu }
+    PositionSource {
+        id: gps
+        active: true
+        updateInterval: 1000
+    }
     Python { id: py }
 }
