@@ -56,16 +56,18 @@ Page {
                     height: Theme.itemSizeSmall
                     text: "Find nearby stops"
                 }
+                onClicked: app.pageStack.push("FindNearbyPage.qml");
             }
             ListItem {
-                id: findByNameItem
+                id: findNameItem
                 contentHeight: Theme.itemSizeSmall
                 ListItemLabel {
-                    color: findByNameItem.highlighted ?
+                    color: findNameItem.highlighted ?
                         Theme.highlightColor : Theme.primaryColor
                     height: Theme.itemSizeSmall
                     text: "Find stops by name"
                 }
+                onClicked: app.pageStack.push("FindNamePage.qml");
             }
         }
         model: ListModel {

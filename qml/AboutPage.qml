@@ -36,11 +36,12 @@ Page {
                 text: "version " + py.evaluate("hts.__version__")
             }
             ListItemLabel {
-                font.pixelSize: Theme.fontSizeExtraSmall
+                font.pixelSize: Theme.fontSizeSmall
                 height: Theme.itemSizeExtraSmall
                 horizontalAlignment: Text.AlignHCenter
                 linkColor: Theme.highlightColor
                 text: '<a href="http://github.com/otsaloma/helsinki-transit-stops">http://github.com/otsaloma/helsinki-transit-stops</a>'
+                wrapMode: Text.WordWrap
                 onLinkActivated: Qt.openUrlExternally(link);
             }
             ListItemLabel {

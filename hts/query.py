@@ -22,7 +22,6 @@ http://developer.reittiopas.fi/pages/en/http-get-interface-version-2.php
 """
 
 import hts
-import json
 import math
 import time
 
@@ -41,7 +40,7 @@ def find_departures(code):
            "&dep_limit=20")
 
     url = url.format(code=code)
-    output = json.loads(hts.http.request_url(url, "utf_8"))
+    output = hts.http.request_json(url, [])
     destinations = dict((line, parse_destination(destination))
                         for line, destination in
                         map(lambda x: x.split(":", 1),
@@ -71,7 +70,7 @@ def find_nearby_stops(x, y):
            "&result_contains=stop")
 
     url = url.format(x=x, y=y)
-    output = json.loads(hts.http.request_url(url, "utf_8"))
+    output = hts.http.request_json(url, [])
     results = [dict(name=result["name"].split(",")[0],
                     address=result["details"]["address"],
                     city=result["city"],
@@ -109,7 +108,7 @@ def find_stops(name, x, y):
            "&loc_types=stop")
 
     url = url.format(name=name)
-    output = json.loads(hts.http.request_url(url, "utf_8"))
+    output = hts.http.request_json(url, [])
     results = [dict(name=result["name"],
                     address=result["details"]["address"],
                     city=result["city"],
@@ -171,6 +170,6 @@ def unique_lines(lines):
     """Return `lines` with duplicates discarded."""
     ulines = []
     for line in lines:
-        if line not in ulines:
+        if not line in ulines:
             ulines.append(line)
     return ulines
