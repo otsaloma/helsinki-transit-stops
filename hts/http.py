@@ -19,7 +19,10 @@
 
 import hts
 import http.client
+import json
+import socket
 import sys
+import traceback
 import urllib.parse
 
 _connections = {}
@@ -66,6 +69,21 @@ def _remove_connection(url):
     except Exception:
         pass
 
+def request_json(url, fallback, encoding="utf_8", retry=1):
+    """Request, parse and return JSON data."""
+    try:
+        text = request_url(url, encoding, retry)
+        if not text and retry > 0:
+            # A blank return is probably an error.
+            _remove_connection(url)
+            text = request_url(url, encoding, retry-1)
+        return json.loads(text)
+    except socket.timeout:
+        return dict(error=True, message="Connection timed out")
+    except Exception:
+        traceback.print_exc()
+        return fallback
+
 def request_url(url, encoding=None, retry=1):
     """
     Request and return data at `url`.
@@ -86,12 +104,7 @@ def request_url(url, encoding=None, retry=1):
 
         blob = response.read()
         if encoding is None: return blob
-        text = blob.decode(encoding, errors="replace")
-        if not text and retry > 0:
-            # A blank return is probably an error.
-            _remove_connection(url)
-            return request_url(url, encoding, retry-1)
-        return text
+        return blob.decode(encoding, errors="replace")
     except Exception as error:
         _remove_connection(url)
         broken = (BrokenPipeError, http.client.BadStatusLine)
