@@ -19,6 +19,8 @@
 
 import contextlib
 import math
+import os
+import sys
 
 
 def calculate_bearing(x1, y1, x2, y2):
@@ -73,6 +75,22 @@ def format_distance(distance, n=2, units="m"):
     distance = round(distance, ndigits)
     fstring = "{{:.{:d}f}} {{}}".format(max(0, ndigits))
     return fstring.format(distance, units)
+
+def makedirs(directory):
+    """Create and return `directory` or raise :exc:`OSError`."""
+    directory = os.path.abspath(directory)
+    if os.path.isdir(directory):
+        return directory
+    try:
+        os.makedirs(directory)
+    except OSError as error:
+        if os.path.isdir(directory):
+            return directory
+        print("Failed to create directory {}: {}"
+              .format(repr(directory), str(error)),
+              file=sys.stderr)
+        raise # OSError
+    return directory
 
 @contextlib.contextmanager
 def silent(*exceptions):

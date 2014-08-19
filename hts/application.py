@@ -26,4 +26,4 @@ class Application:
 
     def __init__(self):
         """Initialize an :class:`Application` instance."""
-        pass
+        self.history = hts.History()

@@ -15,31 +15,17 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-"""Show departures from HSL public transportation stops."""
+"""Standard paths to files."""
 
-__version__ = "0.0"
+import os
 
-try:
-    import pyotherside
-except ImportError:
-    import sys
-    # Allow testing Python backend alone.
-    print("PyOtherSide not found, continuing anyway!",
-          file=sys.stderr)
+__all__ = ("CACHE_HOME_DIR", "CONFIG_HOME_DIR", "DATA_DIR", "DATA_HOME_DIR")
 
-    class pyotherside:
-        def atexit(*args): pass
-        def send(*args): pass
-    sys.modules["pyotherside"] = pyotherside()
+XDG_CACHE_HOME = os.path.expanduser(os.getenv("XDG_CACHE_HOME", "~/.cache"))
+XDG_CONFIG_HOME = os.path.expanduser(os.getenv("XDG_CONFIG_HOME", "~/.config"))
+XDG_DATA_HOME = os.path.expanduser(os.getenv("XDG_DATA_HOME", "~/.local/share"))
 
-from hts.paths import *
-from hts import http
-from hts import util
-from hts import query
-from hts.history import *
-from hts.application import *
-
-def main():
-    """Initialize application."""
-    global app
-    app = Application()
+CACHE_HOME_DIR = os.path.join(XDG_CACHE_HOME, "harbour-helsinki-transit-stops")
+CONFIG_HOME_DIR = os.path.join(XDG_CONFIG_HOME, "harbour-helsinki-transit-stops")
+DATA_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+DATA_HOME_DIR = os.path.join(XDG_DATA_HOME, "harbour-helsinki-transit-stops")
