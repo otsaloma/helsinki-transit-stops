@@ -26,14 +26,14 @@ Page {
     property bool loading: true
     property var results: {}
     property string title: ""
-    // Column width to be set based on data.
-    property int lineWidth: 0
     SilicaListView {
         anchors.fill: parent
         delegate: ListItem {
             id: listItem
             contentHeight: nameLabel.height + addressLabel.height + repeater.height
             property var result: page.results[index]
+            // Column width to be set based on data.
+            property int lineWidth: 0
             ListItemLabel {
                 id: nameLabel
                 color: listItem.highlighted ?
@@ -48,9 +48,7 @@ Page {
                 anchors.top: nameLabel.bottom
                 color: Theme.secondaryColor
                 font.pixelSize: Theme.fontSizeSmall
-                height: implicitHeight + Theme.paddingSmall
-                text: model.dist_label + " " + model.bearing_label +
-                    ", " + model.address
+                text: model.dist_label + " · " + model.address
                 verticalAlignment: Text.AlignVCenter
             }
             Repeater {
@@ -70,14 +68,13 @@ Page {
                         anchors.leftMargin: Theme.paddingLarge
                         color: Theme.secondaryColor
                         font.pixelSize: Theme.fontSizeSmall
-                        horizontalAlignment: Text.AlignRight
                         text: line.line
                         verticalAlignment: Text.AlignVCenter
-                        width: page.lineWidth
+                        width: listItem.lineWidth
                         y: repeater.y + index * row.height
                         Component.onCompleted: {
-                            if (lineLabel.implicitWidth > page.lineWidth)
-                                page.lineWidth = lineLabel.implicitWidth;
+                            if (lineLabel.implicitWidth > listItem.lineWidth)
+                                listItem.lineWidth = lineLabel.implicitWidth;
                         }
                     }
                     Label {
@@ -88,9 +85,15 @@ Page {
                         anchors.top: lineLabel.top
                         color: Theme.secondaryColor
                         font.pixelSize: Theme.fontSizeSmall
-                        text: " → " + line.destination + (index == 2 ? " …" : "")
+                        text: " → " + line.destination
                         truncationMode: TruncationMode.Fade
                         verticalAlignment: Text.AlignVCenter
+                        Component.onCompleted: {
+                            // Add an ellipsis to indicate that only
+                            // a couple first of all lines are shown.
+                            if (index == 2)
+                                destinationLabel.text += "   …"
+                        }
                     }
                     Component.onCompleted: {
                         repeater.height += row.height;
