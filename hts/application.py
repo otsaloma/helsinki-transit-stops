@@ -19,6 +19,8 @@
 
 __all__ = ("Application",)
 
+import hts
+
 
 class Application:
 
@@ -26,4 +28,8 @@ class Application:
 
     def __init__(self):
         """Initialize an :class:`Application` instance."""
-        self.history = hts.History()
+        self.history = hts.HistoryManager()
+
+    def save(self):
+        """Write configuration to files."""
+        self.history.write_names()

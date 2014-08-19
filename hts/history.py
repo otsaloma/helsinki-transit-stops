@@ -28,7 +28,7 @@ class HistoryManager:
 
     """Managing a history of search queries."""
 
-    def __init__(self, max_size=100):
+    def __init__(self, max_size=1000):
         """Initialize a :class:`HistoryManager` instance."""
         self._max_size = max_size
         self._names = []

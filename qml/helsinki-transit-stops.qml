@@ -32,4 +32,8 @@ ApplicationWindow {
         updateInterval: 1000
     }
     Python { id: py }
+    onApplicationActiveChanged: {
+        if (!applicationActive && py.ready)
+            py.call_sync("hts.app.save", []);
+    }
 }

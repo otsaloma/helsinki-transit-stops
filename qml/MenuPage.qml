@@ -65,9 +65,12 @@ Page {
                     color: findNameItem.highlighted ?
                         Theme.highlightColor : Theme.primaryColor
                     height: Theme.itemSizeSmall
-                    text: "Find stops by name"
+                    text: "Find stop by name"
                 }
-                onClicked: app.pageStack.push("FindNamePage.qml");
+                onClicked: {
+                    app.pageStack.push("FindNamePage.qml");
+                    app.pageStack.pushAttached("FindNameResultsPage.qml");
+                }
             }
         }
         model: ListModel {

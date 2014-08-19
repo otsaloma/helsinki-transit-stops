@@ -24,6 +24,7 @@ http://developer.reittiopas.fi/pages/en/http-get-interface-version-2.php
 import hts
 import math
 import time
+import urllib.parse
 
 
 def find_departures(code):
@@ -107,7 +108,7 @@ def find_stops(name, x, y):
            "&key={name}"
            "&loc_types=stop")
 
-    url = url.format(name=name)
+    url = url.format(name=urllib.parse.quote_plus(name))
     output = hts.http.request_json(url, [])
     results = [dict(name=result["name"],
                     address=result["details"]["address"],
