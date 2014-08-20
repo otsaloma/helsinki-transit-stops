@@ -50,13 +50,28 @@ Page {
             ListItem {
                 id: findNearbyItem
                 contentHeight: Theme.itemSizeSmall
+                property bool applicable: gps.position.horizontalAccuracy &&
+                    gps.position.horizontalAccuracy >= 0 &&
+                    gps.position.horizontalAccuracy < 1000
                 ListItemLabel {
+                    id: findNearbyLabel
                     color: findNearbyItem.highlighted ?
                         Theme.highlightColor : Theme.primaryColor
                     height: Theme.itemSizeSmall
+                    opacity: findNearbyItem.applicable ? 1.0 : 0.4
                     text: "Find nearby stops"
                 }
-                onClicked: app.pageStack.push("FindNearbyPage.qml");
+                BusyIndicator {
+                    anchors.right: findNearbyLabel.right
+                    anchors.rightMargin: Theme.paddingLarge
+                    anchors.verticalCenter: findNearbyLabel.verticalCenter
+                    running: !findNearbyItem.applicable
+                    size: BusyIndicatorSize.Medium
+                }
+                onClicked: {
+                    if (findNearbyItem.applicable)
+                        app.pageStack.push("FindNearbyPage.qml");
+                }
             }
             ListItem {
                 id: findNameItem
