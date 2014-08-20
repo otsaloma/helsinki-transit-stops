@@ -18,6 +18,7 @@
 """Miscellaneous helper functions."""
 
 import contextlib
+import json
 import math
 import os
 import sys
@@ -84,13 +85,22 @@ def makedirs(directory):
     try:
         os.makedirs(directory)
     except OSError as error:
-        if os.path.isdir(directory):
-            return directory
         print("Failed to create directory {}: {}"
               .format(repr(directory), str(error)),
               file=sys.stderr)
         raise # OSError
     return directory
+
+def read_json(path):
+    """Read data from JSON file at `path`."""
+    try:
+        with open(path, "r", encoding="utf_8") as f:
+            return json.load(f)
+    except Exception as error:
+        print("Failed to read file {}: {}"
+              .format(repr(path), str(error)),
+              file=sys.stderr)
+        raise # Exception
 
 @contextlib.contextmanager
 def silent(*exceptions):
@@ -99,3 +109,15 @@ def silent(*exceptions):
         yield
     except exceptions:
         pass
+
+def write_json(data, path):
+    """Write `data` to JSON file at `path`."""
+    try:
+        makedirs(os.path.dirname(path))
+        with open(path, "w", encoding="utf_8") as f:
+            json.dump(data, f, ensure_ascii=False, indent=4, sort_keys=True)
+    except Exception as error:
+        print("Failed to write file {}: {}"
+              .format(repr(path), str(error)),
+              file=sys.stderr)
+        raise # Exception

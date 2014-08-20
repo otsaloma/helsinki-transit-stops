@@ -114,5 +114,4 @@ def request_url(url, encoding=None, retry=1):
         print("Failed to download data: {}: {}"
               .format(error.__class__.__name__, str(error)),
               file=sys.stderr)
-
         raise # Exception
