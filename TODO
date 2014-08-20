@@ -3,8 +3,6 @@ Helsinki Transit Stops 0.1
 
  * Add viewing departures
  * Add handling of favorite stops
- * Start/stop PositionSource when appropriate?
- * Wait for valid positioning data before trying to find nearby stops?
 
 Helsinki Transit Stops 1.0
 ==========================

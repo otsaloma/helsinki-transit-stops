@@ -33,7 +33,12 @@ ApplicationWindow {
     }
     Python { id: py }
     onApplicationActiveChanged: {
-        if (!applicationActive && py.ready)
-            py.call_sync("hts.app.save", []);
+        if (applicationActive) {
+            gps.start();
+        } else {
+            gps.stop();
+            if (py.ready)
+                py.call_sync("hts.app.save", []);
+        }
     }
 }
