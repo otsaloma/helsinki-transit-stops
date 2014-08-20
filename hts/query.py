@@ -26,22 +26,24 @@ import math
 import time
 import urllib.parse
 
+URL_PREFIX = ("http://api.reittiopas.fi/hsl/prod/"
+              "?user=helsinki-transit-stops"
+              "&pass=38220661"
+              "&format=json"
+              "&epsg_in=4326"
+              "&epsg_out=4326"
+              "&lang=fi")
+
 
 def find_departures(code):
     """Return a list of departures from given stop."""
-    url = ("http://api.reittiopas.fi/hsl/prod/"
-           "?request=stop"
-           "&user=helsinki-transit-stops"
-           "&pass=38220661"
-           "&format=json"
-           "&epsg_out=4326"
-           "&lang=fi"
-           "&code={code}"
-           "&time_limit=360"
-           "&dep_limit=20")
+    url = URL_PREFIX + ("&request=stop"
+                        "&code={code}"
+                        "&time_limit=360"
+                        "&dep_limit=20")
 
     url = url.format(code=code)
-    output = hts.http.request_json(url, [])
+    output = hts.http.request_json(url, fallback=[])
     destinations = dict((line, parse_destination(destination))
                         for line, destination in
                         map(lambda x: x.split(":", 1),
@@ -57,21 +59,14 @@ def find_departures(code):
 
 def find_nearby_stops(x, y):
     """Return a list of stops near given coordinates."""
-    url = ("http://api.reittiopas.fi/hsl/prod/"
-           "?request=reverse_geocode"
-           "&user=helsinki-transit-stops"
-           "&pass=38220661"
-           "&format=json"
-           "&epsg_in=4326"
-           "&epsg_out=4326"
-           "&lang=fi"
-           "&coordinate={x:.5f},{y:.5f}"
-           "&limit=50"
-           "&radius=1000"
-           "&result_contains=stop")
+    url = URL_PREFIX + ("&request=reverse_geocode"
+                        "&coordinate={x:.5f},{y:.5f}"
+                        "&limit=50"
+                        "&radius=1000"
+                        "&result_contains=stop")
 
     url = url.format(x=x, y=y)
-    output = hts.http.request_json(url, [])
+    output = hts.http.request_json(url, fallback=[])
     results = [dict(name=result["name"].split(",")[0],
                     address=result["details"]["address"],
                     city=result["city"],
@@ -85,31 +80,27 @@ def find_nearby_stops(x, y):
                               ) for line, destination in
                               map(lambda x: x.split(":", 1),
                                   result["details"]["lines"])]),
-
                     ) for result in output]
 
     for result in results:
         coords = (x, y, result["x"], result["y"])
-        result["dist"] = hts.util.calculate_distance(*coords)
-        result["dist_label"] = hts.util.format_distance(result["dist"])
-        result["bearing"] = hts.util.calculate_bearing(*coords)
-        result["bearing_label"] = hts.util.format_bearing(result["bearing"])
+        result.update(dict(
+            dist=hts.util.calculate_distance(*coords),
+            bearing=hts.util.calculate_bearing(*coords)))
+        result.update(dict(
+            dist_label=hts.util.format_distance(result["dist"]),
+            bearing_label=hts.util.format_bearing(result["bearing"])))
+
     return results
 
 def find_stops(name, x, y):
     """Return a list of stops matching `name`."""
-    url = ("http://api.reittiopas.fi/hsl/prod/"
-           "?request=geocode"
-           "&user=helsinki-transit-stops"
-           "&pass=38220661"
-           "&format=json"
-           "&epsg_out=4326"
-           "&lang=fi"
-           "&key={name}"
-           "&loc_types=stop")
+    url = URL_PREFIX + ("&request=geocode"
+                        "&key={name}"
+                        "&loc_types=stop")
 
     url = url.format(name=urllib.parse.quote_plus(name))
-    output = hts.http.request_json(url, [])
+    output = hts.http.request_json(url, fallback=[])
     results = [dict(name=result["name"],
                     address=result["details"]["address"],
                     city=result["city"],
@@ -123,15 +114,17 @@ def find_stops(name, x, y):
                               ) for line, destination in
                               map(lambda x: x.split(":", 1),
                                   result["details"]["lines"])]),
-
                     ) for result in output]
 
     for result in results:
         coords = (x, y, result["x"], result["y"])
-        result["dist"] = hts.util.calculate_distance(*coords)
-        result["dist_label"] = hts.util.format_distance(result["dist"])
-        result["bearing"] = hts.util.calculate_bearing(*coords)
-        result["bearing_label"] = hts.util.format_bearing(result["bearing"])
+        result.update(dict(
+            dist=hts.util.calculate_distance(*coords),
+            bearing=hts.util.calculate_bearing(*coords)))
+        result.update(dict(
+            dist_label=hts.util.format_distance(result["dist"]),
+            bearing_label=hts.util.format_bearing(result["bearing"])))
+
     return results
 
 def parse_destination(destination):
