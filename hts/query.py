@@ -23,6 +23,7 @@ http://developer.reittiopas.fi/pages/en/http-get-interface-version-2.php
 
 import hts
 import math
+import re
 import time
 import urllib.parse
 
@@ -67,7 +68,7 @@ def find_nearby_stops(x, y):
 
     url = url.format(x=x, y=y)
     output = hts.http.request_json(url, fallback=[])
-    results = [dict(name=result["name"].split(",")[0],
+    results = [dict(name=parse_name(result["name"]),
                     address=result["details"]["address"],
                     city=result["city"],
                     x=float(result["coords"].split(",")[0]),
@@ -83,6 +84,8 @@ def find_nearby_stops(x, y):
                     ) for result in output]
 
     for result in results:
+        # Strip trailing municipality from stop name.
+        result["name"] = re.sub(r",[^,]*$", "", result["name"])
         coords = (x, y, result["x"], result["y"])
         result.update(dict(
             dist=hts.util.calculate_distance(*coords),
@@ -101,7 +104,7 @@ def find_stops(name, x, y):
 
     url = url.format(name=urllib.parse.quote_plus(name))
     output = hts.http.request_json(url, fallback=[])
-    results = [dict(name=result["name"],
+    results = [dict(name=parse_name(result["name"]),
                     address=result["details"]["address"],
                     city=result["city"],
                     x=float(result["coords"].split(",")[0]),
@@ -128,21 +131,30 @@ def find_stops(name, x, y):
     return results
 
 def parse_destination(destination):
-    """Parse human readable destination."""
+    """Parse human readable destination name."""
     # Strip platform numbers from terminals.
-    return destination.split(",")[0]
+    destination = destination.split(",")[0]
+    return parse_name(destination)
 
 def parse_line(code):
     """Parse human readable line number from `code`."""
     # Journey Planner returns 7-character JORE-codes.
     if code.startswith(("13", "3")):
         # Metro and trains.
-        return code[4]
-    # Buses and trams.
-    line = code[1:5].strip()
-    while len(line) > 1 and line.startswith("0"):
-        line = line[1:]
+        line = code[4]
+    else:
+        # Buses and trams.
+        line = code[1:5].strip()
+        while len(line) > 1 and line.startswith("0"):
+            line = line[1:]
+    if not line.strip():
+        return "?"
     return line
+
+def parse_name(name):
+    """Parse human readable stop name."""
+    # Fix inconsistent naming of stops at metro stations.
+    return re.sub(r"(\S)\(", r"\1 (", name)
 
 def parse_time(departure):
     """Parse human readable time of `departure`."""
