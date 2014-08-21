@@ -84,7 +84,7 @@ Page {
                 var query = listView.searchField.text.toLowerCase();
                 var nstart = 0;
                 for (var i = 0; i < page.history.length; i++) {
-                    var historyItem = page.history[i].toLowerCase()
+                    var historyItem = page.history[i].toLowerCase();
                     if (query != "" && historyItem.indexOf(query) == 0) {
                         listModel.insert(nstart++, {"name": page.history[i]});
                         if (listModel.count >= 100) break;
@@ -99,8 +99,9 @@ Page {
         VerticalScrollDecorator {}
     }
     onStatusChanged: {
-        if (page.status != PageStatus.Activating) return;
-        page.history = py.evaluate("hts.app.history.names");
-        listView.model.update();
+        if (page.status == PageStatus.Activating) {
+            page.history = py.evaluate("hts.app.history.names");
+            listView.model.update();
+        }
     }
 }

@@ -52,7 +52,7 @@ Page {
                 contentHeight: Theme.itemSizeSmall
                 property bool applicable: gps.position.horizontalAccuracy &&
                     gps.position.horizontalAccuracy >= 0 &&
-                    gps.position.horizontalAccuracy < 1000
+                    gps.position.horizontalAccuracy < 500
                 ListItemLabel {
                     id: findNearbyLabel
                     color: findNearbyItem.highlighted ?

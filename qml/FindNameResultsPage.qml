@@ -26,88 +26,7 @@ Page {
     property bool loading: true
     property var results: {}
     property string title: ""
-    SilicaListView {
-        anchors.fill: parent
-        delegate: ListItem {
-            id: listItem
-            contentHeight: nameLabel.height + addressLabel.height + repeater.height
-            property var result: page.results[index]
-            // Column width to be set based on data.
-            property int lineWidth: 0
-            ListItemLabel {
-                id: nameLabel
-                color: listItem.highlighted ?
-                    Theme.highlightColor : Theme.primaryColor;
-                height: implicitHeight + Theme.paddingMedium
-                text: model.name + " <small>(" + model.short_code + ")</small>"
-                textFormat: Text.RichText
-                verticalAlignment: Text.AlignBottom
-            }
-            ListItemLabel {
-                id: addressLabel
-                anchors.top: nameLabel.bottom
-                color: Theme.secondaryColor
-                font.pixelSize: Theme.fontSizeSmall
-                text: model.dist_label + " · " + model.address
-                verticalAlignment: Text.AlignVCenter
-            }
-            Repeater {
-                id: repeater
-                anchors.top: addressLabel.bottom
-                height: Theme.paddingMedium
-                model: Math.min(3, listItem.result.lines.length)
-                width: parent.width
-                Item {
-                    id: row
-                    height: lineLabel.height
-                    width: parent.width
-                    property var line: listItem.result.lines[index]
-                    Label {
-                        id: lineLabel
-                        anchors.left: parent.left
-                        anchors.leftMargin: Theme.paddingLarge
-                        color: Theme.secondaryColor
-                        font.pixelSize: Theme.fontSizeSmall
-                        text: line.line
-                        verticalAlignment: Text.AlignVCenter
-                        width: listItem.lineWidth
-                        y: repeater.y + index * row.height
-                        Component.onCompleted: {
-                            if (lineLabel.implicitWidth > listItem.lineWidth)
-                                listItem.lineWidth = lineLabel.implicitWidth;
-                        }
-                    }
-                    Label {
-                        id: destinationLabel
-                        anchors.left: lineLabel.right
-                        anchors.right: parent.right
-                        anchors.rightMargin: Theme.paddingLarge
-                        anchors.top: lineLabel.top
-                        color: Theme.secondaryColor
-                        font.pixelSize: Theme.fontSizeSmall
-                        text: " → " + line.destination
-                        truncationMode: TruncationMode.Fade
-                        verticalAlignment: Text.AlignVCenter
-                        Component.onCompleted: {
-                            // Add an ellipsis to indicate that only
-                            // a couple first of all lines are shown.
-                            if (index == 2)
-                                destinationLabel.text += "   …"
-                        }
-                    }
-                    Component.onCompleted: {
-                        repeater.height += row.height;
-                    }
-                }
-            }
-            onClicked: {
-                console.log("Clicked!");
-            }
-        }
-        header: PageHeader { title: page.title }
-        model: ListModel { id: listModel }
-        VerticalScrollDecorator {}
-    }
+    StopListView { id: listView }
     Label {
         id: busyLabel
         anchors.bottom: busyIndicator.top
@@ -135,13 +54,13 @@ Page {
             var searchPage = app.pageStack.previousPage();
             page.populate(searchPage.query);
         } else if (page.status == PageStatus.Inactive) {
-            listModel.clear();
+            listView.model.clear();
         }
     }
     function populate(query) {
         // Query stops from the Python backend.
         py.call_sync("hts.app.history.add_name", [query]);
-        listModel.clear();
+        listView.model.clear();
         var x = gps.position.coordinate.longitude || 0;
         var y = gps.position.coordinate.latitude || 0;
         py.call("hts.query.find_stops", [query, x, y], function(results) {
@@ -153,7 +72,7 @@ Page {
                 page.title = results.length == 1 ?
                     "1 Result" : results.length + " Results";
                 for (var i = 0; i < results.length; i++)
-                    listModel.append(results[i]);
+                    listView.model.append(results[i]);
             } else {
                 page.title = "";
                 busyLabel.text = "No results";
