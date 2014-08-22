@@ -24,6 +24,7 @@ http://developer.reittiopas.fi/pages/en/http-get-interface-version-2.php
 import hts
 import math
 import re
+import socket
 import time
 import urllib.parse
 
@@ -44,7 +45,10 @@ def find_departures(code):
                         "&dep_limit=20")
 
     url = url.format(code=code)
-    output = hts.http.request_json(url, fallback=[])
+    try:
+        output = hts.http.request_json(url, fallback=[])
+    except socket.timeout:
+        return dict(error=True, message="Connection timed out")
     destinations = dict((line, parse_destination(destination))
                         for line, destination in
                         map(lambda x: x.split(":", 1),
@@ -67,7 +71,10 @@ def find_nearby_stops(x, y):
                         "&result_contains=stop")
 
     url = url.format(x=x, y=y)
-    output = hts.http.request_json(url, fallback=[])
+    try:
+        output = hts.http.request_json(url, fallback=[])
+    except socket.timeout:
+        return dict(error=True, message="Connection timed out")
     results = [dict(name=parse_name(result["name"]),
                     address=result["details"]["address"],
                     city=result["city"],
@@ -103,7 +110,10 @@ def find_stops(name, x, y):
                         "&loc_types=stop")
 
     url = url.format(name=urllib.parse.quote_plus(name))
-    output = hts.http.request_json(url, fallback=[])
+    try:
+        output = hts.http.request_json(url, fallback=[])
+    except socket.timeout:
+        return dict(error=True, message="Connection timed out")
     results = [dict(name=parse_name(result["name"]),
                     address=result["details"]["address"],
                     city=result["city"],

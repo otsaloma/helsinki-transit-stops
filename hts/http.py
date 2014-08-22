@@ -20,7 +20,6 @@
 import hts
 import http.client
 import json
-import socket
 import sys
 import traceback
 import urllib.parse
@@ -78,8 +77,6 @@ def request_json(url, fallback, encoding="utf_8", retry=1):
             _remove_connection(url)
             text = request_url(url, encoding, retry-1)
         return json.loads(text)
-    except socket.timeout:
-        return dict(error=True, message="Connection timed out")
     except Exception:
         traceback.print_exc()
         return fallback
