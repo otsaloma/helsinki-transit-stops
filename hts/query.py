@@ -83,9 +83,10 @@ def find_nearby_stops(x, y):
                     code=result["details"]["code"],
                     short_code=result["details"]["shortCode"],
                     lines=unique_lines(
-                        [dict(line=parse_line(line),
+                        [dict(code=code,
+                              line=parse_line(code),
                               destination=parse_destination(destination),
-                              ) for line, destination in
+                              ) for code, destination in
                               map(lambda x: x.split(":", 1),
                                   result["details"]["lines"])]),
                     ) for result in output]
@@ -93,6 +94,8 @@ def find_nearby_stops(x, y):
     for result in results:
         # Strip trailing municipality from stop name.
         result["name"] = re.sub(r",[^,]*$", "", result["name"])
+        linecodes = [x.pop("code") for x in result["lines"]]
+        result["type"] = guess_type(linecodes)
         coords = (x, y, result["x"], result["y"])
         result.update(dict(
             dist=hts.util.calculate_distance(*coords),
@@ -122,14 +125,17 @@ def find_stops(name, x, y):
                     code=result["details"]["code"],
                     short_code=result["details"]["shortCode"],
                     lines=unique_lines(
-                        [dict(line=parse_line(line),
+                        [dict(code=code,
+                              line=parse_line(code),
                               destination=parse_destination(destination),
-                              ) for line, destination in
+                              ) for code, destination in
                               map(lambda x: x.split(":", 1),
                                   result["details"]["lines"])]),
                     ) for result in output]
 
     for result in results:
+        linecodes = [x.pop("code") for x in result["lines"]]
+        result["type"] = guess_type(linecodes)
         coords = (x, y, result["x"], result["y"])
         result.update(dict(
             dist=hts.util.calculate_distance(*coords),
@@ -139,6 +145,22 @@ def find_stops(name, x, y):
             bearing_label=hts.util.format_bearing(result["bearing"])))
 
     return results
+
+def guess_type(codes):
+    """Guess stop type from line `codes`."""
+    for code in codes:
+        if code.startswith("3"): return "train"
+        if code.startswith("13"): return "metro"
+        if code.startswith("1019"): return "ferry"
+        line = code[1:4].strip()
+        while len(line) > 1 and line.startswith("0"):
+            line = line[1:]
+        if line and line.isnumeric():
+            if int(line) <= 10:
+                return "tram"
+    # In addition to actual bus stops,
+    # fall back on bus for unrecognized types.
+    return "bus"
 
 def parse_destination(destination):
     """Parse human readable destination name."""
