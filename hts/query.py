@@ -94,7 +94,7 @@ def find_nearby_stops(x, y):
     for result in results:
         # Strip trailing municipality from stop name.
         result["name"] = re.sub(r",[^,]*$", "", result["name"])
-        linecodes = [x.pop("code") for x in result["lines"]]
+        linecodes = [line.pop("code") for line in result["lines"]]
         result["type"] = guess_type(linecodes)
         coords = (x, y, result["x"], result["y"])
         result.update(dict(
@@ -134,7 +134,7 @@ def find_stops(name, x, y):
                     ) for result in output]
 
     for result in results:
-        linecodes = [x.pop("code") for x in result["lines"]]
+        linecodes = [line.pop("code") for line in result["lines"]]
         result["type"] = guess_type(linecodes)
         coords = (x, y, result["x"], result["y"])
         result.update(dict(

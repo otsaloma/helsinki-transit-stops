@@ -32,13 +32,14 @@ class HistoryManager:
         """Initialize a :class:`HistoryManager` instance."""
         self._max_size = max_size
         self._names = []
-        self._read_names()
+        self._path = os.path.join(hts.CONFIG_HOME_DIR, "history.json")
+        self._read()
 
-    def add_name(self, name):
+    def add(self, name):
         """Add `name` to the list of names."""
         name = name.strip()
         if not name: return
-        self.remove_name(name)
+        self.remove(name)
         self._names.insert(0, name)
 
     @property
@@ -46,35 +47,20 @@ class HistoryManager:
         """Return a list of names."""
         return self._names[:]
 
-    def _read_names(self):
+    def _read(self):
         """Read list of names from file."""
-        path = os.path.join(hts.CONFIG_HOME_DIR, "names.history")
-        try:
-            if os.path.isfile(path):
-                with open(path, "r", encoding="utf_8") as f:
-                    self._names = [x.strip() for x in f.read().splitlines()]
-                    self._names = list(filter(None, self._names))
-        except Exception as error:
-            print("Failed to read file '{}': {}"
-                  .format(path, str(error)),
-                  file=sys.stderr)
+        with hts.util.silent(Exception):
+            self._names = hts.util.read_json(self._path)
 
-    def remove_name(self, name):
+    def remove(self, name):
         """Remove `name` from the list of names."""
         name = name.strip().lower()
         for i in list(reversed(range(len(self._names)))):
             if self._names[i].lower() == name:
                 self._names.pop(i)
 
-    def write_names(self):
+    def write(self):
         """Write list of names to file."""
         names = self._names[:self._max_size]
-        path = os.path.join(hts.CONFIG_HOME_DIR, "names.history")
-        try:
-            hts.util.makedirs(os.path.dirname(path))
-            with open(path, "w", encoding="utf_8") as f:
-                f.writelines("\n".join(names) + "\n")
-        except Exception as error:
-            print("Failed to write file '{}': {}"
-                  .format(path, str(error)),
-                  file=sys.stderr)
+        with hts.util.silent(Exception):
+            hts.util.write_json(names, self._path)

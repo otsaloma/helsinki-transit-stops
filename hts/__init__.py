@@ -36,6 +36,7 @@ from hts.paths import *
 from hts import http
 from hts import util
 from hts import query
+from hts.favorites import *
 from hts.history import *
 from hts.application import *
 

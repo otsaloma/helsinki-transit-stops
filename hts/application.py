@@ -28,8 +28,10 @@ class Application:
 
     def __init__(self):
         """Initialize an :class:`Application` instance."""
+        self.favorites = hts.Favorites()
         self.history = hts.HistoryManager()
 
     def save(self):
-        """Write configuration to files."""
-        self.history.write_names()
+        """Write configuration files."""
+        self.favorites.write()
+        self.history.write()

@@ -57,7 +57,7 @@ Page {
                 app.pageStack.navigateForward();
             }
             function remove() {
-                py.call_sync("hts.app.history.remove_name", [model.name]);
+                py.call_sync("hts.app.history.remove", [model.name]);
                 listView.model.remove(index);
             }
         }
