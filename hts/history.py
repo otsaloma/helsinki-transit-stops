@@ -19,7 +19,6 @@
 
 import hts
 import os
-import sys
 
 __all__ = ("HistoryManager",)
 
@@ -49,8 +48,9 @@ class HistoryManager:
 
     def _read(self):
         """Read list of names from file."""
-        with hts.util.silent(Exception):
-            self._names = hts.util.read_json(self._path)
+        if os.path.isfile(self._path):
+            with hts.util.silent(Exception):
+                self._names = hts.util.read_json(self._path)
 
     def remove(self, name):
         """Remove `name` from the list of names."""

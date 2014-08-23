@@ -28,15 +28,13 @@ class Stop:
 
     """A transit stop and its metadata."""
 
-    def __init__(self, **kwargs):
+    def __init__(self, code, name, type, x, y):
         """Initialize a :class:`Stop` instance."""
-        self.code = None
-        self.name = None
-        self.type = None
-        self.x = None
-        self.y = None
-        for name in set(kwargs) & set(dir(self)):
-            setattr(self, name, kwargs[name])
+        self.code = code
+        self.name = name
+        self.type = type
+        self.x = x
+        self.y = y
 
 
 class Favorites:
@@ -52,8 +50,7 @@ class Favorites:
     def add(self, code, name, type, x, y):
         """Add stop to the list of stops."""
         self.remove(code)
-        stop = Stop(code=code, name=name, type=type, x=x, y=y)
-        self._stops.append(stop)
+        self._stops.append(Stop(code, name, type, x, y))
 
     def has(self, code):
         """Return ``True`` if `code` is among stops."""
@@ -63,9 +60,10 @@ class Favorites:
         return False
 
     def _read(self):
-        """Read list of favorites from file."""
-        with hts.util.silent(Exception):
-            self._stops = hts.util.read_json(self._path)
+        """Read list of stops from file."""
+        if os.path.isfile(self._path):
+            with hts.util.silent(Exception):
+                self._stops = hts.util.read_json(self._path)
 
     def remove(self, code):
         """Remove stop from the list of stops."""
@@ -81,6 +79,6 @@ class Favorites:
         return stops
 
     def write(self):
-        """Write list of favorites to file."""
+        """Write list of stops to file."""
         with hts.util.silent(Exception):
             hts.util.write_json(self._stops, self._path)

@@ -43,7 +43,7 @@ SilicaListView {
             anchors.top: nameLabel.bottom
             color: Theme.secondaryColor
             font.pixelSize: Theme.fontSizeSmall
-            text: model.address + " · " + model.dist_label
+            text: model.address + " · " + model.dist
             verticalAlignment: Text.AlignVCenter
         }
         Repeater {

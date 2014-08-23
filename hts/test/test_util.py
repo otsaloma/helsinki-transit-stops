@@ -20,11 +20,6 @@ import hts.test
 
 class TestModule(hts.test.TestCase):
 
-    def test_calculate_bearing(self):
-        # From Helsinki to Lissabon.
-        bearing = hts.util.calculate_bearing(24.94, 60.17, -9.14, 38.72)
-        assert round(bearing) == 240
-
     def test_calculate_distance(self):
         # From Helsinki to Lissabon.
         dist = hts.util.calculate_distance(24.94, 60.17, -9.14, 38.72)

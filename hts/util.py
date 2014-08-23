@@ -24,18 +24,6 @@ import os
 import sys
 
 
-def calculate_bearing(x1, y1, x2, y2):
-    """Calculate bearing in degrees from point 1 to point 2."""
-    # This is the initial bearing on the great-circle path.
-    # http://www.movable-type.co.uk/scripts/latlong.html
-    x1, y1, x2, y2 = map(math.radians, (x1, y1, x2, y2))
-    x = (math.cos(y1) * math.sin(y2) -
-         math.sin(y1) * math.cos(y2) * math.cos(x2-x1))
-
-    y = math.sin(x2-x1) * math.cos(y2)
-    bearing = math.degrees(math.atan2(y, x))
-    return (bearing + 360) % 360
-
 def calculate_distance(x1, y1, x2, y2):
     """Calculate distance in meters from point 1 to point 2."""
     # Using the haversine formula.
@@ -46,22 +34,6 @@ def calculate_distance(x1, y1, x2, y2):
 
     c = 2 * math.atan2(math.sqrt(a), math.sqrt(1-a))
     return 6371000 * c
-
-def format_bearing(bearing):
-    """Format `bearing` to a human readable string."""
-    bearing = (bearing + 360) % 360
-    bearing = int(round(bearing/45)*45)
-    if bearing ==   0: return "north"
-    if bearing ==  45: return "north-east"
-    if bearing ==  90: return "east"
-    if bearing == 135: return "south-east"
-    if bearing == 180: return "south"
-    if bearing == 225: return "south-west"
-    if bearing == 270: return "west"
-    if bearing == 315: return "north-west"
-    if bearing == 360: return "north"
-    raise ValueError("Unexpected bearing: {}"
-                     .format(repr(bearing)))
 
 def format_distance(distance, n=2, units="m"):
     """Format `distance` to `n` significant digits and unit label."""

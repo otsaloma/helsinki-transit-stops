@@ -49,8 +49,8 @@ def find_departures(code):
         output = hts.http.request_json(url, fallback=[])
     except socket.timeout:
         return dict(error=True, message="Connection timed out")
-    destinations = dict((line, parse_destination(destination))
-                        for line, destination in
+    destinations = dict((code, parse_destination(destination))
+                        for code, destination in
                         map(lambda x: x.split(":", 1),
                             output[0]["lines"]))
 
@@ -77,7 +77,6 @@ def find_nearby_stops(x, y):
         return dict(error=True, message="Connection timed out")
     results = [dict(name=parse_name(result["name"]),
                     address=result["details"]["address"],
-                    city=result["city"],
                     x=float(result["coords"].split(",")[0]),
                     y=float(result["coords"].split(",")[1]),
                     code=result["details"]["code"],
@@ -97,13 +96,8 @@ def find_nearby_stops(x, y):
         linecodes = [line.pop("code") for line in result["lines"]]
         result["type"] = guess_type(linecodes)
         coords = (x, y, result["x"], result["y"])
-        result.update(dict(
-            dist=hts.util.calculate_distance(*coords),
-            bearing=hts.util.calculate_bearing(*coords)))
-        result.update(dict(
-            dist_label=hts.util.format_distance(result["dist"]),
-            bearing_label=hts.util.format_bearing(result["bearing"])))
-
+        dist = hts.util.calculate_distance(*coords)
+        result["dist"] = hts.util.format_distance(dist)
     return results
 
 def find_stops(name, x, y):
@@ -119,7 +113,6 @@ def find_stops(name, x, y):
         return dict(error=True, message="Connection timed out")
     results = [dict(name=parse_name(result["name"]),
                     address=result["details"]["address"],
-                    city=result["city"],
                     x=float(result["coords"].split(",")[0]),
                     y=float(result["coords"].split(",")[1]),
                     code=result["details"]["code"],
@@ -137,17 +130,13 @@ def find_stops(name, x, y):
         linecodes = [line.pop("code") for line in result["lines"]]
         result["type"] = guess_type(linecodes)
         coords = (x, y, result["x"], result["y"])
-        result.update(dict(
-            dist=hts.util.calculate_distance(*coords),
-            bearing=hts.util.calculate_bearing(*coords)))
-        result.update(dict(
-            dist_label=hts.util.format_distance(result["dist"]),
-            bearing_label=hts.util.format_bearing(result["bearing"])))
-
+        dist = hts.util.calculate_distance(*coords)
+        result["dist"] = hts.util.format_distance(dist)
     return results
 
 def guess_type(codes):
     """Guess stop type from line `codes`."""
+    # Journey Planner returns 7-character JORE-codes.
     for code in codes:
         if code.startswith("3"): return "train"
         if code.startswith("13"): return "metro"

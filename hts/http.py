@@ -32,10 +32,9 @@ HEADERS = {"Connection": "Keep-Alive",
 
 def _get_connection(url, timeout=None):
     """Return HTTP connection to `url`."""
-    try:
+    with hts.util.silent(KeyError):
         return _connections[_get_key(url)]
-    except KeyError:
-        return _new_connection(url, timeout)
+    return _new_connection(url, timeout)
 
 def _get_connection_class(url):
     """Return HTTP connection class for `url`."""
@@ -62,11 +61,8 @@ def _new_connection(url, timeout=None):
 
 def _remove_connection(url):
     """Close and remove connection to `url` from the pool."""
-    try:
-        httpc = _connections.pop(_get_key(url))
-        httpc.close()
-    except Exception:
-        pass
+    with hts.util.silent(Exception):
+        _connections.pop(_get_key(url)).close()
 
 def request_json(url, fallback, encoding="utf_8", retry=1):
     """Request, parse and return JSON data."""
