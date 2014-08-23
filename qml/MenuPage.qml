@@ -59,7 +59,7 @@ Page {
                         Theme.highlightColor : Theme.primaryColor
                     height: Theme.itemSizeSmall
                     opacity: findNearbyItem.applicable ? 1.0 : 0.4
-                    text: "Find nearby stops"
+                    text: "List nearby stops"
                 }
                 BusyIndicator {
                     anchors.right: findNearbyLabel.right
@@ -70,7 +70,7 @@ Page {
                 }
                 onClicked: {
                     if (findNearbyItem.applicable)
-                        app.pageStack.push("FindNearbyPage.qml");
+                        app.pageStack.push("NearbyPage.qml");
                 }
             }
             ListItem {
@@ -83,8 +83,8 @@ Page {
                     text: "Find stop by name"
                 }
                 onClicked: {
-                    app.pageStack.push("FindNamePage.qml");
-                    app.pageStack.pushAttached("FindNameResultsPage.qml");
+                    app.pageStack.push("SearchPage.qml");
+                    app.pageStack.pushAttached("SearchResultsPage.qml");
                 }
             }
         }

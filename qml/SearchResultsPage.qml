@@ -70,12 +70,12 @@ Page {
             } else if (results.length > 0) {
                 page.results = results;
                 page.title = results.length == 1 ?
-                    "1 Result" : results.length + " Results";
+                    "1 Stop" : results.length + " Stops";
                 for (var i = 0; i < results.length; i++)
                     listView.model.append(results[i]);
             } else {
                 page.title = "";
-                busyLabel.text = "No results";
+                busyLabel.text = "No stops found";
             }
             page.loading = false;
         });
