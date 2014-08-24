@@ -35,6 +35,22 @@ def calculate_distance(x1, y1, x2, y2):
     c = 2 * math.atan2(math.sqrt(a), math.sqrt(1-a))
     return 6371000 * c
 
+def departure_time_to_color(dist, departure):
+    """
+    Return color to use for departure.
+
+    `dist` should be straight-line distance to stop in meters and
+    `departure` should be the Unix time of departure.
+    """
+    # Use walking speeds from reittiopas.fi: 70 m/min for normal
+    # and 100 m/min for fast speed.
+    import time
+    dist = 1.2 * dist
+    left = (departure - time.time()) / 60
+    if dist /  70 <= left: return "#4E9A06"
+    if dist / 100 <= left: return "#FCE94F"
+    return "#EF2929"
+
 def format_distance(distance, n=2, units="m"):
     """Format `distance` to `n` significant digits and unit label."""
     # XXX: We might need to support for non-SI units here.

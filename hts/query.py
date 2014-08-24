@@ -21,11 +21,11 @@ Query stops and departures from the HSL Journey Planner API.
 http://developer.reittiopas.fi/pages/en/http-get-interface-version-2.php
 """
 
+import datetime
 import hts
 import math
 import re
 import socket
-import time
 import urllib.parse
 
 URL_PREFIX = ("http://api.reittiopas.fi/hsl/prod/"
@@ -49,20 +49,20 @@ def find_departures(code):
         output = hts.http.request_json(url, fallback=[])
     except socket.timeout:
         return dict(error=True, message="Connection timed out")
-    destinations = dict((code, parse_destination(destination))
-                        for code, destination in
-                        map(lambda x: x.split(":", 1),
-                            output[0]["lines"]))
+    if not output or not output[0]:
+        return []
+    destinations = dict(
+        (code, parse_destination(destination))
+        for code, destination in
+        map(lambda x: x.split(":", 1),
+            output[0]["lines"]))
 
-    results = [dict(time=parse_time(departure["time"]),
-                    time_left=parse_time_left(departure["time"]),
-                    line=parse_line(departure["code"]),
-                    destination=destinations[departure["code"]],
-                    ) for departure in output[0]["departures"]]
-
-    for result in results:
-        if result["time_left"] <= 10.5:
-            result["time"] = "{:.0f} min".format(result["time_left"])
+    results = [dict(
+        time=parse_time(departure["time"]),
+        unix_time=parse_unix_time(departure["time"]),
+        line=parse_line(departure["code"]),
+        destination=destinations[departure["code"]],
+    ) for departure in output[0]["departures"]]
     return results
 
 def find_nearby_stops(x, y):
@@ -78,21 +78,22 @@ def find_nearby_stops(x, y):
         output = hts.http.request_json(url, fallback=[])
     except socket.timeout:
         return dict(error=True, message="Connection timed out")
-    results = [dict(name=parse_name(result["name"]),
-                    address=result["details"]["address"],
-                    x=float(result["coords"].split(",")[0]),
-                    y=float(result["coords"].split(",")[1]),
-                    code=result["details"]["code"],
-                    short_code=result["details"]["shortCode"],
-                    lines=unique_lines(
-                        [dict(code=code,
-                              line=parse_line(code),
-                              destination=parse_destination(destination),
-                              ) for code, destination in
-                              map(lambda x: x.split(":", 1),
-                                  result["details"]["lines"])]),
-                    ) for result in output]
-
+    if not output: return []
+    results = [dict(
+        name=parse_name(result["name"]),
+        address=result["details"]["address"],
+        x=float(result["coords"].split(",")[0]),
+        y=float(result["coords"].split(",")[1]),
+        code=result["details"]["code"],
+        short_code=result["details"]["shortCode"],
+        lines=unique_lines([dict(
+            code=code,
+            line=parse_line(code),
+            destination=parse_destination(destination),
+        ) for code, destination in
+          map(lambda x: x.split(":", 1),
+              result["details"]["lines"])]),
+    ) for result in output]
     for result in results:
         # Strip trailing municipality from stop name.
         result["name"] = re.sub(r",[^,]*$", "", result["name"])
@@ -114,21 +115,22 @@ def find_stops(name, x, y):
         output = hts.http.request_json(url, fallback=[])
     except socket.timeout:
         return dict(error=True, message="Connection timed out")
-    results = [dict(name=parse_name(result["name"]),
-                    address=result["details"]["address"],
-                    x=float(result["coords"].split(",")[0]),
-                    y=float(result["coords"].split(",")[1]),
-                    code=result["details"]["code"],
-                    short_code=result["details"]["shortCode"],
-                    lines=unique_lines(
-                        [dict(code=code,
-                              line=parse_line(code),
-                              destination=parse_destination(destination),
-                              ) for code, destination in
-                              map(lambda x: x.split(":", 1),
-                                  result["details"]["lines"])]),
-                    ) for result in output]
-
+    if not output: return []
+    results = [dict(
+        name=parse_name(result["name"]),
+        address=result["details"]["address"],
+        x=float(result["coords"].split(",")[0]),
+        y=float(result["coords"].split(",")[1]),
+        code=result["details"]["code"],
+        short_code=result["details"]["shortCode"],
+        lines=unique_lines([dict(
+            code=code,
+            line=parse_line(code),
+            destination=parse_destination(destination),
+        ) for code, destination in
+          map(lambda x: x.split(":", 1),
+              result["details"]["lines"])]),
+    ) for result in output]
     for result in results:
         linecodes = [line.pop("code") for line in result["lines"]]
         result["type"] = guess_type(linecodes)
@@ -182,19 +184,23 @@ def parse_name(name):
 
 def parse_time(departure):
     """Parse human readable time of `departure`."""
+    # Journey Planner returns a 'HHMM' string.
     departure = float(departure)
     hour = math.floor(departure/100) % 24
-    return "{:02.0f}:{:02.0f}".format(hour, departure % 100)
+    minute = departure % 100
+    return "{:02.0f}:{:02.0f}".format(hour, minute)
 
-def parse_time_left(departure):
-    """Parse amount of minutes left to `departure`."""
-    departure = float(departure)
-    departure = (math.floor(departure/100) % 24) * 60 + (departure % 100)
-    now = time.localtime()
-    now = now.tm_hour * 60 + now.tm_min + now.tm_sec/60
-    if departure < now:
-        departure += 24*60
-    return departure - now
+def parse_unix_time(departure):
+    """Parse Unix time from `departure`."""
+    # Journey Planner returns a 'HHMM' string.
+    hour = math.floor(departure/100) % 24
+    minute = departure % 100
+    now = datetime.datetime.today()
+    departure = now.replace(hour=hour, minute=minute)
+    departure = departure.timestamp()
+    if departure < now.timestamp() - 3600:
+        departure = departure + 86400
+    return departure
 
 def unique_lines(lines):
     """Return `lines` with duplicates discarded."""

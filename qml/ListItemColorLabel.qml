@@ -20,7 +20,6 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 
 Label {
-    id: label
     anchors.left: parent.left
     anchors.leftMargin: 2*Theme.paddingLarge + Theme.paddingMedium
     anchors.right: parent.right
@@ -35,7 +34,7 @@ Label {
         anchors.rightMargin: Theme.paddingLarge
         anchors.top: parent.top
         anchors.topMargin: Theme.paddingMedium
-        color: label.blockColor
+        color: parent.blockColor
         width: Theme.paddingMedium
     }
 }

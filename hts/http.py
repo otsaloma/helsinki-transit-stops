@@ -68,10 +68,12 @@ def request_json(url, fallback, encoding="utf_8", retry=1):
     """Request, parse and return JSON data."""
     try:
         text = request_url(url, encoding, retry)
-        if not text.strip() and retry > 0:
+        if not text.strip():
             # A blank return is probably an error.
-            _remove_connection(url)
-            text = request_url(url, encoding, retry-1)
+            if retry > 0:
+                _remove_connection(url)
+                return request_json(url, fallback, encoding, retry-1)
+            raise Exception("Blank")
         return json.loads(text)
     except Exception:
         traceback.print_exc()

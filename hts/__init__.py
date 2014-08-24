@@ -42,7 +42,6 @@ from hts.application import *
 
 def main():
     """Initialize application."""
-    import pyotherside
     global app
     app = Application()
     pyotherside.atexit(app.save)

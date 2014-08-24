@@ -43,13 +43,11 @@ Page {
                 height: Theme.itemSizeSmall
                 text: model.name
             }
-            Component {
+            ContextMenu {
                 id: contextMenu
-                ContextMenu {
-                    MenuItem {
-                        text: "Remove"
-                        onClicked: listItem.remove();
-                    }
+                MenuItem {
+                    text: "Remove"
+                    onClicked: listItem.remove();
                 }
             }
             onClicked: {

@@ -24,11 +24,12 @@ import "."
 Page {
     id: page
     allowedOrientations: Orientation.All
-    property string code: ""
     property var coordinate: QtPositioning.coordinate(0, 0)
     property bool loading: true
-    property string name: ""
     property var results: {}
+    property string stopCode: ""
+    property string stopName: ""
+    property string stopType: ""
     property string title: ""
     // Column widths to be set based on data.
     property var timeWidth: 0
@@ -38,13 +39,13 @@ Page {
         anchors.fill: parent
         delegate: ListItem {
             id: listItem
-            contentHeight: Theme.itemSizeSmall
+            contentHeight: Theme.itemSizeExtraSmall
             property var result: page.results[index]
             Label {
                 id: timeLabel
                 anchors.left: parent.left
                 anchors.leftMargin: 2*Theme.paddingLarge + Theme.paddingMedium
-                height: Theme.itemSizeSmall
+                height: Theme.itemSizeExtraSmall
                 horizontalAlignment: Text.AlignRight
                 text: model.time
                 verticalAlignment: Text.AlignVCenter
@@ -57,9 +58,9 @@ Page {
             Label {
                 id: lineLabel
                 anchors.left: timeLabel.right
-                anchors.leftMargin: Theme.paddingLarge
+                anchors.leftMargin: 2*Theme.paddingLarge
                 anchors.top: timeLabel.top
-                height: Theme.itemSizeSmall
+                height: Theme.itemSizeExtraSmall
                 horizontalAlignment: Text.AlignRight
                 text: model.line
                 verticalAlignment: Text.AlignVCenter
@@ -72,12 +73,13 @@ Page {
             Label {
                 id: destinationLabel
                 anchors.left: lineLabel.right
+                anchors.leftMargin: Theme.paddingLarge
                 anchors.right: parent.right
                 anchors.rightMargin: Theme.paddingLarge
-                anchors.top: lineLabel.top
+                anchors.top: timeLabel.top
                 color: Theme.secondaryColor
-                height: Theme.itemSizeSmall
-                text: " → " + model.destination
+                height: Theme.itemSizeExtraSmall
+                text: model.destination
                 truncationMode: TruncationMode.Fade
                 verticalAlignment: Text.AlignVCenter
             }
@@ -89,23 +91,17 @@ Page {
                 anchors.rightMargin: Theme.paddingLarge
                 anchors.top: timeLabel.top
                 anchors.topMargin: Theme.paddingMedium
-                color: "#4E9A06";
+                color: "#888888";
                 width: Theme.paddingMedium
                 property var position: gps.position
                 Component.onCompleted: block.updateColor();
                 onPositionChanged: block.updateColor();
                 function updateColor() {
                     // Color block based on whether one can make it in time.
-                    // Normal walking speed 70 m/min, fast 100 m/min,
-                    // from the HSL Journey Planner, reittiopas.fi.
-                    var dist = 1.2*gps.position.coordinate.distanceTo(page.coordinate);
-                    if (dist / 70 < model.time_left) {
-                        block.color = "#4E9A06";
-                    } else if (dist / 100 < model.time_left) {
-                        block.color = "#FCE94F";
-                    } else {
-                        block.color = "#EF2929";
-                    }
+                    var dist = gps.position.coordinate.distanceTo(page.coordinate);
+                    block.color = py.call_sync("hts.util.departure_time_to_color",
+                                               [dist, model.unix_time]);
+
                 }
             }
         }
@@ -147,13 +143,13 @@ Page {
         listView.model.clear();
         page.timeWidth = 0;
         page.lineWidth = 0;
-        py.call("hts.query.find_departures", [page.code], function(results) {
-            if (results.error && results.message) {
+        py.call("hts.query.find_departures", [page.stopCode], function(results) {
+            if (results && results.error && results.message) {
                 page.title = "";
                 busyLabel.text = results.message;
-            } else if (results.length > 0) {
+            } else if (results && results.length > 0) {
                 page.results = results;
-                page.title = page.name;
+                page.title = page.stopName;
                 for (var i = 0; i < results.length; i++)
                     listView.model.append(results[i]);
             } else {

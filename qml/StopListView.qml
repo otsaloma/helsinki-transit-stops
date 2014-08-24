@@ -17,6 +17,7 @@
  */
 
 import QtQuick 2.0
+import QtPositioning 5.0
 import Sailfish.Silica 1.0
 import "."
 
@@ -46,7 +47,6 @@ SilicaListView {
             color: Theme.secondaryColor
             font.pixelSize: Theme.fontSizeSmall
             text: model.address + " · " + model.dist
-            verticalAlignment: Text.AlignVCenter
         }
         Repeater {
             // List at most three lines using the stop along with their
@@ -55,8 +55,7 @@ SilicaListView {
             id: repeater
             anchors.top: addressLabel.bottom
             height: Theme.paddingMedium
-            model: listItem.result ?
-                Math.min(3, listItem.result.lines.length) : 0
+            model: listItem.result ? Math.min(3, listItem.result.lines.length) : 0
             width: parent.width
             Item {
                 id: row
@@ -70,7 +69,6 @@ SilicaListView {
                     color: Theme.secondaryColor
                     font.pixelSize: Theme.fontSizeSmall
                     text: line.line
-                    verticalAlignment: Text.AlignVCenter
                     width: listItem.lineWidth
                     y: repeater.y + index * row.height
                     Component.onCompleted: {
@@ -88,10 +86,9 @@ SilicaListView {
                     font.pixelSize: Theme.fontSizeSmall
                     text: " → " + line.destination
                     truncationMode: TruncationMode.Fade
-                    verticalAlignment: Text.AlignVCenter
                     Component.onCompleted: {
                         // Add an ellipsis to indicate that only
-                        // a couple first of all lines are shown.
+                        // the first three of all lines are shown.
                         if (index == 2)
                             destinationLabel.text += " …";
                     }
@@ -112,7 +109,12 @@ SilicaListView {
             width: Theme.paddingMedium
         }
         onClicked: {
-            console.log("Clicked!");
+            app.pageStack.push("StopPage.qml", {
+                "stopCode": model.code,
+                "stopName": model.name,
+                "stopType": model.type,
+                "coordinate": QtPositioning.coordinate(model.y, model.x)
+            });
         }
     }
     header: PageHeader { title: page.title }

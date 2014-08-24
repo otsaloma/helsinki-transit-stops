@@ -41,8 +41,9 @@ Page {
             }
             onClicked: {
                 app.pageStack.push("StopPage.qml", {
-                    "code": model.code,
-                    "name": model.name,
+                    "stopCode": model.code,
+                    "stopName": model.name,
+                    "stopType": model.type,
                     "coordinate": QtPositioning.coordinate(model.y, model.x)
                 });
             }
@@ -70,7 +71,7 @@ Page {
                 contentHeight: Theme.itemSizeSmall
                 property bool applicable: gps.position.horizontalAccuracy &&
                     gps.position.horizontalAccuracy >= 0 &&
-                    gps.position.horizontalAccuracy < 500
+                    gps.position.horizontalAccuracy < 1000
                 ListItemLabel {
                     id: findNearbyLabel
                     anchors.leftMargin: 2*Theme.paddingLarge + Theme.paddingMedium
@@ -108,7 +109,7 @@ Page {
                 }
             }
         }
-        model: ListModel { id: listModel }
+        model: ListModel {}
         VerticalScrollDecorator {}
     }
     onStatusChanged: {

@@ -62,10 +62,10 @@ Page {
         var x = gps.position.coordinate.longitude || 0;
         var y = gps.position.coordinate.latitude || 0;
         py.call("hts.query.find_nearby_stops", [x, y], function(results) {
-            if (results.error && results.message) {
+            if (results && results.error && results.message) {
                 page.title = "";
                 busyLabel.text = results.message;
-            } else if (results.length > 0) {
+            } else if (results && results.length > 0) {
                 page.results = results;
                 page.title = results.length == 1 ?
                     "1 Stop" : results.length + " Stops";
