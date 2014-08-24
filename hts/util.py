@@ -82,6 +82,21 @@ def silent(*exceptions):
     except exceptions:
         pass
 
+def type_to_color(type):
+    """Return color based on vehicle `type`."""
+    if type == "train":
+        return "#2DBE2C"
+    if type == "metro":
+        return "#FF6319"
+    if type == "ferry":
+        return "#00B9E4"
+    if type == "tram":
+        return "#00985F"
+    if type == "bus":
+        return "#007AC9"
+    raise ValueError("Unrecognized type: {}"
+                     .format(repr(type)))
+
 def write_json(data, path):
     """Write `data` to JSON file at `path`."""
     try:

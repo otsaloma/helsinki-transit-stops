@@ -29,6 +29,18 @@ Page {
         // Prevent list items from stealing focus.
         currentIndex: -1
         delegate: ListItem {
+            id: listItem
+            contentHeight: Theme.itemSizeSmall
+            ListItemColorLabel {
+                blockColor: model.color;
+                color: listItem.highlighted ?
+                    Theme.highlightColor : Theme.primaryColor
+                height: Theme.itemSizeSmall
+                text: model.name
+            }
+            onClicked: {
+                console.log("Clicked!");
+            }
         }
         footer: Column {
             width: parent.width
@@ -36,6 +48,7 @@ Page {
                 id: aboutItem
                 contentHeight: Theme.itemSizeSmall
                 ListItemLabel {
+                    anchors.leftMargin: 2*Theme.paddingLarge + Theme.paddingMedium
                     color: aboutItem.highlighted ?
                         Theme.highlightColor : Theme.primaryColor
                     height: Theme.itemSizeSmall
@@ -55,6 +68,7 @@ Page {
                     gps.position.horizontalAccuracy < 500
                 ListItemLabel {
                     id: findNearbyLabel
+                    anchors.leftMargin: 2*Theme.paddingLarge + Theme.paddingMedium
                     color: findNearbyItem.highlighted ?
                         Theme.highlightColor : Theme.primaryColor
                     height: Theme.itemSizeSmall
@@ -77,6 +91,7 @@ Page {
                 id: findNameItem
                 contentHeight: Theme.itemSizeSmall
                 ListItemLabel {
+                    anchors.leftMargin: 2*Theme.paddingLarge + Theme.paddingMedium
                     color: findNameItem.highlighted ?
                         Theme.highlightColor : Theme.primaryColor
                     height: Theme.itemSizeSmall
@@ -88,8 +103,26 @@ Page {
                 }
             }
         }
-        model: ListModel {
-        }
+        model: ListModel { id: listModel }
         VerticalScrollDecorator {}
+    }
+    Component.onCompleted: {
+        py.onReadyChanged.connect(function() {
+            page.populate();
+        });
+    }
+    onStatusChanged: {
+        if (page.status == PageStatus.Active) {
+            py.ready && page.populate();
+        }
+    }
+    function populate() {
+        // Query favorite stops from the Python backend.
+        listView.model.clear();
+        var stops = py.evaluate("hts.app.favorites.stops");
+        for (var i = 0; i < stops.length; i++) {
+            stops[i].color = py.call_sync("hts.util.type_to_color", [stops[i].type]);
+            listView.model.append(stops[i]);
+        }
     }
 }

@@ -24,19 +24,6 @@ import os
 __all__ = ("Favorites",)
 
 
-class Stop:
-
-    """A transit stop and its metadata."""
-
-    def __init__(self, code, name, type, x, y):
-        """Initialize a :class:`Stop` instance."""
-        self.code = code
-        self.name = name
-        self.type = type
-        self.x = x
-        self.y = y
-
-
 class Favorites:
 
     """A collection of favorite stops and their metadata."""
@@ -44,18 +31,23 @@ class Favorites:
     def __init__(self):
         """Initialize a :class:`Favorites` instance."""
         self._path = os.path.join(hts.CONFIG_HOME_DIR, "favorites.json")
-        self._read()
         self._stops = []
+        self._read()
 
     def add(self, code, name, type, x, y):
         """Add stop to the list of stops."""
         self.remove(code)
-        self._stops.append(Stop(code, name, type, x, y))
+        self._stops.append(dict(
+            code=code,
+            name=name,
+            type=type,
+            x=x,
+            y=y))
 
     def has(self, code):
         """Return ``True`` if `code` is among stops."""
         for stop in self._stops:
-            if stop.code == code:
+            if stop["code"] == code:
                 return True
         return False
 
@@ -68,7 +60,7 @@ class Favorites:
     def remove(self, code):
         """Remove stop from the list of stops."""
         for i in list(reversed(range(len(self._stops)))):
-            if self._stops[i].code == code:
+            if self._stops[i]["code"] == code:
                 self._stops.pop(i)
 
     @property
