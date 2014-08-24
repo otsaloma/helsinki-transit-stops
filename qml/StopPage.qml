@@ -42,24 +42,10 @@ Page {
             contentHeight: Theme.itemSizeExtraSmall
             property var result: page.results[index]
             Label {
-                id: timeLabel
+                id: lineLabel
                 anchors.left: parent.left
                 anchors.leftMargin: 2*Theme.paddingLarge + Theme.paddingMedium
-                height: Theme.itemSizeExtraSmall
-                horizontalAlignment: Text.AlignRight
-                text: model.time
-                verticalAlignment: Text.AlignVCenter
-                width: page.timeWidth
-                Component.onCompleted: {
-                    if (timeLabel.implicitWidth > page.timeWidth)
-                        page.timeWidth = timeLabel.implicitWidth;
-                }
-            }
-            Label {
-                id: lineLabel
-                anchors.left: timeLabel.right
-                anchors.leftMargin: 2*Theme.paddingLarge
-                anchors.top: timeLabel.top
+                font.pixelSize: Theme.fontSizeLarge
                 height: Theme.itemSizeExtraSmall
                 horizontalAlignment: Text.AlignRight
                 text: model.line
@@ -71,25 +57,50 @@ Page {
                 }
             }
             Label {
-                id: destinationLabel
-                anchors.left: lineLabel.right
-                anchors.leftMargin: Theme.paddingLarge
+                id: timeLabel
+                anchors.baseline: lineLabel.baseline
                 anchors.right: parent.right
                 anchors.rightMargin: Theme.paddingLarge
-                anchors.top: timeLabel.top
+                horizontalAlignment: Text.AlignRight
+                text: model.time
+                verticalAlignment: Text.AlignVCenter
+                width: page.timeWidth
+                Component.onCompleted: {
+                    if (timeLabel.implicitWidth > page.timeWidth)
+                        page.timeWidth = timeLabel.implicitWidth;
+                }
+            }
+            Label {
+                id: destinationLabel
+                anchors.baseline: lineLabel.baseline
+                anchors.left: lineLabel.right
+                anchors.leftMargin: Theme.paddingLarge
+                anchors.right: timeLabel.left
+                anchors.rightMargin: Theme.paddingLarge
                 color: Theme.secondaryColor
-                height: Theme.itemSizeExtraSmall
                 text: model.destination
                 truncationMode: TruncationMode.Fade
                 verticalAlignment: Text.AlignVCenter
+                Component.onCompleted: {
+                    // Add a dotted line long enough for landscape as well.
+                    var size = Math.max(page.width, page.height);
+                    var dots = " . . . . . . . . . . . . . . . . . . . .";
+                    while (dots.length < 200)
+                        dots += dots.substr(0, 20);
+                    while (destinationLabel.implicitWidth < size) {
+                        destinationLabel.text += dots;
+                        // Just in case, to avoid an infinite loop.
+                        if (destinationLabel.text.length > 1000) break;
+                    }
+                }
             }
             Rectangle {
                 id: block
-                anchors.bottom: timeLabel.bottom
+                anchors.bottom: lineLabel.bottom
                 anchors.bottomMargin: Theme.paddingMedium
-                anchors.right: timeLabel.left
+                anchors.right: lineLabel.left
                 anchors.rightMargin: Theme.paddingLarge
-                anchors.top: timeLabel.top
+                anchors.top: lineLabel.top
                 anchors.topMargin: Theme.paddingMedium
                 color: "#888888";
                 width: Theme.paddingMedium

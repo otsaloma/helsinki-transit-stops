@@ -62,7 +62,7 @@ def find_departures(code):
         unix_time=parse_unix_time(departure["time"]),
         line=parse_line(departure["code"]),
         destination=destinations[departure["code"]],
-    ) for departure in output[0]["departures"]]
+    ) for departure in output[0]["departures"] or []]
     return results
 
 def find_nearby_stops(x, y):
@@ -188,7 +188,7 @@ def parse_time(departure):
     departure = float(departure)
     hour = math.floor(departure/100) % 24
     minute = departure % 100
-    return "{:02.0f}:{:02.0f}".format(hour, minute)
+    return "{:.0f}:{:02.0f}".format(hour, minute)
 
 def parse_unix_time(departure):
     """Parse Unix time from `departure`."""
