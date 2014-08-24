@@ -116,6 +116,6 @@ SilicaListView {
         }
     }
     header: PageHeader { title: page.title }
-    model: ListModel { id: listModel }
+    model: ListModel {}
     VerticalScrollDecorator {}
 }

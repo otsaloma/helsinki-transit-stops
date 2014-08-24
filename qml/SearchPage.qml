@@ -72,36 +72,35 @@ Page {
                 EnterKey.onClicked: app.pageStack.navigateForward();
                 onTextChanged: {
                     page.query = searchField.text;
-                    listModel.update();
+                    page.populate();
                 }
             }
             Component.onCompleted: listView.searchField = searchField;
         }
-        model: ListModel {
-            id: listModel
-            function update() {
-                listModel.clear();
-                var query = listView.searchField.text.toLowerCase();
-                var nstart = 0;
-                for (var i = 0; i < page.history.length; i++) {
-                    var historyItem = page.history[i].toLowerCase();
-                    if (query != "" && historyItem.indexOf(query) == 0) {
-                        listModel.insert(nstart++, {"name": page.history[i]});
-                        if (listModel.count >= 100) break;
-                    } else if (query == "" || historyItem.indexOf(query) > 0) {
-                        listModel.append({"name": page.history[i]});
-                        if (listModel.count >= 100) break;
-                    }
-                }
-            }
-        }
+        model: ListModel {}
         property var searchField
         VerticalScrollDecorator {}
     }
     onStatusChanged: {
         if (page.status == PageStatus.Activating) {
             page.history = py.evaluate("hts.app.history.names");
-            listView.model.update();
+            page.populate();
+        }
+    }
+    function populate() {
+        // Load search history items from the Python backend.
+        listView.model.clear();
+        var query = listView.searchField.text.toLowerCase();
+        var nstart = 0;
+        for (var i = 0; i < page.history.length; i++) {
+            var historyItem = page.history[i].toLowerCase();
+            if (query != "" && historyItem.indexOf(query) == 0) {
+                listView.model.insert(nstart++, {"name": page.history[i]});
+                if (listView.model.count >= 100) break;
+            } else if (query == "" || historyItem.indexOf(query) > 0) {
+                listView.model.append({"name": page.history[i]});
+                if (listView.model.count >= 100) break;
+            }
         }
     }
 }

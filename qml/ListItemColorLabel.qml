@@ -27,7 +27,7 @@ Label {
     anchors.rightMargin: Theme.paddingLarge
     truncationMode: TruncationMode.Fade
     verticalAlignment: Text.AlignVCenter
-    property string blockColor: "#FFFFFF"
+    property var blockColor: "#888888"
     Rectangle {
         anchors.bottom: parent.bottom
         anchors.bottomMargin: Theme.paddingMedium

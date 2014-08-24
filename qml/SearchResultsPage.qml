@@ -58,7 +58,7 @@ Page {
         }
     }
     function populate(query) {
-        // Query stops from the Python backend.
+        // Load stops from the Python backend.
         py.call_sync("hts.app.history.add", [query]);
         listView.model.clear();
         var x = gps.position.coordinate.longitude || 0;

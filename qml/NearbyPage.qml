@@ -57,7 +57,7 @@ Page {
         }
     }
     function populate() {
-        // Query stops from the Python backend.
+        // Load stops from the Python backend.
         listView.model.clear();
         var x = gps.position.coordinate.longitude || 0;
         var y = gps.position.coordinate.latitude || 0;

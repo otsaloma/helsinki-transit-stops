@@ -106,18 +106,19 @@ Page {
         model: ListModel { id: listModel }
         VerticalScrollDecorator {}
     }
-    Component.onCompleted: {
-        py.onReadyChanged.connect(function() {
-            page.populate();
-        });
-    }
     onStatusChanged: {
-        if (page.status == PageStatus.Active) {
-            py.ready && page.populate();
+        if (page.status == PageStatus.Activating) {
+            if (py.ready) {
+                page.populate();
+            } else {
+                py.onReadyChanged.connect(function() {
+                    page.populate();
+                });
+            }
         }
     }
     function populate() {
-        // Query favorite stops from the Python backend.
+        // Load favorite stops from the Python backend.
         listView.model.clear();
         var stops = py.evaluate("hts.app.favorites.stops");
         for (var i = 0; i < stops.length; i++) {
