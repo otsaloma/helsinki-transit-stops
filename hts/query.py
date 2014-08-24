@@ -60,6 +60,9 @@ def find_departures(code):
                     destination=destinations[departure["code"]],
                     ) for departure in output[0]["departures"]]
 
+    for result in results:
+        if result["time_left"] <= 10.5:
+            result["time"] = "{:.0f} min".format(result["time_left"])
     return results
 
 def find_nearby_stops(x, y):
@@ -181,7 +184,7 @@ def parse_time(departure):
     """Parse human readable time of `departure`."""
     departure = float(departure)
     hour = math.floor(departure/100) % 24
-    return "{:.0f}:{:.0f}".format(hour, departure % 100)
+    return "{:02.0f}:{:02.0f}".format(hour, departure % 100)
 
 def parse_time_left(departure):
     """Parse amount of minutes left to `departure`."""

@@ -17,6 +17,7 @@
  */
 
 import QtQuick 2.0
+import QtPositioning 5.0
 import Sailfish.Silica 1.0
 import "."
 
@@ -39,7 +40,11 @@ Page {
                 text: model.name
             }
             onClicked: {
-                console.log("Clicked!");
+                app.pageStack.push("StopPage.qml", {
+                    "code": model.code,
+                    "name": model.name,
+                    "coordinate": QtPositioning.coordinate(model.y, model.x)
+                });
             }
         }
         footer: Column {
