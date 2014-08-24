@@ -31,7 +31,7 @@ class HistoryManager:
         """Initialize a :class:`HistoryManager` instance."""
         self._max_size = max_size
         self._names = []
-        self._path = os.path.join(hts.CONFIG_HOME_DIR, "history.json")
+        self._path = os.path.join(hts.CONFIG_HOME_DIR, "search_history.json")
         self._read()
 
     def add(self, name):
