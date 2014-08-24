@@ -30,6 +30,7 @@ SilicaListView {
         property int lineWidth: 0
         ListItemLabel {
             id: nameLabel
+            anchors.leftMargin: 2*Theme.paddingLarge + Theme.paddingMedium
             color: listItem.highlighted ?
                 Theme.highlightColor : Theme.primaryColor;
             height: implicitHeight + Theme.paddingMedium
@@ -40,6 +41,7 @@ SilicaListView {
         }
         ListItemLabel {
             id: addressLabel
+            anchors.leftMargin: 2*Theme.paddingLarge + Theme.paddingMedium
             anchors.top: nameLabel.bottom
             color: Theme.secondaryColor
             font.pixelSize: Theme.fontSizeSmall
@@ -64,7 +66,7 @@ SilicaListView {
                 Label {
                     id: lineLabel
                     anchors.left: parent.left
-                    anchors.leftMargin: Theme.paddingLarge
+                    anchors.leftMargin: 2*Theme.paddingLarge + Theme.paddingMedium
                     color: Theme.secondaryColor
                     font.pixelSize: Theme.fontSizeSmall
                     text: line.line
@@ -98,6 +100,16 @@ SilicaListView {
                     repeater.height += row.height;
                 }
             }
+        }
+        Rectangle {
+            anchors.bottom: repeater.bottom
+            anchors.bottomMargin: 1.5*Theme.paddingMedium
+            anchors.right: nameLabel.left
+            anchors.rightMargin: Theme.paddingLarge
+            anchors.top: nameLabel.top
+            anchors.topMargin: 1.5*Theme.paddingMedium
+            color: py.call_sync("hts.util.type_to_color", [model.type]);
+            width: Theme.paddingMedium
         }
         onClicked: {
             console.log("Clicked!");
