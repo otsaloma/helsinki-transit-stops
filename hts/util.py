@@ -45,7 +45,7 @@ def departure_time_to_color(dist, departure):
     # Use walking speeds from reittiopas.fi: 70 m/min for normal
     # and 100 m/min for fast speed.
     import time
-    dist = 1.2 * dist
+    dist = 1.35 * dist
     left = (departure - time.time()) / 60
     if dist /  70 <= left: return "#4E9A06"
     if dist / 100 <= left: return "#FCE94F"

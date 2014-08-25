@@ -1,11 +1,10 @@
 Helsinki Transit Stops 0.1
 ==========================
 
- * Check onStatusChanged handlers to avoid unnecessary API calls
  * Use a key for favorites to allow duplicated stops
  * Add menu items to add and remove favorite stops
  * Update list of departures on a timer?
- * Shown time remaining as # min when <= 10 min
+ * Show time remaining as # min when <= 10 min
    (update on a timer on the QML side)
  * Update metadata of favorite stops periodically?
 

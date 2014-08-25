@@ -26,6 +26,7 @@ ApplicationWindow {
     allowedOrientations: Orientation.All
     cover: undefined
     initialPage: MenuPage { id: menu }
+    property string searchQuery: ""
     PositionSource {
         id: gps
         active: true

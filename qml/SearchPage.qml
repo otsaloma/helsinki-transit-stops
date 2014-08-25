@@ -23,9 +23,8 @@ import "."
 Page {
     id: page
     allowedOrientations: Orientation.All
-    canNavigateForward: query.length > 0
+    canNavigateForward: app.searchQuery.length > 0
     property var history: []
-    property string query: ""
     SilicaListView {
         id: listView
         anchors.fill: parent
@@ -51,7 +50,7 @@ Page {
                 }
             }
             onClicked: {
-                page.query = model.name;
+                app.searchQuery = model.name;
                 app.pageStack.navigateForward();
             }
             function remove() {
@@ -69,7 +68,7 @@ Page {
                 EnterKey.enabled: searchField.text.length > 0
                 EnterKey.onClicked: app.pageStack.navigateForward();
                 onTextChanged: {
-                    page.query = searchField.text;
+                    app.searchQuery = searchField.text;
                     page.populate();
                 }
             }

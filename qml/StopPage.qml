@@ -26,6 +26,7 @@ Page {
     allowedOrientations: Orientation.All
     property var coordinate: QtPositioning.coordinate(0, 0)
     property bool loading: true
+    property bool populated: false
     property var results: {}
     property string stopCode: ""
     property string stopName: ""
@@ -139,14 +140,15 @@ Page {
         visible: page.loading
     }
     onStatusChanged: {
-        if (page.status == PageStatus.Activating) {
+        if (page.populated) {
+            return;
+        } else if (page.status == PageStatus.Activating) {
+            listView.model.clear();
             page.loading = true;
             page.title = "";
             busyLabel.text = "Loading"
         } else if (page.status == PageStatus.Active) {
             page.populate();
-        } else if (page.status == PageStatus.Inactive) {
-            listView.model.clear();
         }
     }
     function populate() {
@@ -168,6 +170,7 @@ Page {
                 busyLabel.text = "No departures found";
             }
             page.loading = false;
+            page.populated = true;
         });
     }
 }

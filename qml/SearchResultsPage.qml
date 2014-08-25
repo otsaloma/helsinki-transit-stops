@@ -24,6 +24,7 @@ Page {
     id: page
     allowedOrientations: Orientation.All
     property bool loading: true
+    property string populatedQuery: ""
     property var results: {}
     property string title: ""
     StopListView { id: listView }
@@ -46,15 +47,15 @@ Page {
         visible: page.loading
     }
     onStatusChanged: {
-        if (page.status == PageStatus.Activating) {
+        if (app.searchQuery == page.populatedQuery) {
+            return;
+        } else if (page.status == PageStatus.Activating) {
+            listView.model.clear();
             page.loading = true;
             page.title = "";
             busyLabel.text = "Searching"
         } else if (page.status == PageStatus.Active) {
-            var searchPage = app.pageStack.previousPage();
-            page.populate(searchPage.query);
-        } else if (page.status == PageStatus.Inactive) {
-            listView.model.clear();
+            page.populate(app.searchQuery);
         }
     }
     function populate(query) {
@@ -78,6 +79,7 @@ Page {
                 busyLabel.text = "No stops found";
             }
             page.loading = false;
+            page.populatedQuery = query;
         });
     }
 }
