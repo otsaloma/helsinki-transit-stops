@@ -20,6 +20,7 @@
 import copy
 import hts
 import os
+import time
 
 __all__ = ("Favorites",)
 
@@ -38,18 +39,12 @@ class Favorites:
         """Add stop to the list of stops."""
         self.remove(code)
         self._stops.append(dict(
+            key=str(int(1000*time.time())),
             code=code,
             name=name,
             type=type,
             x=x,
             y=y))
-
-    def has(self, code):
-        """Return ``True`` if `code` is among stops."""
-        for stop in self._stops:
-            if stop["code"] == code:
-                return True
-        return False
 
     def _read(self):
         """Read list of stops from file."""
@@ -57,10 +52,10 @@ class Favorites:
             with hts.util.silent(Exception):
                 self._stops = hts.util.read_json(self._path)
 
-    def remove(self, code):
+    def remove(self, key):
         """Remove stop from the list of stops."""
         for i in list(reversed(range(len(self._stops)))):
-            if self._stops[i]["code"] == code:
+            if self._stops[i]["key"] == key:
                 self._stops.pop(i)
 
     @property

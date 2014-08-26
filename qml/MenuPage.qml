@@ -41,6 +41,7 @@ Page {
             }
             onClicked: {
                 app.pageStack.push("StopPage.qml", {
+                    "favorite": model.key,
                     "stopCode": model.code,
                     "stopName": model.name,
                     "stopType": model.type,

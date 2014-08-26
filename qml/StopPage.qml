@@ -25,6 +25,7 @@ Page {
     id: page
     allowedOrientations: Orientation.All
     property var coordinate: QtPositioning.coordinate(0, 0)
+    property string favorite: ""
     property bool loading: true
     property bool populated: false
     property var results: {}
