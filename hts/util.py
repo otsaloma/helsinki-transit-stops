@@ -47,9 +47,9 @@ def departure_time_to_color(dist, departure):
     import time
     dist = 1.35 * dist
     left = (departure - time.time()) / 60
-    if dist /  70 <= left: return "#4E9A06"
-    if dist / 100 <= left: return "#FCE94F"
-    return "#EF2929"
+    if left > 3 and dist /  70 <= left: return "#3890FF"
+    if left > 1 and dist / 100 <= left: return "#FFF444"
+    return "#FF4744"
 
 def format_distance(distance, n=2, units="m"):
     """Format `distance` to `n` significant digits and unit label."""
