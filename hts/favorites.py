@@ -37,7 +37,6 @@ class Favorites:
 
     def add(self, code, name, type, x, y):
         """Add stop to the list of stops."""
-        self.remove(code)
         self._stops.append(dict(
             key=str(int(1000*time.time())),
             code=code,

@@ -120,6 +120,24 @@ Page {
         }
         header: PageHeader { title: page.title }
         model: ListModel {}
+        PullDownMenu {
+            MenuItem {
+                text: "Add to favorites"
+                onClicked: {
+                    var dialog = pageStack.push("FavoriteDialog.qml", {
+                        "name": page.stopName});
+                    dialog.accepted.connect(function() {
+                        py.call_sync("hts.app.favorites.add", [
+                            page.stopCode,
+                            dialog.name,
+                            page.stopType,
+                            page.coordinate.longitude,
+                            page.coordinate.latitude
+                        ]);
+                    });
+                }
+            }
+        }
         VerticalScrollDecorator {}
     }
     Label {
