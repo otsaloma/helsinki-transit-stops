@@ -36,6 +36,7 @@ Page {
     // Column widths to be set based on data.
     property var timeWidth: 0
     property var lineWidth: 0
+    RemorsePopup { id: remorse }
     SilicaListView {
         id: listView
         anchors.fill: parent
@@ -127,13 +128,26 @@ Page {
                     var dialog = pageStack.push("FavoriteDialog.qml", {
                         "name": page.stopName});
                     dialog.accepted.connect(function() {
-                        py.call_sync("hts.app.favorites.add", [
+                        var key = py.call_sync("hts.app.favorites.add", [
                             page.stopCode,
                             dialog.name,
                             page.stopType,
                             page.coordinate.longitude,
                             page.coordinate.latitude
                         ]);
+                        page.favorite = key;
+                        page.stopName = dialog.name;
+                        page.title = dialog.name;
+                    });
+                }
+            }
+            MenuItem {
+                text: "Remove from favorites"
+                visible: page.favorite.length > 0
+                onClicked: {
+                    remorse.execute("Removing", function() {
+                        py.call_sync("hts.app.favorites.remove", [page.favorite]);
+                        page.favorite = "";
                     });
                 }
             }

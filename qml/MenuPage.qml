@@ -32,12 +32,38 @@ Page {
         delegate: ListItem {
             id: listItem
             contentHeight: Theme.itemSizeSmall
+            menu: contextMenu
+            ListView.onRemove: animateRemoval(listItem)
             ListItemColorLabel {
                 blockColor: model.color;
                 color: listItem.highlighted ?
                     Theme.highlightColor : Theme.primaryColor
                 height: Theme.itemSizeSmall
                 text: model.name
+            }
+            ContextMenu {
+                id: contextMenu
+                MenuItem {
+                    text: "Rename"
+                    onClicked: {
+                        var dialog = pageStack.push("FavoriteDialog.qml", {
+                            "name": model.name});
+                        dialog.accepted.connect(function() {
+                            var args = [model.key, dialog.name];
+                            py.call_sync("hts.app.favorites.rename", args);
+                            model.name = dialog.name;
+                        });
+                    }
+                }
+                MenuItem {
+                    text: "Remove"
+                    onClicked: {
+                        remorseAction("Removing", function() {
+                            py.call_sync("hts.app.favorites.remove", [model.key]);
+                            listView.model.remove(index);
+                        });
+                    }
+                }
             }
             onClicked: {
                 app.pageStack.push("StopPage.qml", {

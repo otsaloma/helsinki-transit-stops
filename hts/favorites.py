@@ -36,14 +36,16 @@ class Favorites:
         self._read()
 
     def add(self, code, name, type, x, y):
-        """Add stop to the list of stops."""
-        self._stops.append(dict(
-            key=str(int(1000*time.time())),
-            code=code,
-            name=name,
-            type=type,
-            x=x,
-            y=y))
+        """Add stop to the list of stops and return key."""
+        key = str(int(1000*time.time()))
+        self._stops.append(dict(key=key,
+                                code=code,
+                                name=name.strip(),
+                                type=type,
+                                x=x,
+                                y=y))
+
+        return key
 
     def _read(self):
         """Read list of stops from file."""
@@ -56,6 +58,12 @@ class Favorites:
         for i in list(reversed(range(len(self._stops)))):
             if self._stops[i]["key"] == key:
                 self._stops.pop(i)
+
+    def rename(self, key, name):
+        """Give an existing stop a new name."""
+        for stop in self._stops:
+            if stop["key"] == key:
+                stop["name"] = name.strip()
 
     @property
     def stops(self):
