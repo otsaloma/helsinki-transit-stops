@@ -122,6 +122,7 @@ Page {
         header: PageHeader { title: page.title }
         model: ListModel {}
         PullDownMenu {
+            visible: !page.loading
             MenuItem {
                 text: "Add to favorites"
                 onClicked: {
