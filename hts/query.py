@@ -169,7 +169,7 @@ def parse_line(code):
         # Metro and trains.
         line = code[4]
     else:
-        # Buses and trams.
+        # Buses, trams and ferries.
         line = code[1:5].strip()
         while len(line) > 1 and line.startswith("0"):
             line = line[1:]

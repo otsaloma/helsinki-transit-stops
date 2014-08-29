@@ -22,6 +22,7 @@ import json
 import math
 import os
 import sys
+import time
 
 
 def calculate_distance(x1, y1, x2, y2):
@@ -44,7 +45,6 @@ def departure_time_to_color(dist, departure):
     """
     # Use walking speeds from reittiopas.fi: 70 m/min for normal
     # and 100 m/min for fast speed.
-    import time
     dist = 1.35 * dist
     left = (departure - time.time()) / 60
     if left > 3 and dist /  70 <= left: return "#3890FF"

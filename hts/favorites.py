@@ -36,7 +36,7 @@ class Favorites:
         self._read()
 
     def add(self, code, name, type, x, y):
-        """Add stop to the list of stops and return key."""
+        """Add stop to the list of stops and return its key."""
         key = str(int(1000*time.time()))
         self._stops.append(dict(key=key,
                                 code=code,

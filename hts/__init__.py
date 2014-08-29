@@ -33,8 +33,8 @@ except ImportError:
     sys.modules["pyotherside"] = pyotherside()
 
 from hts.paths import *
-from hts import http
 from hts import util
+from hts import http
 from hts import query
 from hts.favorites import *
 from hts.history import *
