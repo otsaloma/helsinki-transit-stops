@@ -46,18 +46,18 @@ def departure_time_to_color(dist, departure):
     # Use walking speeds from reittiopas.fi: 70 m/min for normal
     # and 100 m/min for fast speed.
     dist = 1.35 * dist
-    left = (departure - time.time()) / 60
-    if left > 3 and dist /  70 <= left: return "#3890FF"
-    if left > 1 and dist / 100 <= left: return "#FFF444"
+    min_left = (departure - time.time()) / 60
+    if min_left > 3 and dist /  70 <= min_left: return "#3890FF"
+    if min_left > 1 and dist / 100 <= min_left: return "#FFF444"
     return "#FF4744"
 
 def format_departure_time(departure):
     """Format Unix time `departure` for display."""
-    left = (departure - time.time()) / 60
-    if left < -0.5:
+    min_left = (departure - time.time()) / 60
+    if min_left < -0.5:
         return ""
-    if left < 10.5:
-        return "{:d} min".format(round(left))
+    if min_left <  9.5:
+        return "{:d} min".format(round(min_left))
     departure = time.localtime(departure)
     return "{:.0f}:{:02.0f}".format(departure.tm_hour,
                                     departure.tm_min)

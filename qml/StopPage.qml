@@ -24,129 +24,25 @@ import "."
 Page {
     id: page
     allowedOrientations: Orientation.All
-    property bool loading: true
+
+    property bool loading: false
     property bool populated: false
-    property var position: gps.position
     property var results: {}
+    property string title: ""
+
+    // Stop metadata matching what is stored in favorites.
+    property string stopKey:  ""
     property string stopCode: ""
-    property var stopCoordinate: QtPositioning.coordinate(0, 0)
-    property string stopKey: ""
     property string stopName: ""
     property string stopType: ""
-    property string title: ""
+    property var stopCoordinate: QtPositioning.coordinate(0, 0)
+
     // Column widths to be set based on data.
-    property var lineWidth: 0
-    property var timeWidth: 0
+    property int lineWidth: 0
+    property int timeWidth: 0
+
     RemorsePopup { id: remorse }
-    SilicaListView {
-        id: listView
-        anchors.fill: parent
-        delegate: ListItem {
-            id: listItem
-            contentHeight: Theme.itemSizeExtraSmall
-            property var result: page.results[index]
-            Label {
-                id: lineLabel
-                anchors.left: parent.left
-                anchors.leftMargin: 2*Theme.paddingLarge + Theme.paddingMedium
-                font.pixelSize: Theme.fontSizeLarge
-                height: Theme.itemSizeExtraSmall
-                horizontalAlignment: Text.AlignRight
-                text: model.line
-                verticalAlignment: Text.AlignVCenter
-                width: page.lineWidth
-                Component.onCompleted: {
-                    if (lineLabel.implicitWidth > page.lineWidth)
-                        page.lineWidth = lineLabel.implicitWidth;
-                }
-            }
-            Label {
-                id: timeLabel
-                anchors.baseline: lineLabel.baseline
-                anchors.right: parent.right
-                anchors.rightMargin: Theme.paddingLarge
-                horizontalAlignment: Text.AlignRight
-                text: model.time
-                verticalAlignment: Text.AlignVCenter
-                width: page.timeWidth
-                onTextChanged: {
-                    if (timeLabel.implicitWidth > page.timeWidth)
-                        page.timeWidth = timeLabel.implicitWidth;
-                }
-                Component.onCompleted: {
-                    if (timeLabel.implicitWidth > page.timeWidth)
-                        page.timeWidth = timeLabel.implicitWidth;
-                }
-            }
-            Label {
-                id: destinationLabel
-                anchors.baseline: lineLabel.baseline
-                anchors.left: lineLabel.right
-                anchors.leftMargin: Theme.paddingLarge
-                anchors.right: timeLabel.left
-                anchors.rightMargin: Theme.paddingLarge
-                color: Theme.secondaryColor
-                text: model.destination
-                truncationMode: TruncationMode.Fade
-                verticalAlignment: Text.AlignVCenter
-                Component.onCompleted: {
-                    // Add a dotted line long enough for landscape as well.
-                    var dots = " . . . . . . . . . . . . . . . . . . . .";
-                    while (dots.length < 200)
-                        dots += dots.substr(0, 20);
-                    var size = Math.max(page.width, page.height);
-                    while (destinationLabel.implicitWidth < size)
-                        destinationLabel.text += dots;
-                }
-            }
-            Rectangle {
-                id: block
-                anchors.bottom: lineLabel.bottom
-                anchors.bottomMargin: Theme.paddingMedium
-                anchors.right: lineLabel.left
-                anchors.rightMargin: Theme.paddingLarge
-                anchors.top: lineLabel.top
-                anchors.topMargin: Theme.paddingMedium
-                color: model.color
-                width: Theme.paddingMedium
-            }
-        }
-        header: PageHeader { title: page.title }
-        model: ListModel {}
-        PullDownMenu {
-            visible: !page.loading
-            MenuItem {
-                text: "Add to favorites"
-                onClicked: {
-                    var dialog = pageStack.push("FavoriteDialog.qml", {
-                        "name": page.stopName});
-                    dialog.accepted.connect(function() {
-                        var key = py.call_sync("hts.app.favorites.add", [
-                            page.stopCode,
-                            dialog.name,
-                            page.stopType,
-                            page.stopCoordinate.longitude,
-                            page.stopCoordinate.latitude
-                        ]);
-                        page.stopKey = key;
-                        page.stopName = dialog.name;
-                        page.title = dialog.name;
-                    });
-                }
-            }
-            MenuItem {
-                text: "Remove from favorites"
-                visible: page.stopKey.length > 0
-                onClicked: {
-                    remorse.execute("Removing", function() {
-                        py.call_sync("hts.app.favorites.remove", [page.stopKey]);
-                        page.stopKey = "";
-                    });
-                }
-            }
-        }
-        VerticalScrollDecorator {}
-    }
+    DepartureListView { id: listView }
     Label {
         id: busyLabel
         anchors.bottom: busyIndicator.top
@@ -166,15 +62,14 @@ Page {
         visible: page.loading
     }
     Timer {
-        id: timer
-        interval: 60000
+        // Assuming we have only schedule data, i.e. not real-time,
+        // it is sufficient to download data only once, then update
+        // time remaining and colors periodically.
+        interval: 30000
         repeat: true
-        running: false
+        running: app.running && page.populated
         triggeredOnStart: true
         onTriggered: page.update();
-    }
-    onPositionChanged: {
-        page.update();
     }
     onStatusChanged: {
         if (page.populated) {
@@ -204,7 +99,6 @@ Page {
                     results[i].color = "#888888";
                     listView.model.append(results[i]);
                 }
-                timer.start();
             } else {
                 page.title = "";
                 busyLabel.text = "No departures found";
@@ -226,10 +120,9 @@ Page {
                 "hts.util.departure_time_to_color",
                 [dist, item.unix_time]
             );
+            // Remove departures already passed.
             if (item.time.length == 0)
                 listView.model.remove(i);
         }
-        if (listView.model.count == 0)
-            timer.stop();
     }
 }

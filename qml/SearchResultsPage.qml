@@ -23,7 +23,7 @@ import "."
 Page {
     id: page
     allowedOrientations: Orientation.All
-    property bool loading: true
+    property bool loading: false
     property string populatedQuery: ""
     property var results: {}
     property string title: ""
