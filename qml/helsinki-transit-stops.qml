@@ -25,16 +25,13 @@ ApplicationWindow {
     allowedOrientations: Orientation.All
     cover: undefined
     initialPage: MenuPage { id: menu }
+    // TODO: Add cover.status when we have a cover.
+    property bool running: applicationActive
     property string searchQuery: ""
     PositionSource { id: gps }
     Python { id: py }
     onApplicationActiveChanged: {
-        if (applicationActive) {
-            gps.start();
-        } else {
-            gps.stop();
-            if (py.ready)
-                py.call_sync("hts.app.save", []);
-        }
+        if (!app.applicationActive && py.ready)
+            py.call_sync("hts.app.save", []);
     }
 }

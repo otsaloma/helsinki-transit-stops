@@ -21,10 +21,13 @@ import QtPositioning 5.0
 
 PositionSource {
     id: gps
-    active: true
+    active: app.running
     updateInterval: 1000
     property bool ready: false
     onPositionChanged: {
-        gps.ready = gps.position.horizontalAccuracy < 1000;
+        // Nearby stops are looked for with a 1000 meter radius.
+        gps.ready = (gps.position.coordinate.longitude &&
+            gps.position.horizontalAccuracy > 0 &&
+            gps.position.horizontalAccuracy < 1000) || false;
     }
 }
