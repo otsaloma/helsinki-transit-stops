@@ -17,24 +17,14 @@
  */
 
 import QtQuick 2.0
-import Sailfish.Silica 1.0
-import "."
+import QtPositioning 5.0
 
-ApplicationWindow {
-    id: app
-    allowedOrientations: Orientation.All
-    cover: undefined
-    initialPage: MenuPage { id: menu }
-    property string searchQuery: ""
-    PositionSource { id: gps }
-    Python { id: py }
-    onApplicationActiveChanged: {
-        if (applicationActive) {
-            gps.start();
-        } else {
-            gps.stop();
-            if (py.ready)
-                py.call_sync("hts.app.save", []);
-        }
+PositionSource {
+    id: gps
+    active: true
+    updateInterval: 1000
+    property bool ready: false
+    onPositionChanged: {
+        gps.ready = gps.position.horizontalAccuracy < 1000;
     }
 }

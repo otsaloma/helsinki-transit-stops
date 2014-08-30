@@ -6,10 +6,8 @@ Helsinki Transit Stops 0.1
 Helsinki Transit Stops 1.0
 ==========================
 
- * Add line filters
  * Add proper cover
- * Update list of departures on a timer?
- * Show time remaining as # min when <= 10 min
+ * Add line filters
  * Update metadata of favorite stops periodically?
  * Add disruption listing from Poikkeusinfo XML API
  * Add user interface translations

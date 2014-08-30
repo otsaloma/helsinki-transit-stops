@@ -51,6 +51,17 @@ def departure_time_to_color(dist, departure):
     if left > 1 and dist / 100 <= left: return "#FFF444"
     return "#FF4744"
 
+def format_departure_time(departure):
+    """Format Unix time `departure` for display."""
+    left = (departure - time.time()) / 60
+    if left < -0.5:
+        return ""
+    if left < 10.5:
+        return "{:d} min".format(round(left))
+    departure = time.localtime(departure)
+    return "{:.0f}:{:02.0f}".format(departure.tm_hour,
+                                    departure.tm_min)
+
 def format_distance(distance, n=2, units="m"):
     """Format `distance` to `n` significant digits and unit label."""
     # XXX: We might need to support for non-SI units here.

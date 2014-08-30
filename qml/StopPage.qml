@@ -24,18 +24,19 @@ import "."
 Page {
     id: page
     allowedOrientations: Orientation.All
-    property var coordinate: QtPositioning.coordinate(0, 0)
-    property string favorite: ""
     property bool loading: true
     property bool populated: false
+    property var position: gps.position
     property var results: {}
     property string stopCode: ""
+    property var stopCoordinate: QtPositioning.coordinate(0, 0)
+    property string stopKey: ""
     property string stopName: ""
     property string stopType: ""
     property string title: ""
     // Column widths to be set based on data.
-    property var timeWidth: 0
     property var lineWidth: 0
+    property var timeWidth: 0
     RemorsePopup { id: remorse }
     SilicaListView {
         id: listView
@@ -68,6 +69,10 @@ Page {
                 text: model.time
                 verticalAlignment: Text.AlignVCenter
                 width: page.timeWidth
+                onTextChanged: {
+                    if (timeLabel.implicitWidth > page.timeWidth)
+                        page.timeWidth = timeLabel.implicitWidth;
+                }
                 Component.onCompleted: {
                     if (timeLabel.implicitWidth > page.timeWidth)
                         page.timeWidth = timeLabel.implicitWidth;
@@ -86,15 +91,12 @@ Page {
                 verticalAlignment: Text.AlignVCenter
                 Component.onCompleted: {
                     // Add a dotted line long enough for landscape as well.
-                    var size = Math.max(page.width, page.height);
                     var dots = " . . . . . . . . . . . . . . . . . . . .";
                     while (dots.length < 200)
                         dots += dots.substr(0, 20);
-                    while (destinationLabel.implicitWidth < size) {
+                    var size = Math.max(page.width, page.height);
+                    while (destinationLabel.implicitWidth < size)
                         destinationLabel.text += dots;
-                        // Just in case, to avoid an infinite loop.
-                        if (destinationLabel.text.length > 1000) break;
-                    }
                 }
             }
             Rectangle {
@@ -105,18 +107,8 @@ Page {
                 anchors.rightMargin: Theme.paddingLarge
                 anchors.top: lineLabel.top
                 anchors.topMargin: Theme.paddingMedium
-                color: "#888888";
+                color: model.color
                 width: Theme.paddingMedium
-                property var position: gps.position
-                Component.onCompleted: block.updateColor();
-                onPositionChanged: block.updateColor();
-                function updateColor() {
-                    // Color block based on whether one can make it in time.
-                    var dist = gps.position.coordinate.distanceTo(page.coordinate);
-                    block.color = py.call_sync("hts.util.departure_time_to_color",
-                                               [dist, model.unix_time]);
-
-                }
             }
         }
         header: PageHeader { title: page.title }
@@ -133,10 +125,10 @@ Page {
                             page.stopCode,
                             dialog.name,
                             page.stopType,
-                            page.coordinate.longitude,
-                            page.coordinate.latitude
+                            page.stopCoordinate.longitude,
+                            page.stopCoordinate.latitude
                         ]);
-                        page.favorite = key;
+                        page.stopKey = key;
                         page.stopName = dialog.name;
                         page.title = dialog.name;
                     });
@@ -144,11 +136,11 @@ Page {
             }
             MenuItem {
                 text: "Remove from favorites"
-                visible: page.favorite.length > 0
+                visible: page.stopKey.length > 0
                 onClicked: {
                     remorse.execute("Removing", function() {
-                        py.call_sync("hts.app.favorites.remove", [page.favorite]);
-                        page.favorite = "";
+                        py.call_sync("hts.app.favorites.remove", [page.stopKey]);
+                        page.stopKey = "";
                     });
                 }
             }
@@ -173,6 +165,17 @@ Page {
         size: BusyIndicatorSize.Large
         visible: page.loading
     }
+    Timer {
+        id: timer
+        interval: 60000
+        repeat: true
+        running: false
+        triggeredOnStart: true
+        onTriggered: page.update();
+    }
+    onPositionChanged: {
+        page.update();
+    }
     onStatusChanged: {
         if (page.populated) {
             return;
@@ -188,8 +191,8 @@ Page {
     function populate() {
         // Load departures from the Python backend.
         listView.model.clear();
-        page.timeWidth = 0;
         page.lineWidth = 0;
+        page.timeWidth = 0;
         py.call("hts.query.find_departures", [page.stopCode], function(results) {
             if (results && results.error && results.message) {
                 page.title = "";
@@ -197,8 +200,11 @@ Page {
             } else if (results && results.length > 0) {
                 page.results = results;
                 page.title = page.stopName;
-                for (var i = 0; i < results.length; i++)
+                for (var i = 0; i < results.length; i++) {
+                    results[i].color = "#888888";
                     listView.model.append(results[i]);
+                }
+                timer.start();
             } else {
                 page.title = "";
                 busyLabel.text = "No departures found";
@@ -206,5 +212,24 @@ Page {
             page.loading = false;
             page.populated = true;
         });
+    }
+    function update() {
+        // Update colors and times remaining to departure.
+        var dist = gps.position.coordinate.distanceTo(page.stopCoordinate);
+        for (var i = listView.model.count-1; i >= 0; i--) {
+            var item = listView.model.get(i);
+            item.time = py.call_sync(
+                "hts.util.format_departure_time",
+                [item.unix_time]
+            );
+            item.color = py.call_sync(
+                "hts.util.departure_time_to_color",
+                [dist, item.unix_time]
+            );
+            if (item.time.length == 0)
+                listView.model.remove(i);
+        }
+        if (listView.model.count == 0)
+            timer.stop();
     }
 }

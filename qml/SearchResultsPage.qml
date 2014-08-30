@@ -47,7 +47,7 @@ Page {
         visible: page.loading
     }
     onStatusChanged: {
-        if (app.searchQuery == page.populatedQuery) {
+        if (page.populatedQuery == app.searchQuery) {
             return;
         } else if (page.status == PageStatus.Activating) {
             listView.model.clear();

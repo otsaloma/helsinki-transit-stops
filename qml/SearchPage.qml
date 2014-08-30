@@ -46,16 +46,15 @@ Page {
                 id: contextMenu
                 MenuItem {
                     text: "Remove"
-                    onClicked: listItem.remove();
+                    onClicked: {
+                        py.call_sync("hts.app.history.remove", [model.name]);
+                        listView.model.remove(index);
+                    }
                 }
             }
             onClicked: {
                 app.searchQuery = model.name;
                 app.pageStack.navigateForward();
-            }
-            function remove() {
-                py.call_sync("hts.app.history.remove", [model.name]);
-                listView.model.remove(index);
             }
         }
         header: Column {
@@ -65,7 +64,7 @@ Page {
                 id: searchField
                 placeholderText: "Stop name or number"
                 width: parent.width
-                EnterKey.enabled: searchField.text.length > 0
+                EnterKey.enabled: text.length > 0
                 EnterKey.onClicked: app.pageStack.navigateForward();
                 onTextChanged: {
                     app.searchQuery = searchField.text;

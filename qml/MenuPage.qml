@@ -67,11 +67,11 @@ Page {
             }
             onClicked: {
                 app.pageStack.push("StopPage.qml", {
-                    "favorite": model.key,
+                    "stopKey":  model.key,
                     "stopCode": model.code,
                     "stopName": model.name,
                     "stopType": model.type,
-                    "coordinate": QtPositioning.coordinate(model.y, model.x)
+                    "stopCoordinate": QtPositioning.coordinate(model.y, model.x)
                 });
             }
         }
@@ -94,38 +94,32 @@ Page {
             width: parent.width
             PageHeader { title: "Helsinki Transit Stops" }
             ListItem {
-                id: findNearbyItem
+                id: nearbyItem
                 contentHeight: Theme.itemSizeSmall
-                property bool applicable: gps.position.horizontalAccuracy &&
-                    gps.position.horizontalAccuracy >= 0 &&
-                    gps.position.horizontalAccuracy < 1000
                 ListItemLabel {
-                    id: findNearbyLabel
+                    id: nearbyLabel
                     anchors.leftMargin: 2*Theme.paddingLarge + Theme.paddingMedium
-                    color: findNearbyItem.highlighted ?
+                    color: nearbyItem.highlighted ?
                         Theme.highlightColor : Theme.primaryColor
                     height: Theme.itemSizeSmall
-                    opacity: findNearbyItem.applicable ? 1.0 : 0.4
+                    opacity: gps.ready ? 1.0 : 0.4
                     text: "List nearby stops"
                 }
                 BusyIndicator {
-                    anchors.right: findNearbyLabel.right
+                    anchors.right: nearbyLabel.right
                     anchors.rightMargin: Theme.paddingLarge
-                    anchors.verticalCenter: findNearbyLabel.verticalCenter
-                    running: !findNearbyItem.applicable
+                    anchors.verticalCenter: nearbyLabel.verticalCenter
+                    running: !gps.ready
                     size: BusyIndicatorSize.Medium
                 }
-                onClicked: {
-                    if (findNearbyItem.applicable)
-                        app.pageStack.push("NearbyPage.qml");
-                }
+                onClicked: gps.ready && app.pageStack.push("NearbyPage.qml");
             }
             ListItem {
-                id: findNameItem
+                id: searchItem
                 contentHeight: Theme.itemSizeSmall
                 ListItemLabel {
                     anchors.leftMargin: 2*Theme.paddingLarge + Theme.paddingMedium
-                    color: findNameItem.highlighted ?
+                    color: searchItem.highlighted ?
                         Theme.highlightColor : Theme.primaryColor
                     height: Theme.itemSizeSmall
                     text: "Find stop by name"

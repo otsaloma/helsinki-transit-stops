@@ -35,7 +35,7 @@ SilicaListView {
             color: listItem.highlighted ?
                 Theme.highlightColor : Theme.primaryColor;
             height: implicitHeight + Theme.paddingMedium
-            text: model.short_code == "" ? model.name :
+            text: model.short_code.length > 0 ? model.name :
                 model.name + " <small>(" + model.short_code + ")</small>"
             textFormat: Text.RichText
             verticalAlignment: Text.AlignBottom
@@ -113,7 +113,7 @@ SilicaListView {
                 "stopCode": model.code,
                 "stopName": model.name,
                 "stopType": model.type,
-                "coordinate": QtPositioning.coordinate(model.y, model.x)
+                "stopCoordinate": QtPositioning.coordinate(model.y, model.x)
             });
         }
     }

@@ -18,7 +18,6 @@
 
 import QtQuick 2.0
 import Sailfish.Silica 1.0
-import "."
 
 Dialog {
     id: dialog
@@ -38,7 +37,7 @@ Dialog {
             focus: true
             label: "Name"
             text: dialog.name
-            EnterKey.enabled: textField.text.length > 0
+            EnterKey.enabled: text.length > 0
             EnterKey.onClicked: dialog.accept();
         }
         Component.onCompleted: dialog.textField = textField;

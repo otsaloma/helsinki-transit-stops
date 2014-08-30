@@ -55,7 +55,7 @@ def _new_connection(url, timeout=None):
     """Return new HTTP connection to `url`."""
     cls = _get_connection_class(url)
     host = urllib.parse.urlparse(url).netloc
-    timeout = timeout or 10
+    timeout = timeout or 15
     _connections[_get_key(url)] = cls(host, timeout=timeout)
     return _connections[_get_key(url)]
 
