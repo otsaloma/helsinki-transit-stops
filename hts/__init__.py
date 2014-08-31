@@ -17,7 +17,7 @@
 
 """Show departures from HSL public transportation stops."""
 
-__version__ = "0.0"
+__version__ = "0.1"
 
 try:
     import pyotherside
