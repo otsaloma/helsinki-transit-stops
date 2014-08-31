@@ -21,7 +21,6 @@ import hts
 import http.client
 import json
 import sys
-import traceback
 import urllib.parse
 
 _connections = {}
@@ -55,7 +54,7 @@ def _new_connection(url, timeout=None):
     """Return new HTTP connection to `url`."""
     cls = _get_connection_class(url)
     host = urllib.parse.urlparse(url).netloc
-    timeout = timeout or 15
+    timeout = timeout or 10
     _connections[_get_key(url)] = cls(host, timeout=timeout)
     return _connections[_get_key(url)]
 
@@ -64,20 +63,22 @@ def _remove_connection(url):
     with hts.util.silent(Exception):
         _connections.pop(_get_key(url)).close()
 
-def request_json(url, fallback, encoding="utf_8", retry=1):
+def request_json(url, encoding="utf_8", retry=1):
     """Request, parse and return JSON data."""
+    text = request_url(url, encoding, retry)
+    if not text.strip() and retry > 0:
+        # A blank return is probably an error.
+        _remove_connection(url)
+        text = request_url(url, encoding, retry-1)
     try:
-        text = request_url(url, encoding, retry)
         if not text.strip():
-            # A blank return is probably an error.
-            if retry > 0:
-                _remove_connection(url)
-                return request_json(url, fallback, encoding, retry-1)
-            raise Exception("Blank")
+            raise ValueError("Expected JSON, received blank")
         return json.loads(text)
-    except Exception:
-        traceback.print_exc()
-        return fallback
+    except Exception as error:
+        print("Failed to parse JSON data: {}: {}"
+              .format(error.__class__.__name__, str(error)),
+              file=sys.stderr)
+        raise # Exception
 
 def request_url(url, encoding=None, retry=1):
     """

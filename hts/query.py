@@ -21,11 +21,14 @@ Query stops and departures from the HSL Journey Planner API.
 http://developer.reittiopas.fi/pages/en/http-get-interface-version-2.php
 """
 
+import copy
 import datetime
+import functools
 import hts
 import math
 import re
 import socket
+import traceback
 import urllib.parse
 
 URL_PREFIX = ("http://api.reittiopas.fi/hsl/prod/"
@@ -37,6 +40,22 @@ URL_PREFIX = ("http://api.reittiopas.fi/hsl/prod/"
               "&lang=fi")
 
 
+def api_query(fallback):
+    """Decorator for API requests with graceful error handling."""
+    def outer_wrapper(function):
+        @functools.wraps(function)
+        def inner_wrapper(*args, **kwargs):
+            try:
+                return function(*args, **kwargs)
+            except socket.timeout:
+                return dict(error=True, message="Connection timed out")
+            except Exception:
+                traceback.print_exc()
+                return copy.deepcopy(fallback)
+        return inner_wrapper
+    return outer_wrapper
+
+@api_query(fallback=[])
 def find_departures(code):
     """Return a list of departures from given stop."""
     url = URL_PREFIX + ("&request=stop"
@@ -45,12 +64,8 @@ def find_departures(code):
                         "&dep_limit=20")
 
     url = url.format(code=code)
-    try:
-        output = hts.http.request_json(url, fallback=[])
-    except socket.timeout:
-        return dict(error=True, message="Connection timed out")
-    if not output or not output[0]:
-        return []
+    output = hts.http.request_json(url)
+    if not output or not output[0]: return []
     destinations = dict(
         (code, parse_destination(destination))
         for code, destination in
@@ -65,6 +80,7 @@ def find_departures(code):
     ) for departure in output[0]["departures"] or []]
     return results
 
+@api_query(fallback=[])
 def find_nearby_stops(x, y):
     """Return a list of stops near given coordinates."""
     url = URL_PREFIX + ("&request=reverse_geocode"
@@ -74,10 +90,7 @@ def find_nearby_stops(x, y):
                         "&result_contains=stop")
 
     url = url.format(x=x, y=y)
-    try:
-        output = hts.http.request_json(url, fallback=[])
-    except socket.timeout:
-        return dict(error=True, message="Connection timed out")
+    output = hts.http.request_json(url)
     if not output: return []
     results = [dict(
         name=parse_name(result["name"]),
@@ -104,6 +117,7 @@ def find_nearby_stops(x, y):
         result["dist"] = hts.util.format_distance(dist)
     return results
 
+@api_query(fallback=[])
 def find_stops(name, x, y):
     """Return a list of stops matching `name`."""
     url = URL_PREFIX + ("&request=geocode"
@@ -111,10 +125,7 @@ def find_stops(name, x, y):
                         "&loc_types=stop")
 
     url = url.format(name=urllib.parse.quote_plus(name))
-    try:
-        output = hts.http.request_json(url, fallback=[])
-    except socket.timeout:
-        return dict(error=True, message="Connection timed out")
+    output = hts.http.request_json(url)
     if not output: return []
     results = [dict(
         name=parse_name(result["name"]),
