@@ -1,6 +1,8 @@
 Helsinki Transit Stops 1.0
 ==========================
 
+ * Fix display of stop numbers in search results
+ * Allow landscape only for keyboarded pages?
  * Add a proper cover
  * Add line filters
  * Update metadata of favorite stops periodically?
