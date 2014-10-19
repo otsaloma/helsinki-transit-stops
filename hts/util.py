@@ -47,9 +47,9 @@ def departure_time_to_color(dist, departure):
     # and 100 m/min for fast speed.
     dist = 1.35 * dist
     min_left = (departure - time.time()) / 60
-    if min_left > 3 and dist /  70 <= min_left: return "#3890FF"
-    if min_left > 1 and dist / 100 <= min_left: return "#FFF444"
-    return "#FF4744"
+    if min_left > 3 and dist /  70 <= min_left: return "#3890ff"
+    if min_left > 1 and dist / 100 <= min_left: return "#fff444"
+    return "#ff4744"
 
 def format_departure_time(departure):
     """Format Unix time `departure` for display."""
@@ -112,15 +112,15 @@ def silent(*exceptions):
 def type_to_color(type):
     """Return color based on vehicle `type`."""
     if type == "train":
-        return "#2DBE2C"
+        return "#2dbe2c"
     if type == "metro":
-        return "#FF6319"
+        return "#ff6319"
     if type == "ferry":
-        return "#00B9E4"
+        return "#00b9e4"
     if type == "tram":
-        return "#00985F"
+        return "#00985f"
     if type == "bus":
-        return "#007AC9"
+        return "#007ac9"
     raise ValueError("Unrecognized type: {}"
                      .format(repr(type)))
 
