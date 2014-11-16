@@ -3,7 +3,8 @@ Helsinki Transit Stops 0.2
 
  [ ] Allow multiple stops to be grouped as one favorite
  [X] Allow landscape only for keyboarded pages
- [ ] Fix display of stop numbers in search results
+ [X] Fix display of stop numbers in search results
+ [X] Fix search field history list filtering to be faster and smoother
 
 Helsinki Transit Stops 1.0
 ==========================

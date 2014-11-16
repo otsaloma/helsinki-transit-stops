@@ -32,8 +32,9 @@ Page {
         currentIndex: -1
         delegate: ListItem {
             id: listItem
-            contentHeight: Theme.itemSizeSmall
+            contentHeight: visible ? Theme.itemSizeSmall : 0
             menu: contextMenu
+            visible: model.visible
             ListView.onRemove: animateRemoval(listItem)
             ListItemLabel {
                 anchors.leftMargin: listView.searchField.textLeftMargin
@@ -58,8 +59,12 @@ Page {
             }
         }
         header: Column {
+            height: pageHeader.height + searchField.height
             width: parent.width
-            PageHeader { title: "Find Stop by Name" }
+            PageHeader {
+                id: pageHeader
+                title: "Find Stop by Name"
+            }
             SearchField {
                 id: searchField
                 placeholderText: "Stop name or number"
@@ -68,7 +73,7 @@ Page {
                 EnterKey.onClicked: app.pageStack.navigateForward();
                 onTextChanged: {
                     app.searchQuery = searchField.text;
-                    page.populate();
+                    page.filterHistory();
                 }
             }
             Component.onCompleted: listView.searchField = searchField;
@@ -79,24 +84,37 @@ Page {
     }
     onStatusChanged: {
         if (page.status == PageStatus.Activating) {
-            page.history = py.evaluate("hts.app.history.names");
-            page.populate();
+            page.loadHistory();
+            page.filterHistory();
         }
     }
-    function populate() {
-        // Load search history items from the Python backend.
-        listView.model.clear();
+    function filterHistory() {
+        // Filter search history for current search field text.
         var query = listView.searchField.text.toLowerCase();
-        var nstart = 0;
+        var found = [], n = 0;
         for (var i = 0; i < page.history.length; i++) {
             var historyItem = page.history[i].toLowerCase();
-            if (query != "" && historyItem.indexOf(query) == 0) {
-                listView.model.insert(nstart++, {"name": page.history[i]});
-                if (listView.model.count >= 100) break;
-            } else if (query == "" || historyItem.indexOf(query) > 0) {
-                listView.model.append({"name": page.history[i]});
-                if (listView.model.count >= 100) break;
+            if (query.length > 0 && historyItem.indexOf(query) == 0) {
+                found[n++] = page.history[i];
+                if (found.length >= listView.count) break;
+            } else if (query.length == 0 || historyItem.indexOf(query) > 0) {
+                found[found.length] = page.history[i];
+                if (found.length >= listView.count) break;
             }
+        }
+        for (var i = 0; i < found.length; i++) {
+            listView.model.setProperty(i, "name", found[i]);
+            listView.model.setProperty(i, "visible", true);
+        }
+        for (var i = found.length; i < listView.count; i++)
+            listView.model.setProperty(i, "visible", false);
+    }
+    function loadHistory() {
+        // Load search history and preallocate list items.
+        page.history = py.evaluate("hts.app.history.names");
+        if (listView.model.count == 0) {
+            for (var i = 0; i < 50; i++)
+                listView.model.append({"name": "", "visible": false});
         }
     }
 }
