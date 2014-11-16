@@ -29,7 +29,7 @@ Page {
         Column {
             id: column
             width: parent.width
-            PageHeader { title: "Helsinki Transit Stops" }
+            PageHeader { title: "About Helsinki Transit Stops" }
             ListItemLabel {
                 height: Theme.itemSizeExtraSmall
                 horizontalAlignment: Text.AlignHCenter
