@@ -35,6 +35,7 @@ Label {
         anchors.top: parent.top
         anchors.topMargin: Theme.paddingMedium
         color: parent.blockColor
-        width: Theme.paddingMedium
+        radius: Theme.paddingSmall/3
+        width: Theme.paddingSmall
     }
 }

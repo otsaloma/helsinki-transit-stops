@@ -106,7 +106,8 @@ SilicaListView {
             anchors.top: nameLabel.top
             anchors.topMargin: 1.5*Theme.paddingMedium
             color: py.call_sync("hts.util.type_to_color", [model.type]);
-            width: Theme.paddingMedium
+            radius: Theme.paddingSmall/3
+            width: Theme.paddingSmall
         }
         onClicked: {
             app.pageStack.push("StopPage.qml", {
