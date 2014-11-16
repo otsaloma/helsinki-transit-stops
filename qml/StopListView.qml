@@ -31,8 +31,7 @@ SilicaListView {
         property int lineWidth: 0
         ListItemLabel {
             id: nameLabel
-            anchors.leftMargin: Theme.paddingLarge +
-                Theme.paddingMedium + Theme.paddingSmall
+            anchors.leftMargin: 2*Theme.paddingLarge + Theme.paddingSmall
             color: listItem.highlighted ?
                 Theme.highlightColor : Theme.primaryColor;
             height: implicitHeight + Theme.paddingMedium
@@ -47,8 +46,7 @@ SilicaListView {
         }
         ListItemLabel {
             id: addressLabel
-            anchors.leftMargin: Theme.paddingLarge +
-                Theme.paddingMedium + Theme.paddingSmall
+            anchors.leftMargin: 2*Theme.paddingLarge + Theme.paddingSmall
             anchors.top: nameLabel.bottom
             color: Theme.secondaryColor
             font.pixelSize: Theme.fontSizeSmall
@@ -71,8 +69,7 @@ SilicaListView {
                 Label {
                     id: lineLabel
                     anchors.left: parent.left
-                    anchors.leftMargin: Theme.paddingLarge +
-                        Theme.paddingMedium + Theme.paddingSmall
+                    anchors.leftMargin: 2*Theme.paddingLarge + Theme.paddingSmall
                     color: Theme.secondaryColor
                     font.pixelSize: Theme.fontSizeSmall
                     text: line.line
@@ -109,22 +106,14 @@ SilicaListView {
             anchors.bottom: repeater.bottom
             anchors.bottomMargin: 1.5*Theme.paddingMedium
             anchors.right: nameLabel.left
-            anchors.rightMargin: Theme.paddingMedium
+            anchors.rightMargin: Theme.paddingLarge
             anchors.top: nameLabel.top
             anchors.topMargin: 1.5*Theme.paddingMedium
             color: model.color;
             radius: Theme.paddingSmall/3
             width: Theme.paddingSmall
         }
-        onClicked: {
-            // XXX:
-            // app.pageStack.push("StopPage.qml", {
-            //     "stopCode": model.code,
-            //     "stopName": model.name,
-            //     "stopType": model.type,
-            //     "stopCoordinate": QtPositioning.coordinate(model.y, model.x)
-            // });
-        }
+        onClicked: app.pageStack.push("StopPage.qml", {"props": model});
     }
     header: PageHeader { title: page.title }
     model: ListModel {}

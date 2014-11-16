@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-"""A collection of favorite stops and their metadata."""
+"""A collection of favorite stop groups and their metadata."""
 
 import copy
 import hts
@@ -27,52 +27,93 @@ __all__ = ("Favorites",)
 
 class Favorites:
 
-    """A collection of favorite stops and their metadata."""
+    """A collection of favorite stop groups and their metadata."""
 
     def __init__(self):
         """Initialize a :class:`Favorites` instance."""
         self._path = os.path.join(hts.CONFIG_HOME_DIR, "favorites.json")
-        self._stops = []
+        self._favorites = []
         self._read()
 
-    def add(self, code, name, type, x, y):
-        """Add stop to the list of stops and return its key."""
+    def add(self, name):
+        """Add `name` to the list of favorites and return added favorite."""
         key = str(int(1000*time.time()))
-        self._stops.append(dict(key=key,
-                                code=code,
-                                name=name.strip(),
-                                type=type,
-                                x=x,
-                                y=y))
+        self._favorites.append(dict(key=key, name=name, stops=[]))
+
+    def add_stop(self, key, props):
+        """
+        Add stop to favorite `key` and return key.
+
+        `key` can be ``None`` to create a new favorite.
+        """
+        favorite = self.get(key)
+        if favorite is None:
+            favorite = self.add(props.name)
+        favorite.stops.append(dict(code=props["code"],
+                                   short_code=props["short_code"],
+                                   type=props["type"],
+                                   x=props["x"],
+                                   y=props["y"]))
 
         return key
 
+    @property
+    def favorites(self):
+        """Return a list of favorites."""
+        favorites = copy.deepcopy(self._favorites)
+        favorites.sort(key=lambda x: x["name"])
+        for favorite in favorites:
+            types = [stop["type"] for stop in favorite["stops"]]
+            favorite["color"] = hts.util.types_to_color(types)
+        return favorites
+
+    def get(self, key):
+        """Return favorite matching `key` or ``None``."""
+        for favorite in self._favorites:
+            if favorite["key"] == key:
+                return favorite
+        return None
+
     def _read(self):
-        """Read list of stops from file."""
+        """Read list of favorites from file."""
         if os.path.isfile(self._path):
             with hts.util.silent(Exception):
-                self._stops = hts.util.read_json(self._path)
+                self._favorites = hts.util.read_json(self._path)
+        # Favorite format changed in version 0.2.
+        for favorite in self._favorites:
+            if not "stops" in favorite:
+                favorite["stops"] = [dict(code=favorite["code"],
+                                          short_code=None,
+                                          type=favorite["type"],
+                                          x=favorite["x"],
+                                          y=favorite["y"])]
+
+                favorite.pop("code")
+                favorite.pop("type")
+                favorite.pop("x")
+                favorite.pop("y")
 
     def remove(self, key):
-        """Remove stop from the list of stops."""
-        for i in list(reversed(range(len(self._stops)))):
-            if self._stops[i]["key"] == key:
-                self._stops.pop(i)
+        """Remove favorite from the list of favorites."""
+        for i in list(reversed(range(len(self._favorites)))):
+            if self._favorites[i]["key"] == key:
+                self._favorites.pop(i)
+
+    def remove_stop(self, key, code):
+        """Remove stop from stops of favorite `key`."""
+        for favorite in self._favorites:
+            if favorite["key"] == key:
+                for i in list(reversed(range(len(favorite["stops"])))):
+                    if favorite["stops"][i]["code"] == code:
+                        favorite["stops"].pop(i)
 
     def rename(self, key, name):
-        """Give an existing stop a new name."""
-        for stop in self._stops:
-            if stop["key"] == key:
-                stop["name"] = name.strip()
-
-    @property
-    def stops(self):
-        """Return a list of stops."""
-        stops = copy.deepcopy(self._stops)
-        stops.sort(key=lambda x: x["name"])
-        return stops
+        """Give an existing favorite a new name."""
+        for favorite in self._favorites:
+            if favorite["key"] == key:
+                favorite["name"] = name.strip()
 
     def write(self):
-        """Write list of stops to file."""
+        """Write list of favorites to file."""
         with hts.util.silent(Exception):
-            hts.util.write_json(self._stops, self._path)
+            hts.util.write_json(self._favorites, self._path)

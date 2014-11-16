@@ -24,24 +24,14 @@ import "."
 Page {
     id: page
     allowedOrientations: Orientation.Portrait
-
     property bool loading: false
     property bool populated: false
+    property var props: {}
     property var results: {}
     property string title: ""
-
-    // Stop metadata matching what is stored in favorites.
-    property string stopKey:  ""
-    property string stopCode: ""
-    property string stopName: ""
-    property string stopType: ""
-    property var stopCoordinate: QtPositioning.coordinate(0, 0)
-
     // Column widths to be set based on data.
     property int lineWidth: 0
     property int timeWidth: 0
-
-    RemorsePopup { id: remorse }
     DepartureListView { id: listView }
     Label {
         id: busyLabel
@@ -88,13 +78,14 @@ Page {
         listView.model.clear();
         page.lineWidth = 0;
         page.timeWidth = 0;
-        py.call("hts.query.find_departures", [page.stopCode], function(results) {
+        var code = page.props.code;
+        py.call("hts.query.find_departures", [code], function(results) {
             if (results && results.error && results.message) {
                 page.title = "";
                 busyLabel.text = results.message;
             } else if (results && results.length > 0) {
                 page.results = results;
-                page.title = page.stopName;
+                page.title = page.props.name;
                 for (var i = 0; i < results.length; i++) {
                     results[i].color = "#888888";
                     listView.model.append(results[i]);
@@ -109,7 +100,8 @@ Page {
     }
     function update() {
         // Update colors and times remaining to departure.
-        var dist = gps.position.coordinate.distanceTo(page.stopCoordinate);
+        var dist = gps.position.coordinate.distanceTo(
+            QtPositioning.coordinate(page.props.y, page.props.x));
         for (var i = listView.model.count-1; i >= 0; i--) {
             var item = listView.model.get(i);
             item.time = py.call_sync(

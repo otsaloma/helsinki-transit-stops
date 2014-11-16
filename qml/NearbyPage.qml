@@ -53,7 +53,7 @@ Page {
             listView.model.clear();
             page.loading = true;
             page.title = "";
-            busyLabel.text = "Searching"
+            busyLabel.text = "Searching";
         } else if (page.status == PageStatus.Active) {
             page.populate();
         }

@@ -21,7 +21,7 @@ import Sailfish.Silica 1.0
 
 Label {
     anchors.left: parent.left
-    anchors.leftMargin: 2*Theme.paddingLarge + Theme.paddingMedium
+    anchors.leftMargin: 2*Theme.paddingLarge + Theme.paddingSmall
     anchors.right: parent.right
     anchors.rightMargin: Theme.paddingLarge
     truncationMode: TruncationMode.Fade

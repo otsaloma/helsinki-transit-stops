@@ -44,15 +44,11 @@ Page {
             ContextMenu {
                 id: contextMenu
                 MenuItem {
-                    text: "Rename"
+                    text: "Edit"
                     onClicked: {
-                        var dialog = pageStack.push("FavoriteDialog.qml", {
-                            "name": model.name});
-                        dialog.accepted.connect(function() {
-                            var args = [model.key, dialog.name];
-                            py.call_sync("hts.app.favorites.rename", args);
-                            model.name = dialog.name;
-                        });
+                        // XXX:
+                        // var dialog = pageStack.push("EditFavoriteDialog.qml", {});
+                        // dialog.accepted.connect(function() {});
                     }
                 }
                 MenuItem {
@@ -66,13 +62,14 @@ Page {
                 }
             }
             onClicked: {
-                app.pageStack.push("StopPage.qml", {
-                    "stopKey":  model.key,
-                    "stopCode": model.code,
-                    "stopName": model.name,
-                    "stopType": model.type,
-                    "stopCoordinate": QtPositioning.coordinate(model.y, model.x)
-                });
+                // XXX:
+                // app.pageStack.push("FavoritePage.qml", {
+                //     "stopKey":  model.key,
+                //     "stopCode": model.code,
+                //     "stopName": model.name,
+                //     "stopType": model.type,
+                //     "stopCoordinate": QtPositioning.coordinate(model.y, model.x)
+                // });
             }
         }
         footer: Column {
@@ -81,7 +78,7 @@ Page {
                 id: aboutItem
                 contentHeight: Theme.itemSizeSmall
                 ListItemLabel {
-                    anchors.leftMargin: 2*Theme.paddingLarge + Theme.paddingMedium
+                    anchors.leftMargin: 2*Theme.paddingLarge + Theme.paddingSmall
                     color: aboutItem.highlighted ?
                         Theme.highlightColor : Theme.primaryColor
                     height: Theme.itemSizeSmall
@@ -98,7 +95,7 @@ Page {
                 contentHeight: Theme.itemSizeSmall
                 ListItemLabel {
                     id: nearbyLabel
-                    anchors.leftMargin: 2*Theme.paddingLarge + Theme.paddingMedium
+                    anchors.leftMargin: 2*Theme.paddingLarge + Theme.paddingSmall
                     color: nearbyItem.highlighted ?
                         Theme.highlightColor : Theme.primaryColor
                     height: Theme.itemSizeSmall
@@ -118,7 +115,7 @@ Page {
                 id: searchItem
                 contentHeight: Theme.itemSizeSmall
                 ListItemLabel {
-                    anchors.leftMargin: 2*Theme.paddingLarge + Theme.paddingMedium
+                    anchors.leftMargin: 2*Theme.paddingLarge + Theme.paddingSmall
                     color: searchItem.highlighted ?
                         Theme.highlightColor : Theme.primaryColor
                     height: Theme.itemSizeSmall
@@ -133,24 +130,20 @@ Page {
         model: ListModel {}
         VerticalScrollDecorator {}
     }
-    onStatusChanged: {
-        if (page.status == PageStatus.Activating) {
-            if (py.ready) {
+    Component.onCompleted: {
+        if (py.ready) {
+            page.populate();
+        } else {
+            py.onReadyChanged.connect(function() {
                 page.populate();
-            } else {
-                py.onReadyChanged.connect(function() {
-                    page.populate();
-                });
-            }
+            });
         }
     }
     function populate() {
-        // Load favorite stops from the Python backend.
+        // Load favorites from the Python backend.
         listView.model.clear();
-        var stops = py.evaluate("hts.app.favorites.stops");
-        for (var i = 0; i < stops.length; i++) {
-            stops[i].color = py.call_sync("hts.util.type_to_color", [stops[i].type]);
-            listView.model.append(stops[i]);
-        }
+        var favorites = py.evaluate("hts.app.favorites.favorites");
+        for (var i = 0; i < favorites.length; i++)
+            listView.model.append(favorites[i]);
     }
 }

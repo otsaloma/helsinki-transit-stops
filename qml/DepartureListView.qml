@@ -30,7 +30,7 @@ SilicaListView {
         Label {
             id: lineLabel
             anchors.left: parent.left
-            anchors.leftMargin: 2*Theme.paddingLarge + Theme.paddingMedium
+            anchors.leftMargin: 2*Theme.paddingLarge + Theme.paddingSmall
             font.pixelSize: Theme.fontSizeLarge
             height: Theme.itemSizeExtraSmall
             horizontalAlignment: Text.AlignRight
@@ -93,7 +93,8 @@ SilicaListView {
             anchors.top: lineLabel.top
             anchors.topMargin: Theme.paddingMedium
             color: model.color
-            width: Theme.paddingMedium
+            radius: Theme.paddingSmall/3
+            width: Theme.paddingSmall
         }
     }
     header: PageHeader { title: page.title }
@@ -103,30 +104,21 @@ SilicaListView {
         MenuItem {
             text: "Add to favorites"
             onClicked: {
-                var dialog = pageStack.push("FavoriteDialog.qml", {
-                    "name": page.stopName});
-                dialog.accepted.connect(function() {
-                    var key = py.call_sync("hts.app.favorites.add", [
-                        page.stopCode,
-                        dialog.name,
-                        page.stopType,
-                        page.stopCoordinate.longitude,
-                        page.stopCoordinate.latitude
-                    ]);
-                    page.stopKey = key;
-                    page.stopName = dialog.name;
-                    page.title = dialog.name;
-                });
-            }
-        }
-        MenuItem {
-            text: "Remove from favorites"
-            visible: page.stopKey.length > 0
-            onClicked: {
-                remorse.execute("Removing", function() {
-                    py.call_sync("hts.app.favorites.remove", [page.stopKey]);
-                    page.stopKey = "";
-                });
+                // XXX:
+                // var dialog = pageStack.push("FavoriteDialog.qml", {
+                //     "name": page.stopName});
+                // dialog.accepted.connect(function() {
+                //     var key = py.call_sync("hts.app.favorites.add", [
+                //         page.stopCode,
+                //         dialog.name,
+                //         page.stopType,
+                //         page.stopCoordinate.longitude,
+                //         page.stopCoordinate.latitude
+                //     ]);
+                //     page.stopKey = key;
+                //     page.stopName = dialog.name;
+                //     page.title = dialog.name;
+                // });
             }
         }
     }

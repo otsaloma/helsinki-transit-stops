@@ -111,17 +111,21 @@ def silent(*exceptions):
 
 def type_to_color(type):
     """Return color based on vehicle `type`."""
-    if type == "train":
+    return types_to_color((type,))
+
+def types_to_color(types):
+    """Return color based on vehicle `types`."""
+    if "train" in types:
         return "#2dbe2c"
-    if type == "metro":
+    if "metro" in types:
         return "#ff6319"
-    if type == "ferry":
+    if "ferry" in types:
         return "#00b9e4"
-    if type == "tram":
+    if "tram" in types:
         return "#00985f"
-    if type == "bus":
+    if "bus" in types:
         return "#007ac9"
-    raise ValueError("Unrecognized type: {}"
+    raise ValueError("Unrecognized types: {}"
                      .format(repr(type)))
 
 def write_json(data, path):
