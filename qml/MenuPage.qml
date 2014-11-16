@@ -23,7 +23,7 @@ import "."
 
 Page {
     id: page
-    allowedOrientations: Orientation.All
+    allowedOrientations: Orientation.Portrait
     SilicaListView {
         id: listView
         anchors.fill: parent

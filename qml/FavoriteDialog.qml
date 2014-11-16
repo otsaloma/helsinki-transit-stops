@@ -21,7 +21,7 @@ import Sailfish.Silica 1.0
 
 Dialog {
     id: dialog
-    allowedOrientations: Orientation.All
+    allowedOrientations: Orientation.Portrait
     canAccept: textField && textField.text.length > 0
     property string name: ""
     property var textField

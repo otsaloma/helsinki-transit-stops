@@ -1,14 +1,15 @@
 Helsinki Transit Stops 0.2
 ==========================
 
- [ ] Add line filters
- [ ] Add a proper active cover
- [ ] Allow landscape only for keyboarded pages
+ [ ] Allow multiple stops to be grouped as one favorite
+ [X] Allow landscape only for keyboarded pages
  [ ] Fix display of stop numbers in search results
 
 Helsinki Transit Stops 1.0
 ==========================
 
+ * Add line filters
+ * Add a proper active cover
  * Update metadata of favorite stops periodically?
  * Add disruption listing from Poikkeusinfo XML API
  * Add user interface translations
