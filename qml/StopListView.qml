@@ -31,18 +31,24 @@ SilicaListView {
         property int lineWidth: 0
         ListItemLabel {
             id: nameLabel
-            anchors.leftMargin: 2*Theme.paddingLarge + Theme.paddingMedium
+            anchors.leftMargin: Theme.paddingLarge +
+                Theme.paddingMedium + Theme.paddingSmall
             color: listItem.highlighted ?
                 Theme.highlightColor : Theme.primaryColor;
             height: implicitHeight + Theme.paddingMedium
-            text: model.short_code.length > 0 ? model.name :
-                model.name + " <small>(" + model.short_code + ")</small>"
-            textFormat: Text.RichText
+            text: model.name
             verticalAlignment: Text.AlignBottom
+            Component.onCompleted: {
+                if (model.short_code && model.short_code.length > 0) {
+                    nameLabel.textFormat = Text.RichText;
+                    nameLabel.text += " <small>(" + model.short_code + ")</small>";
+                }
+            }
         }
         ListItemLabel {
             id: addressLabel
-            anchors.leftMargin: 2*Theme.paddingLarge + Theme.paddingMedium
+            anchors.leftMargin: Theme.paddingLarge +
+                Theme.paddingMedium + Theme.paddingSmall
             anchors.top: nameLabel.bottom
             color: Theme.secondaryColor
             font.pixelSize: Theme.fontSizeSmall
@@ -65,7 +71,8 @@ SilicaListView {
                 Label {
                     id: lineLabel
                     anchors.left: parent.left
-                    anchors.leftMargin: 2*Theme.paddingLarge + Theme.paddingMedium
+                    anchors.leftMargin: Theme.paddingLarge +
+                        Theme.paddingMedium + Theme.paddingSmall
                     color: Theme.secondaryColor
                     font.pixelSize: Theme.fontSizeSmall
                     text: line.line
@@ -102,20 +109,21 @@ SilicaListView {
             anchors.bottom: repeater.bottom
             anchors.bottomMargin: 1.5*Theme.paddingMedium
             anchors.right: nameLabel.left
-            anchors.rightMargin: Theme.paddingLarge
+            anchors.rightMargin: Theme.paddingMedium
             anchors.top: nameLabel.top
             anchors.topMargin: 1.5*Theme.paddingMedium
-            color: py.call_sync("hts.util.type_to_color", [model.type]);
+            color: model.color;
             radius: Theme.paddingSmall/3
             width: Theme.paddingSmall
         }
         onClicked: {
-            app.pageStack.push("StopPage.qml", {
-                "stopCode": model.code,
-                "stopName": model.name,
-                "stopType": model.type,
-                "stopCoordinate": QtPositioning.coordinate(model.y, model.x)
-            });
+            // XXX:
+            // app.pageStack.push("StopPage.qml", {
+            //     "stopCode": model.code,
+            //     "stopName": model.name,
+            //     "stopType": model.type,
+            //     "stopCoordinate": QtPositioning.coordinate(model.y, model.x)
+            // });
         }
     }
     header: PageHeader { title: page.title }
