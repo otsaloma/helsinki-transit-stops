@@ -80,6 +80,18 @@ def find_departures(code):
     ) for departure in output[0]["departures"] or []]
     return results
 
+def find_departures_group(codes):
+    """Return a list of departures from given stops."""
+    results = []
+    for code in codes:
+        value = find_departures(code)
+        if isinstance(value, dict):
+            # socket.timeout error.
+            return value
+        results.extend(value)
+    results.sort(key=lambda x: x["unix_time"])
+    return results
+
 @api_query(fallback=[])
 def find_nearby_stops(x, y):
     """Return a list of stops near given coordinates."""

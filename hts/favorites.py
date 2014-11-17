@@ -36,26 +36,20 @@ class Favorites:
         self._read()
 
     def add(self, name):
-        """Add `name` to the list of favorites and return added favorite."""
+        """Add `name` to the list of favorites and return key."""
         key = str(int(1000*time.time()))
         self._favorites.append(dict(key=key, name=name, stops=[]))
+        return key
 
     def add_stop(self, key, props):
-        """
-        Add stop to favorite `key` and return key.
-
-        `key` can be ``None`` to create a new favorite.
-        """
+        """Add stop to given favorite."""
         favorite = self.get(key)
-        if favorite is None:
-            favorite = self.add(props.name)
+        self.remove_stop(key, props["code"])
         favorite.stops.append(dict(code=props["code"],
                                    short_code=props["short_code"],
                                    type=props["type"],
                                    x=props["x"],
                                    y=props["y"]))
-
-        return key
 
     @property
     def favorites(self):
@@ -63,16 +57,23 @@ class Favorites:
         favorites = copy.deepcopy(self._favorites)
         favorites.sort(key=lambda x: x["name"])
         for favorite in favorites:
-            types = [stop["type"] for stop in favorite["stops"]]
+            types = [x["type"] for x in favorite["stops"]]
             favorite["color"] = hts.util.types_to_color(types)
         return favorites
 
+    def find_departures(self, key):
+        """Return a list of departures from given favorite."""
+        favorite = self.get(key)
+        codes = [x["code"] for x in favorite["stops"]]
+        return hts.query.find_departures_group(codes)
+
     def get(self, key):
-        """Return favorite matching `key` or ``None``."""
+        """Return favorite matching `key` or raise :exc:`LookupError`."""
         for favorite in self._favorites:
             if favorite["key"] == key:
                 return favorite
-        return None
+        raise LookupError("Favorite {} not found"
+                          .format(repr(key)))
 
     def _read(self):
         """Read list of favorites from file."""
@@ -101,17 +102,15 @@ class Favorites:
 
     def remove_stop(self, key, code):
         """Remove stop from stops of favorite `key`."""
-        for favorite in self._favorites:
-            if favorite["key"] == key:
-                for i in list(reversed(range(len(favorite["stops"])))):
-                    if favorite["stops"][i]["code"] == code:
-                        favorite["stops"].pop(i)
+        favorite = self.get(key)
+        for i in list(reversed(range(len(favorite["stops"])))):
+            if favorite["stops"][i]["code"] == code:
+                favorite["stops"].pop(i)
 
     def rename(self, key, name):
         """Give an existing favorite a new name."""
-        for favorite in self._favorites:
-            if favorite["key"] == key:
-                favorite["name"] = name.strip()
+        favorite = self.get(key)
+        favorite["name"] = name.strip()
 
     def write(self):
         """Write list of favorites to file."""

@@ -61,16 +61,7 @@ Page {
                     }
                 }
             }
-            onClicked: {
-                // XXX:
-                // app.pageStack.push("FavoritePage.qml", {
-                //     "stopKey":  model.key,
-                //     "stopCode": model.code,
-                //     "stopName": model.name,
-                //     "stopType": model.type,
-                //     "stopCoordinate": QtPositioning.coordinate(model.y, model.x)
-                // });
-            }
+            onClicked: app.pageStack.push("FavoritePage.qml", {"props": model});
         }
         footer: Column {
             width: parent.width

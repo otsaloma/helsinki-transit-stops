@@ -37,23 +37,9 @@ Page {
         PullDownMenu {
             visible: !page.loading || false
             MenuItem {
-                text: "Add to favorites"
+                text: "Edit"
                 onClicked: {
-                    // XXX:
-                    // var dialog = pageStack.push("FavoriteDialog.qml", {
-                    //     "name": page.stopName});
-                    // dialog.accepted.connect(function() {
-                    //     var key = py.call_sync("hts.app.favorites.add", [
-                    //         page.stopCode,
-                    //         dialog.name,
-                    //         page.stopType,
-                    //         page.stopCoordinate.longitude,
-                    //         page.stopCoordinate.latitude
-                    //     ]);
-                    //     page.stopKey = key;
-                    //     page.stopName = dialog.name;
-                    //     page.title = dialog.name;
-                    // });
+                    // ...
                 }
             }
         }
@@ -103,8 +89,8 @@ Page {
         listView.model.clear();
         page.lineWidth = 0;
         page.timeWidth = 0;
-        var code = page.props.code;
-        py.call("hts.query.find_departures", [code], function(results) {
+        var key = page.props.key;
+        py.call("hts.app.favorites.find_departures", [key], function(results) {
             if (results && results.error && results.message) {
                 page.title = "";
                 busyLabel.text = results.message;
