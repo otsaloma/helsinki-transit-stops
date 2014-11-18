@@ -43,10 +43,13 @@ def departure_time_to_color(dist, departure):
     `dist` should be straight-line distance to stop in meters and
     `departure` should be the Unix time of departure.
     """
-    # Use walking speeds from reittiopas.fi: 70 m/min for normal
-    # and 100 m/min for fast speed.
+    # Actual walking distance is usually between 1 and 1.414,
+    # on average maybe around 1.2, times the straight-line distance.
+    # We can bump that figure a bit to account for traffic lights etc.
     dist = 1.35 * dist
     min_left = (departure - time.time()) / 60
+    # Use walking speeds from reittiopas.fi:
+    # 70 m/min for normal and 100 m/min for fast speed.
     if min_left > 3 and dist /  70 <= min_left: return "#3890ff"
     if min_left > 1 and dist / 100 <= min_left: return "#fff444"
     return "#ff4744"
