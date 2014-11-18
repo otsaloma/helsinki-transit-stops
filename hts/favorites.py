@@ -46,6 +46,7 @@ class Favorites:
         favorite = self.get(key)
         self.remove_stop(key, props["code"])
         favorite.stops.append(dict(code=props["code"],
+                                   name=props["name"],
                                    short_code=props["short_code"],
                                    type=props["type"],
                                    x=props["x"],
@@ -59,13 +60,14 @@ class Favorites:
         for favorite in favorites:
             types = [x["type"] for x in favorite["stops"]]
             favorite["color"] = hts.util.types_to_color(types)
+            favorite.stops.sort(key=lambda x: x["name"])
         return favorites
 
     def find_departures(self, key):
         """Return a list of departures from given favorite."""
         favorite = self.get(key)
         codes = [x["code"] for x in favorite["stops"]]
-        return hts.query.find_departures_group(codes)
+        return hts.query.find_departures(codes)
 
     def get(self, key):
         """Return favorite matching `key` or raise :exc:`LookupError`."""
@@ -84,6 +86,7 @@ class Favorites:
         for favorite in self._favorites:
             if not "stops" in favorite:
                 favorite["stops"] = [dict(code=favorite["code"],
+                                          name=favorite["name"],
                                           short_code=None,
                                           type=favorite["type"],
                                           x=favorite["x"],
@@ -95,13 +98,13 @@ class Favorites:
                 favorite.pop("y")
 
     def remove(self, key):
-        """Remove favorite from the list of favorites."""
+        """Remove `key` from the list of favorites."""
         for i in list(reversed(range(len(self._favorites)))):
             if self._favorites[i]["key"] == key:
                 self._favorites.pop(i)
 
     def remove_stop(self, key, code):
-        """Remove stop from stops of favorite `key`."""
+        """Remove `code` from stops of favorite `key`."""
         favorite = self.get(key)
         for i in list(reversed(range(len(favorite["stops"])))):
             if favorite["stops"][i]["code"] == code:

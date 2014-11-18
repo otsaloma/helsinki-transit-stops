@@ -56,7 +56,7 @@ def api_query(fallback):
     return outer_wrapper
 
 @api_query(fallback=[])
-def find_departures(code):
+def _find_departures(code):
     """Return a list of departures from given stop."""
     url = URL_PREFIX + ("&request=stop"
                         "&code={code}"
@@ -80,13 +80,20 @@ def find_departures(code):
     ) for departure in output[0]["departures"] or []]
     return results
 
-def find_departures_group(codes):
-    """Return a list of departures from given stops."""
+def find_departures(codes):
+    """
+    Return a list of departures from given stops.
+
+    `codes` can be either a string to get departures from one stop or
+    a list or tuple of strings to get departures from a group of stops.
+    """
+    if isinstance(codes, str):
+        return _find_departures(codes)
     results = []
     for code in codes:
-        value = find_departures(code)
+        value = _find_departures(code)
         if isinstance(value, dict):
-            # socket.timeout error.
+            # Error value.
             return value
         results.extend(value)
     results.sort(key=lambda x: x["unix_time"])
@@ -125,9 +132,8 @@ def find_nearby_stops(x, y):
         linecodes = [line.pop("code") for line in result["lines"]]
         result["type"] = guess_type(linecodes)
         result["color"] = hts.util.type_to_color(result["type"])
-        coords = (x, y, result["x"], result["y"])
-        dist = hts.util.calculate_distance(*coords)
-        result["dist"] = hts.util.format_distance(dist)
+        result["dist"] = hts.util.format_distance(
+            hts.util.calculate_distance(x, y, result["x"], result["y"]))
     return results
 
 @api_query(fallback=[])
@@ -159,9 +165,8 @@ def find_stops(name, x, y):
         linecodes = [line.pop("code") for line in result["lines"]]
         result["type"] = guess_type(linecodes)
         result["color"] = hts.util.type_to_color(result["type"])
-        coords = (x, y, result["x"], result["y"])
-        dist = hts.util.calculate_distance(*coords)
-        result["dist"] = hts.util.format_distance(dist)
+        result["dist"] = hts.util.format_distance(
+            hts.util.calculate_distance(x, y, result["x"], result["y"]))
     return results
 
 def guess_type(codes):

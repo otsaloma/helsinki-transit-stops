@@ -6,11 +6,14 @@ Helsinki Transit Stops 0.2
  [X] Fix display of stop numbers in search results
  [X] Fix search field history list filtering to be faster and smoother
 
+ * Keep passed departures on screen for a minute longer?
+ * Bump threshold when to show minutes instead of time?
+
 Helsinki Transit Stops 1.0
 ==========================
 
  * Add line filters
- * Add a proper active cover
+ * Add a proper, active cover
  * Update metadata of favorite stops periodically?
  * Add disruption listing from Poikkeusinfo XML API
  * Add user interface translations
