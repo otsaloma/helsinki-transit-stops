@@ -39,7 +39,9 @@ Page {
             MenuItem {
                 text: "Edit"
                 onClicked: {
-                    // ...
+                    // XXX:
+                    // var dialog = pageStack.push("EditFavoriteDialog.qml", {});
+                    // dialog.accepted.connect(function() {});
                 }
             }
         }

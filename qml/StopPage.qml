@@ -40,20 +40,8 @@ Page {
                 text: "Add to favorites"
                 onClicked: {
                     // XXX:
-                    // var dialog = pageStack.push("FavoriteDialog.qml", {
-                    //     "name": page.stopName});
-                    // dialog.accepted.connect(function() {
-                    //     var key = py.call_sync("hts.app.favorites.add", [
-                    //         page.stopCode,
-                    //         dialog.name,
-                    //         page.stopType,
-                    //         page.stopCoordinate.longitude,
-                    //         page.stopCoordinate.latitude
-                    //     ]);
-                    //     page.stopKey = key;
-                    //     page.stopName = dialog.name;
-                    //     page.title = dialog.name;
-                    // });
+                    // var dialog = pageStack.push("AddFavoriteDialog.qml", {});
+                    // dialog.accepted.connect(function() {});
                 }
             }
         }
