@@ -45,12 +45,12 @@ class Favorites:
         """Add stop to given favorite."""
         favorite = self.get(key)
         self.remove_stop(key, props["code"])
-        favorite.stops.append(dict(code=props["code"],
-                                   name=props["name"],
-                                   short_code=props["short_code"],
-                                   type=props["type"],
-                                   x=props["x"],
-                                   y=props["y"]))
+        favorite["stops"].append(dict(code=props["code"],
+                                      name=props["name"],
+                                      short_code=props["short_code"],
+                                      type=props["type"],
+                                      x=props["x"],
+                                      y=props["y"]))
 
     @property
     def favorites(self):
@@ -60,7 +60,7 @@ class Favorites:
         for favorite in favorites:
             types = [x["type"] for x in favorite["stops"]]
             favorite["color"] = hts.util.types_to_color(types)
-            favorite.stops.sort(key=lambda x: x["name"])
+            favorite["stops"].sort(key=lambda x: x["name"])
         return favorites
 
     def find_departures(self, key):
