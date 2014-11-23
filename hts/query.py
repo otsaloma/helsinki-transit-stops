@@ -96,7 +96,7 @@ def find_departures(codes):
             # Error value.
             return value
         results.extend(value)
-    results.sort(key=lambda x: x["unix_time"])
+    results.sort(key=lambda x: (x["unix_time"], x["line"]))
     return results
 
 @api_query(fallback=[])
@@ -236,6 +236,6 @@ def unique_lines(lines):
     """Return `lines` with duplicates discarded."""
     ulines = []
     for line in lines:
-        if not line in ulines:
+        if not line["line"] in (x["line"] for x in ulines):
             ulines.append(line)
     return ulines
