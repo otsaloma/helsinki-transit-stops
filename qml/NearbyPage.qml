@@ -27,7 +27,18 @@ Page {
     property bool populated: false
     property var results: {}
     property string title: ""
-    StopListView { id: listView }
+    SilicaListView {
+        id: listView
+        anchors.fill: parent
+        // Prevent list items from stealing focus.
+        currentIndex: -1
+        delegate: StopListItem {
+            onClicked: app.pageStack.push("StopPage.qml", {"props": model});
+        }
+        header: PageHeader { title: page.title }
+        model: ListModel {}
+        VerticalScrollDecorator {}
+    }
     Label {
         id: busyLabel
         anchors.bottom: busyIndicator.top

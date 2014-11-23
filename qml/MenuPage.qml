@@ -17,7 +17,6 @@
  */
 
 import QtQuick 2.0
-import QtPositioning 5.0
 import Sailfish.Silica 1.0
 import "."
 
@@ -29,30 +28,9 @@ Page {
         anchors.fill: parent
         // Prevent list items from stealing focus.
         currentIndex: -1
-        delegate: ListItem {
+        delegate: FavoriteListItem {
             id: listItem
-            contentHeight: Theme.itemSizeSmall
-            menu: contextMenu
-            ListView.onRemove: animateRemoval(listItem)
-            ListItemLabel {
-                anchors.leftMargin: 2*Theme.paddingLarge + Theme.paddingSmall
-                color: listItem.highlighted ?
-                    Theme.highlightColor : Theme.primaryColor
-                height: Theme.itemSizeSmall
-                text: model.name
-                Rectangle {
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: Theme.paddingMedium
-                    anchors.right: parent.left
-                    anchors.rightMargin: Theme.paddingLarge
-                    anchors.top: parent.top
-                    anchors.topMargin: Theme.paddingMedium
-                    color: model.color
-                    radius: Theme.paddingSmall/3
-                    width: Theme.paddingSmall
-                }
-            }
-            ContextMenu {
+            menu: ContextMenu {
                 id: contextMenu
                 MenuItem {
                     text: "Edit"
@@ -72,6 +50,7 @@ Page {
                     }
                 }
             }
+            ListView.onRemove: animateRemoval(listItem);
             onClicked: app.pageStack.push("FavoritePage.qml", {"props": model});
         }
         footer: Column {

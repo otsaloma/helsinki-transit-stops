@@ -32,8 +32,14 @@ Page {
     // Column widths to be set based on data.
     property int lineWidth: 0
     property int timeWidth: 0
-    DepartureListView {
+    SilicaListView {
         id: listView
+        anchors.fill: parent
+        // Prevent list items from stealing focus.
+        currentIndex: -1
+        delegate: DepartureListItem {}
+        header: PageHeader { title: page.title }
+        model: ListModel {}
         PullDownMenu {
             visible: !page.loading || false
             MenuItem {
@@ -45,6 +51,7 @@ Page {
                 }
             }
         }
+        VerticalScrollDecorator {}
     }
     Label {
         id: busyLabel

@@ -77,6 +77,12 @@ class Favorites:
         raise LookupError("Favorite {} not found"
                           .format(repr(key)))
 
+    def get_stops(self, key):
+        """Return a list of stops of favorite matching `key`."""
+        stops = self.get(key)["stops"]
+        stops.sort(key=lambda x: x["name"])
+        return stops
+
     def _read(self):
         """Read list of favorites from file."""
         if os.path.isfile(self._path):
