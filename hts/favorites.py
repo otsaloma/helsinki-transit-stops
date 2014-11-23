@@ -77,9 +77,22 @@ class Favorites:
         raise LookupError("Favorite {} not found"
                           .format(repr(key)))
 
+    def get_color(self, key):
+        """Return color of favorite matching `key`."""
+        favorite = self.get(key)
+        types = [x["type"] for x in favorite["stops"]]
+        return hts.util.types_to_color(types)
+
+    def get_name(self, key):
+        """Return name of favorite matching `key`."""
+        favorite = self.get(key)
+        return favorite["name"]
+
     def get_stops(self, key):
         """Return a list of stops of favorite matching `key`."""
         stops = self.get(key)["stops"]
+        for stop in stops:
+            stop["color"] = hts.util.type_to_color(stop["type"])
         stops.sort(key=lambda x: x["name"])
         return stops
 

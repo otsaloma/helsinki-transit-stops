@@ -120,10 +120,10 @@ Page {
     }
     function update() {
         // Update colors and times remaining to departure.
-        var dist = gps.position.coordinate.distanceTo(
-            QtPositioning.coordinate(page.props.y, page.props.x));
         for (var i = listView.model.count-1; i >= 0; i--) {
             var item = listView.model.get(i);
+            var dist = gps.position.coordinate.distanceTo(
+                QtPositioning.coordinate(item.y, item.x));
             item.time = py.call_sync(
                 "hts.util.format_departure_time",
                 [item.unix_time]

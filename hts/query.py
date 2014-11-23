@@ -76,6 +76,8 @@ def _find_departures(code):
         time=parse_time(departure["time"]),
         unix_time=parse_unix_time(departure["time"]),
         line=parse_line(departure["code"]),
+        x=float(output[0]["coords"].split(",")[0]),
+        y=float(output[0]["coords"].split(",")[1]),
         destination=destinations[departure["code"]],
     ) for departure in output[0]["departures"] or []]
     return results

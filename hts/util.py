@@ -128,8 +128,8 @@ def types_to_color(types):
         return "#00985f"
     if "bus" in types:
         return "#007ac9"
-    raise ValueError("Unrecognized types: {}"
-                     .format(repr(type)))
+    # types can in corner-cases be empty.
+    return "#aaaaaa"
 
 def write_json(data, path):
     """Write `data` to JSON file at `path`."""

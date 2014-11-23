@@ -35,9 +35,25 @@ Page {
                 MenuItem {
                     text: "Edit"
                     onClicked: {
-                        // XXX:
-                        // var dialog = pageStack.push("EditFavoriteDialog.qml", {});
-                        // dialog.accepted.connect(function() {});
+                        var dialog = pageStack.push("EditFavoriteDialog.qml", {
+                            "key": model.key, "name": model.name
+                        });
+                        dialog.accepted.connect(function() {
+                            py.call_sync(
+                                "hts.app.favorites.rename",
+                                [model.key, dialog.name]);
+                            for (var i = 0; i < dialog.removals.length; i++)
+                                py.call_sync(
+                                    "hts.app.favorites.remove_stop",
+                                    [model.key, dialog.removals[i]]);
+                            listView.model.setProperty(
+                                model.index, "name", dialog.name);
+                            var color = py.call_sync(
+                                "hts.app.favorites.get_color",
+                                [model.key]);
+                            listView.model.setProperty(
+                                model.index, "color", color);
+                        });
                     }
                 }
                 MenuItem {
