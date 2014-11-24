@@ -35,7 +35,7 @@ Page {
                 MenuItem {
                     text: "Edit"
                     onClicked: {
-                        var dialog = pageStack.push("EditFavoriteDialog.qml", {
+                        var dialog = pageStack.push("EditFavoritePage.qml", {
                             "key": model.key, "name": model.name
                         });
                         dialog.accepted.connect(function() {

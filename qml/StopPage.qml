@@ -45,9 +45,21 @@ Page {
             MenuItem {
                 text: "Add to favorites"
                 onClicked: {
-                    // XXX:
-                    // var dialog = pageStack.push("AddFavoriteDialog.qml", {});
-                    // dialog.accepted.connect(function() {});
+                    var dialog = pageStack.push("AddFavoritePage.qml", {
+                        "code": page.props.code, "name": page.props.name
+                    });
+                    dialog.accepted.connect(function() {
+                        py.call_sync("hts.app.favorites.add_stop",
+                                     [dialog.key, {
+                                         "code": page.props.code,
+                                         "name": page.props.name,
+                                         "short_code": page.props.short_code,
+                                         "type": page.props.type,
+                                         "x": page.props.x,
+                                         "y": page.props.y}]);
+
+                        menu.populate();
+                    });
                 }
             }
         }
