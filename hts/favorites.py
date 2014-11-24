@@ -90,7 +90,7 @@ class Favorites:
 
     def get_stops(self, key):
         """Return a list of stops of favorite matching `key`."""
-        stops = self.get(key)["stops"]
+        stops = copy.deepcopy(self.get(key)["stops"])
         for stop in stops:
             stop["color"] = hts.util.type_to_color(stop["type"])
         stops.sort(key=lambda x: x["name"])
