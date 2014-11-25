@@ -42,7 +42,7 @@ class Favorites:
         return key
 
     def add_stop(self, key, props):
-        """Add stop to given favorite."""
+        """Add stop to favorite matching `key`."""
         favorite = self.get(key)
         self.remove_stop(key, props["code"])
         favorite["stops"].append(dict(code=props["code"],
@@ -54,20 +54,20 @@ class Favorites:
 
     @property
     def favorites(self):
-        """Return a list of favorites."""
+        """Return a list of favorite stop groups."""
         favorites = copy.deepcopy(self._favorites)
         favorites.sort(key=lambda x: x["name"])
         for favorite in favorites:
-            types = [x["type"] for x in favorite["stops"]]
-            favorite["color"] = hts.util.types_to_color(types)
+            favorite["color"] = hts.util.types_to_color(
+                [x["type"] for x in favorite["stops"]])
             favorite["stops"].sort(key=lambda x: x["name"])
         return favorites
 
     def find_departures(self, key):
-        """Return a list of departures from given favorite."""
+        """Return a list of departures from favorite matching `key`."""
         favorite = self.get(key)
-        codes = [x["code"] for x in favorite["stops"]]
-        return hts.query.find_departures(codes)
+        return hts.query.find_departures(
+            [x["code"] for x in favorite["stops"]])
 
     def get(self, key):
         """Return favorite matching `key` or raise :exc:`LookupError`."""
@@ -80,8 +80,8 @@ class Favorites:
     def get_color(self, key):
         """Return color of favorite matching `key`."""
         favorite = self.get(key)
-        types = [x["type"] for x in favorite["stops"]]
-        return hts.util.types_to_color(types)
+        return hts.util.types_to_color(
+            [x["type"] for x in favorite["stops"]])
 
     def get_name(self, key):
         """Return name of favorite matching `key`."""
@@ -90,7 +90,8 @@ class Favorites:
 
     def get_stops(self, key):
         """Return a list of stops of favorite matching `key`."""
-        stops = copy.deepcopy(self.get(key)["stops"])
+        favorite = self.get(key)
+        stops = copy.deepcopy(favorite["stops"])
         for stop in stops:
             stop["color"] = hts.util.type_to_color(stop["type"])
         stops.sort(key=lambda x: x["name"])
@@ -104,20 +105,15 @@ class Favorites:
         # Favorite format changed in version 0.2.
         for favorite in self._favorites:
             if not "stops" in favorite:
-                favorite["stops"] = [dict(code=favorite["code"],
+                favorite["stops"] = [dict(code=favorite.pop("code"),
                                           name=favorite["name"],
                                           short_code=None,
-                                          type=favorite["type"],
-                                          x=favorite["x"],
-                                          y=favorite["y"])]
-
-                favorite.pop("code")
-                favorite.pop("type")
-                favorite.pop("x")
-                favorite.pop("y")
+                                          type=favorite.pop("type"),
+                                          x=favorite.pop("x"),
+                                          y=favorite.pop("y"))]
 
     def remove(self, key):
-        """Remove `key` from the list of favorites."""
+        """Remove favorite matching `key` from the list of favorites."""
         for i in list(reversed(range(len(self._favorites)))):
             if self._favorites[i]["key"] == key:
                 self._favorites.pop(i)
@@ -130,7 +126,7 @@ class Favorites:
                 favorite["stops"].pop(i)
 
     def rename(self, key, name):
-        """Give an existing favorite a new name."""
+        """Give favorite matching `key` a new name."""
         favorite = self.get(key)
         favorite["name"] = name.strip()
 

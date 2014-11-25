@@ -46,6 +46,11 @@ def api_query(fallback):
         @functools.wraps(function)
         def inner_wrapper(*args, **kwargs):
             try:
+                # function can fail due to connection errors or errors
+                # in parsing the received data. Notify the user of some
+                # common errors by returning a dictionary with the error
+                # message to be displayed. With unexpected errors, print
+                # a traceback and return blank of correct type.
                 return function(*args, **kwargs)
             except socket.timeout:
                 return dict(error=True, message="Connection timed out")
@@ -57,7 +62,7 @@ def api_query(fallback):
 
 @api_query(fallback=[])
 def _find_departures(code):
-    """Return a list of departures from given stop."""
+    """Return a list of departures from stop with given code."""
     url = URL_PREFIX + ("&request=stop"
                         "&code={code}"
                         "&time_limit=360"
@@ -84,7 +89,7 @@ def _find_departures(code):
 
 def find_departures(codes):
     """
-    Return a list of departures from given stops.
+    Return a list of departures from stops with given codes.
 
     `codes` can be either a string to get departures from one stop or
     a list or tuple of strings to get departures from a group of stops.
@@ -131,8 +136,8 @@ def find_nearby_stops(x, y):
     for result in results:
         # Strip trailing municipality from stop name.
         result["name"] = re.sub(r",[^,]*$", "", result["name"])
-        linecodes = [line.pop("code") for line in result["lines"]]
-        result["type"] = guess_type(linecodes)
+        result["type"] = guess_type(
+            [x.pop("code") for x in result["lines"]])
         result["color"] = hts.util.type_to_color(result["type"])
         result["dist"] = hts.util.format_distance(
             hts.util.calculate_distance(x, y, result["x"], result["y"]))
@@ -164,8 +169,8 @@ def find_stops(name, x, y):
               result["details"]["lines"])]),
     ) for result in output]
     for result in results:
-        linecodes = [line.pop("code") for line in result["lines"]]
-        result["type"] = guess_type(linecodes)
+        result["type"] = guess_type(
+            [x.pop("code") for x in result["lines"]])
         result["color"] = hts.util.type_to_color(result["type"])
         result["dist"] = hts.util.format_distance(
             hts.util.calculate_distance(x, y, result["x"], result["y"]))
@@ -215,7 +220,7 @@ def parse_name(name):
     return re.sub(r"(\S)\(", r"\1 (", name)
 
 def parse_time(departure):
-    """Parse human readable time of `departure`."""
+    """Parse human readable time from `departure`."""
     # Journey Planner returns a 'HHMM' string.
     departure = float(departure)
     hour = math.floor(departure/100) % 24
