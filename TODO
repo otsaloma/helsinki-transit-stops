@@ -3,10 +3,10 @@ Helsinki Transit Stops 0.2
 
  [X] Allow multiple stops to be grouped as one favorite
  [X] Allow landscape only for keyboarded pages
+ [X] Show passed departures for one minute
  [X] Fix display of stop numbers in search results
  [X] Fix search field history list filtering to be faster and smoother
 
- * Keep passed departures on screen for a minute longer?
  * Bump threshold when to show minutes instead of time?
  * Use GitHub-compatible markdown for the README file?
    - http://github.com/github/markup

@@ -57,7 +57,7 @@ def departure_time_to_color(dist, departure):
 def format_departure_time(departure):
     """Format Unix time `departure` for display."""
     min_left = (departure - time.time()) / 60
-    if min_left < -0.5:
+    if min_left < -1.5:
         return ""
     if min_left <  9.5:
         return "{:d} min".format(round(min_left))
