@@ -63,7 +63,6 @@ ListItem {
         anchors.left: lineLabel.right
         anchors.leftMargin: Theme.paddingLarge
         anchors.right: timeLabel.left
-        anchors.rightMargin: Theme.paddingLarge
         color: Theme.secondaryColor
         text: model.destination
         truncationMode: TruncationMode.Fade
