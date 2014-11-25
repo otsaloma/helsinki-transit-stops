@@ -59,7 +59,7 @@ def format_departure_time(departure):
     min_left = (departure - time.time()) / 60
     if min_left < -1.5:
         return ""
-    if min_left <  9.5:
+    if min_left <  59.5:
         return "{:d} min".format(round(min_left))
     departure = time.localtime(departure)
     return "{:.0f}:{:02.0f}".format(departure.tm_hour,
