@@ -59,7 +59,7 @@ class Favorites:
         favorites.sort(key=lambda x: x["name"])
         for favorite in favorites:
             favorite["color"] = hts.util.types_to_color(
-                [x["type"] for x in favorite["stops"]])
+                *[x["type"] for x in favorite["stops"]])
             favorite["stops"].sort(key=lambda x: x["name"])
         return favorites
 
@@ -81,7 +81,7 @@ class Favorites:
         """Return color of favorite matching `key`."""
         favorite = self.get(key)
         return hts.util.types_to_color(
-            [x["type"] for x in favorite["stops"]])
+            *[x["type"] for x in favorite["stops"]])
 
     def get_name(self, key):
         """Return name of favorite matching `key`."""
@@ -93,7 +93,7 @@ class Favorites:
         favorite = self.get(key)
         stops = copy.deepcopy(favorite["stops"])
         for stop in stops:
-            stop["color"] = hts.util.type_to_color(stop["type"])
+            stop["color"] = hts.util.types_to_color(stop["type"])
         stops.sort(key=lambda x: x["name"])
         return stops
 

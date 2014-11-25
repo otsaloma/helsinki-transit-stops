@@ -138,7 +138,7 @@ def find_nearby_stops(x, y):
         result["name"] = re.sub(r",[^,]*$", "", result["name"])
         result["type"] = guess_type(
             [x.pop("code") for x in result["lines"]])
-        result["color"] = hts.util.type_to_color(result["type"])
+        result["color"] = hts.util.types_to_color(result["type"])
         result["dist"] = hts.util.format_distance(
             hts.util.calculate_distance(x, y, result["x"], result["y"]))
     return results
@@ -171,7 +171,7 @@ def find_stops(name, x, y):
     for result in results:
         result["type"] = guess_type(
             [x.pop("code") for x in result["lines"]])
-        result["color"] = hts.util.type_to_color(result["type"])
+        result["color"] = hts.util.types_to_color(result["type"])
         result["dist"] = hts.util.format_distance(
             hts.util.calculate_distance(x, y, result["x"], result["y"]))
     return results

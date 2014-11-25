@@ -8,6 +8,8 @@ Helsinki Transit Stops 0.2
 
  * Keep passed departures on screen for a minute longer?
  * Bump threshold when to show minutes instead of time?
+ * Use GitHub-compatible markdown for the README file?
+   - http://github.com/github/markup
 
 Helsinki Transit Stops 1.0
 ==========================

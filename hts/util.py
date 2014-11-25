@@ -112,11 +112,7 @@ def silent(*exceptions):
     except exceptions:
         pass
 
-def type_to_color(type):
-    """Return color based on vehicle `type`."""
-    return types_to_color((type,))
-
-def types_to_color(types):
+def types_to_color(*types):
     """Return color based on vehicle `types`."""
     if "train" in types:
         return "#2dbe2c"
@@ -128,7 +124,7 @@ def types_to_color(types):
         return "#00985f"
     if "bus" in types:
         return "#007ac9"
-    # types can in corner-cases be empty.
+    # types is allowed to be empty.
     return "#aaaaaa"
 
 def write_json(data, path):
