@@ -23,7 +23,6 @@ ListItem {
     id: listItem
     contentHeight: Theme.itemSizeExtraSmall
     property var result: page.results[index]
-    ListView.onRemove: animateRemoval(listItem)
     Label {
         id: lineLabel
         anchors.left: parent.left
@@ -46,7 +45,6 @@ ListItem {
         anchors.rightMargin: Theme.paddingLarge
         horizontalAlignment: Text.AlignRight
         text: model.time
-        verticalAlignment: Text.AlignVCenter
         width: page.timeWidth
         onTextChanged: {
             if (timeLabel.implicitWidth > page.timeWidth)
@@ -66,9 +64,8 @@ ListItem {
         color: Theme.secondaryColor
         text: model.destination
         truncationMode: TruncationMode.Fade
-        verticalAlignment: Text.AlignVCenter
         Component.onCompleted: {
-            // Add a dotted line long enough for landscape as well.
+            // Add a dotted line long enough for all orientations.
             var dots = " . . . . . . . . . . . . . . . . . . . .";
             while (dots.length < 200)
                 dots += dots.substr(0, 20);
@@ -81,7 +78,6 @@ ListItem {
         }
     }
     Rectangle {
-        id: block
         anchors.bottom: lineLabel.bottom
         anchors.bottomMargin: Theme.paddingMedium
         anchors.right: lineLabel.left
@@ -92,4 +88,5 @@ ListItem {
         radius: Theme.paddingSmall/3
         width: Theme.paddingSmall
     }
+    ListView.onRemove: animateRemoval(listItem);
 }
