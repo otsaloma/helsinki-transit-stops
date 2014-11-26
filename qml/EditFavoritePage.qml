@@ -23,11 +23,11 @@ import "."
 Dialog {
     id: page
     allowedOrientations: Orientation.Portrait
-    canAccept: textField && textField.text.length > 0
+    canAccept: nameField && nameField.text.length > 0
     property string key: ""
     property string name: ""
     property var removals: []
-    property var textField
+    property var nameField
     SilicaListView {
         id: listView
         anchors.fill: parent
@@ -44,17 +44,6 @@ Dialog {
                     Theme.highlightColor : Theme.primaryColor;
                 height: Theme.itemSizeSmall
                 text: model.name
-                Rectangle {
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: Theme.paddingMedium
-                    anchors.right: parent.left
-                    anchors.rightMargin: Theme.paddingLarge
-                    anchors.top: parent.top
-                    anchors.topMargin: Theme.paddingMedium
-                    color: model.color
-                    radius: Theme.paddingSmall/3
-                    width: Theme.paddingSmall
-                }
                 Component.onCompleted: {
                     if (model.short_code && model.short_code.length > 0) {
                         nameLabel.textFormat = Text.RichText;
@@ -62,11 +51,23 @@ Dialog {
                     }
                 }
             }
+            Rectangle {
+                anchors.bottom: nameLabel.bottom
+                anchors.bottomMargin: Theme.paddingMedium
+                anchors.right: nameLabel.left
+                anchors.rightMargin: Theme.paddingLarge
+                anchors.top: nameLabel.top
+                anchors.topMargin: Theme.paddingMedium
+                color: model.color
+                radius: Theme.paddingSmall/3
+                width: Theme.paddingSmall
+            }
             ContextMenu {
                 id: contextMenu
                 MenuItem {
                     text: "Remove"
                     onClicked: {
+                        // Mark stop to be removed once dialog is accepted.
                         page.removals.push(model.code);
                         listView.model.remove(index);
                     }
@@ -75,11 +76,11 @@ Dialog {
             ListView.onRemove: animateRemoval(listItem)
         }
         header: Column {
-            height: pageHeader.height + textField.height + titleLabel.height
+            height: header.height + nameField.height + titleLabel.height
             width: parent.width
-            DialogHeader { id: pageHeader }
+            DialogHeader { id: header }
             TextField {
-                id: textField
+                id: nameField
                 anchors.left: parent.left
                 anchors.leftMargin: Theme.paddingLarge
                 anchors.right: parent.right
@@ -87,7 +88,7 @@ Dialog {
                 label: "Name"
                 text: page.name
                 EnterKey.enabled: text.length > 0
-                EnterKey.onClicked: textField.focus = false;
+                EnterKey.onClicked: nameField.focus = false;
             }
             ListItemLabel {
                 id: titleLabel
@@ -97,19 +98,20 @@ Dialog {
                 horizontalAlignment: Text.AlignRight
                 text: "Stops"
             }
-            Component.onCompleted: page.textField = textField;
+            Component.onCompleted: page.nameField = nameField;
         }
         model: ListModel {}
         VerticalScrollDecorator {}
     }
     Component.onCompleted: {
-        // Load favorites from the Python backend.
+        // Load stops from the Python backend.
         listView.model.clear();
         var stops = py.call_sync("hts.app.favorites.get_stops", [page.key]);
         for (var i = 0; i < stops.length; i++)
             listView.model.append(stops[i]);
     }
     onAccepted: {
-        page.name = textField.text;
+        // Save name to use for renaming.
+        page.name = nameField.text;
     }
 }
