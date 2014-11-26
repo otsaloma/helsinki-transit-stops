@@ -23,11 +23,11 @@ import "."
 Dialog {
     id: page
     allowedOrientations: Orientation.Portrait
-    canAccept: textField && textField.visible && textField.text.length > 0
+    canAccept: nameField && nameField.visible && nameField.text.length > 0
     property string code: ""
     property string key: ""
     property string name: ""
-    property var textField
+    property var nameField
     SilicaListView {
         id: listView
         anchors.fill: parent
@@ -35,16 +35,16 @@ Dialog {
         currentIndex: -1
         delegate: FavoriteListItem {
             onClicked: {
-                // Accept existing favorite.
+                // Accept clicked existing favorite.
                 page.canAccept = true;
                 page.key = model.key;
                 page.accept();
             }
         }
         header: Column {
-            height: pageHeader.height + comboBox.height + textField.height
+            height: header.height + comboBox.height + nameField.height
             width: parent.width
-            DialogHeader { id: pageHeader }
+            DialogHeader { id: header }
             ComboBox {
                 id: comboBox
                 anchors.left: parent.left
@@ -58,14 +58,14 @@ Dialog {
                     MenuItem { text: "Add to existing" }
                 }
                 onCurrentIndexChanged: {
-                    textField.visible = (comboBox.currentIndex == 0);
+                    // Show either nameField or listView.
+                    nameField.visible = (comboBox.currentIndex == 0);
                     listView.model.clear();
-                    if (comboBox.currentIndex == 1)
-                        page.populate();
+                    nameField.visible || page.populate();
                 }
             }
             TextField {
-                id: textField
+                id: nameField
                 anchors.left: parent.left
                 anchors.leftMargin: Theme.paddingLarge + Theme.paddingSmall
                 anchors.right: parent.right
@@ -76,15 +76,17 @@ Dialog {
                 EnterKey.enabled: text.length > 0
                 EnterKey.onClicked: page.accept();
             }
-            Component.onCompleted: page.textField = textField;
+            Component.onCompleted: page.nameField = nameField;
         }
         model: ListModel {}
         VerticalScrollDecorator {}
     }
     onAccepted: {
-        if (textField.visible)
-            page.key = py.call_sync(
-                "hts.app.favorites.add", [textField.text]);
+        // Add new favorite and store value of its key.
+        if (page.nameField.visible) {
+            var text = page.nameField.text;
+            page.key = py.call_sync("hts.app.favorites.add", [text]);
+        }
     }
     function populate() {
         // Load favorites from the Python backend.
