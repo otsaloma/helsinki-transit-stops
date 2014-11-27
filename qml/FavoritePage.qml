@@ -96,7 +96,7 @@ Page {
                 page.results = results;
                 page.title = page.props.name;
                 for (var i = 0; i < results.length; i++) {
-                    results[i].color = "#888888";
+                    results[i].color = "#aaaaaa";
                     listView.model.append(results[i]);
                 }
             } else {
@@ -113,16 +113,12 @@ Page {
             var item = listView.model.get(i);
             var dist = gps.position.coordinate.distanceTo(
                 QtPositioning.coordinate(item.y, item.x));
-            item.time = py.call_sync(
-                "hts.util.format_departure_time",
-                [item.unix_time]
-            );
-            item.color = py.call_sync(
-                "hts.util.departure_time_to_color",
-                [dist, item.unix_time]
-            );
+            var fun = "hts.util.format_departure_time";
+            item.time = py.call_sync(fun, [item.unix_time]);
+            var fun = "hts.util.departure_time_to_color";
+            item.color = py.call_sync(fun, [dist, item.unix_time]);
             // Remove departures already passed.
-            if (item.time.length == 0)
+            if (!item.time || item.time.length == 0)
                 listView.model.remove(i);
         }
     }

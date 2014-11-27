@@ -24,20 +24,21 @@ ListItem {
     id: listItem
     contentHeight: Theme.itemSizeSmall
     ListItemLabel {
+        id: label
         anchors.leftMargin: 2*Theme.paddingLarge + Theme.paddingSmall
         color: listItem.highlighted ? Theme.highlightColor : Theme.primaryColor
         height: Theme.itemSizeSmall
         text: model.name
-        Rectangle {
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: Theme.paddingMedium
-            anchors.right: parent.left
-            anchors.rightMargin: Theme.paddingLarge
-            anchors.top: parent.top
-            anchors.topMargin: Theme.paddingMedium
-            color: model.color
-            radius: Theme.paddingSmall/3
-            width: Theme.paddingSmall
-        }
+    }
+    Rectangle {
+        anchors.bottom: label.bottom
+        anchors.bottomMargin: Theme.paddingMedium
+        anchors.right: label.left
+        anchors.rightMargin: Theme.paddingLarge
+        anchors.top: label.top
+        anchors.topMargin: Theme.paddingMedium
+        color: model.color
+        radius: Theme.paddingSmall/3
+        width: Theme.paddingSmall
     }
 }
