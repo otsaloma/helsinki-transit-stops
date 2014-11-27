@@ -39,20 +39,18 @@ Page {
                             "key": model.key, "name": model.name
                         });
                         dialog.accepted.connect(function() {
+                            // Rename favorite and/or remove associated stops.
                             py.call_sync(
                                 "hts.app.favorites.rename",
                                 [model.key, dialog.name]);
                             for (var i = 0; i < dialog.removals.length; i++)
-                                py.call_sync(
-                                    "hts.app.favorites.remove_stop",
-                                    [model.key, dialog.removals[i]]);
-                            listView.model.setProperty(
-                                model.index, "name", dialog.name);
-                            var color = py.call_sync(
-                                "hts.app.favorites.get_color",
-                                [model.key]);
-                            listView.model.setProperty(
-                                model.index, "color", color);
+                                py.call_sync("hts.app.favorites.remove_stop",
+                                             [model.key, dialog.removals[i]]);
+
+                            var i = model.index;
+                            listView.model.setProperty(i, "name", dialog.name);
+                            listView.model.setProperty(i, "color", py.call_sync(
+                                "hts.app.favorites.get_color", [model.key]));
                         });
                     }
                 }
@@ -70,6 +68,7 @@ Page {
             onClicked: app.pageStack.push("FavoritePage.qml", {"props": model});
         }
         footer: Column {
+            height: aboutItem.height
             width: parent.width
             ListItem {
                 id: aboutItem
@@ -85,8 +84,12 @@ Page {
             }
         }
         header: Column {
+            height: header.height + nearbyItem.height + searchItem.height
             width: parent.width
-            PageHeader { title: "Helsinki Transit Stops" }
+            PageHeader {
+                id: header
+                title: "Helsinki Transit Stops"
+            }
             ListItem {
                 id: nearbyItem
                 contentHeight: Theme.itemSizeSmall
