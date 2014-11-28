@@ -26,7 +26,7 @@ Departures from Helsinki Region Transport (HSL) public transportation stops.
 make DESTDIR=%{buildroot} PREFIX=/usr install
 
 %files
-%doc AUTHORS COPYING NEWS README TODO
+%doc AUTHORS COPYING NEWS README.md TODO
 %{_datadir}/%{name}
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
