@@ -90,7 +90,7 @@ ListItem {
                 Component.onCompleted: {
                     // Add an ellipsis to indicate that only
                     // the first three of all lines are shown.
-                    (index == 2) && destinationLabel.text += " …";
+                    if (index == 2) destinationLabel.text += " …";
                 }
             }
             Component.onCompleted: repeater.height += row.height;
