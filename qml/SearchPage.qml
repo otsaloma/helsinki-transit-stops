@@ -59,10 +59,10 @@ Page {
             }
         }
         header: Column {
-            height: pageHeader.height + searchField.height
+            height: header.height + searchField.height
             width: parent.width
             PageHeader {
-                id: pageHeader
+                id: header
                 title: "Find Stop by Name"
             }
             SearchField {
@@ -112,9 +112,7 @@ Page {
     function loadHistory() {
         // Load search history and preallocate list items.
         page.history = py.evaluate("hts.app.history.names");
-        if (listView.model.count == 0) {
-            for (var i = 0; i < 50; i++)
-                listView.model.append({"name": "", "visible": false});
-        }
+        while (listView.model.count < 50)
+            listView.model.append({"name": "", "visible": false});
     }
 }

@@ -90,13 +90,10 @@ ListItem {
                 Component.onCompleted: {
                     // Add an ellipsis to indicate that only
                     // the first three of all lines are shown.
-                    if (index == 2)
-                        destinationLabel.text += " …";
+                    (index == 2) && destinationLabel.text += " …";
                 }
             }
-            Component.onCompleted: {
-                repeater.height += row.height;
-            }
+            Component.onCompleted: repeater.height += row.height;
         }
     }
     Rectangle {
