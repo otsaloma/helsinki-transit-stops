@@ -187,7 +187,7 @@ def guess_type(codes):
         while len(line) > 1 and line.startswith("0"):
             line = line[1:]
         if line and line.isnumeric():
-            if int(line) <= 10:
+            if code.startswith("1") and int(line) <= 10:
                 return "tram"
     # In addition to actual bus stops,
     # fall back on bus for unrecognized types.
