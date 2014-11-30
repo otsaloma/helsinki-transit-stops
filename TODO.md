@@ -1,8 +1,8 @@
 Helsinki Transit Stops 0.3
 ==========================
 
- [ ] Add line filters
- [ ] Add a proper, active cover
+ * [ ] Add line filters
+ * [ ] Add a proper, active cover
 
 Helsinki Transit Stops 1.0
 ==========================
