@@ -5,10 +5,10 @@ Releasing a New Version
    - `pyflakes3 hts`
    - `py.test-3 hts`
  * Bump version numbers
-   - hts/__init__.py
-   - rpm/*.spec
-   - Makefile
- * Update NEWS.md and TODO.md
+   - `hts/__init__.py`
+   - `rpm/*.spec`
+   - `Makefile`
+ * Update `NEWS.md` and `TODO.md`
  * Build tarball and RPM
    - `make dist`
    - `make rpm`
