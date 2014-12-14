@@ -24,7 +24,6 @@ Dialog {
     id: page
     allowedOrientations: Orientation.Portrait
     property var codes: []
-    property string key: ""
     property bool loading: false
     property var skip: []
     SilicaGridView {
@@ -110,15 +109,8 @@ Dialog {
             if (results && results.error && results.message) {
                 busyLabel.text = results.message;
             } else if (results && results.length > 0) {
-                if (page.key && page.key.length > 0) {
-                    var skip = py.call_sync(
-                        "hts.app.favorites.get_skip_lines",
-                        [page.key]);
-                } else {
-                    var skip = [];
-                }
                 for (var i = 0; i < results.length; i++) {
-                    results[i].checked = skip.indexOf(results[i].line) < 0;
+                    results[i].checked = page.skip.indexOf(results[i].line) < 0;
                     gridView.model.append(results[i]);
                 }
             } else {

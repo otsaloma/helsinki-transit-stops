@@ -47,7 +47,9 @@ Page {
                         "codes": py.call_sync(
                             "hts.app.favorites.get_stop_codes",
                             [page.props.key]),
-                        "key": page.props.key
+                        "skip": py.call_sync(
+                            "hts.app.favorites.get_skip_lines",
+                            [page.props.key]);
                     });
                     dialog.accepted.connect(function() {
                         var skip = dialog.skip;
@@ -58,6 +60,7 @@ Page {
                             var item = listView.model.get(i);
                             item.visible = skip.indexOf(item.line) < 0;
                         }
+                        page.update();
                     });
                 }
             }
@@ -145,5 +148,16 @@ Page {
             if (!item.time || item.time.length == 0)
                 listView.model.remove(i);
         }
+        var lineWidth = 0;
+        var timeWidth = 0;
+        for (var i = 0; i < listView.model.count; i++) {
+            var item = listView.model.get(i);
+            if (item.visible && item.lineWidth > lineWidth)
+                lineWidth = item.lineWidth;
+            if (item.visible && item.timeWidth > timeWidth)
+                timeWidth = item.timeWidth;
+        }
+        page.lineWidth = lineWidth;
+        page.timeWidth = timeWidth;
     }
 }

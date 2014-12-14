@@ -28,6 +28,7 @@ Page {
     property bool populated: false
     property var props: {}
     property var results: {}
+    property var skip: []
     property string title: ""
     // Column widths to be set based on data.
     property int lineWidth: 0
@@ -65,7 +66,8 @@ Page {
                 text: "Filter lines"
                 onClicked: {
                     var dialog = pageStack.push("LineFilterPage.qml", {
-                        "codes": [page.props.code]
+                        "codes": [page.props.code],
+                        "skip": page.skip
                     });
                     dialog.accepted.connect(function() {
                         var skip = dialog.skip;
@@ -73,6 +75,8 @@ Page {
                             var item = listView.model.get(i);
                             item.visible = skip.indexOf(item.line) < 0;
                         }
+                        page.skip = skip;
+                        page.update();
                     });
                 }
             }
@@ -159,5 +163,17 @@ Page {
             if (!item.time || item.time.length == 0)
                 listView.model.remove(i);
         }
+        var lineWidth = 0;
+        var timeWidth = 0;
+        for (var i = 0; i < listView.model.count; i++) {
+            var item = listView.model.get(i);
+            if (item.visible && item.lineWidth > lineWidth)
+                lineWidth = item.lineWidth;
+            if (item.visible && item.timeWidth > timeWidth)
+                timeWidth = item.timeWidth;
+        }
+        page.lineWidth = lineWidth;
+        page.timeWidth = timeWidth;
+        listView.forceLayout();
     }
 }

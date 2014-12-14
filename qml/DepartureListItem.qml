@@ -35,7 +35,9 @@ ListItem {
         verticalAlignment: Text.AlignVCenter
         width: page.lineWidth
         Component.onCompleted: {
-            if (lineLabel.implicitWidth > page.lineWidth)
+            listView.model.setProperty(
+                model.index, "lineWidth", lineLabel.implicitWidth);
+            if (model.visible && lineLabel.implicitWidth > page.lineWidth)
                 page.lineWidth = lineLabel.implicitWidth;
         }
     }
@@ -48,11 +50,15 @@ ListItem {
         text: model.time
         width: page.timeWidth
         onTextChanged: {
-            if (timeLabel.implicitWidth > page.timeWidth)
+            listView.model.setProperty(
+                model.index, "timeWidth", timeLabel.implicitWidth);
+            if (model.visible && timeLabel.implicitWidth > page.timeWidth)
                 page.timeWidth = timeLabel.implicitWidth;
         }
         Component.onCompleted: {
-            if (timeLabel.implicitWidth > page.timeWidth)
+            listView.model.setProperty(
+                model.index, "timeWidth", timeLabel.implicitWidth);
+            if (model.visible && timeLabel.implicitWidth > page.timeWidth)
                 page.timeWidth = timeLabel.implicitWidth;
         }
     }
