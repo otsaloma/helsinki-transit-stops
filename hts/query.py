@@ -119,7 +119,7 @@ def find_nearby_stops(x, y):
     output = hts.http.request_json(url)
     if not output: return []
     results = [dict(
-        name=parse_name(result["name"]),
+        name=parse_name(result.get("shortName", result["name"])),
         address=result["details"]["address"],
         x=float(result["coords"].split(",")[0]),
         y=float(result["coords"].split(",")[1]),
@@ -154,7 +154,7 @@ def find_stops(name, x, y):
     output = hts.http.request_json(url)
     if not output: return []
     results = [dict(
-        name=parse_name(result["name"]),
+        name=parse_name(result.get("shortName", result["name"])),
         address=result["details"]["address"],
         x=float(result["coords"].split(",")[0]),
         y=float(result["coords"].split(",")[1]),
