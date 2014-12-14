@@ -35,11 +35,33 @@ Page {
     SilicaListView {
         id: listView
         anchors.fill: parent
-        // Prevent list items from stealing focus.
-        currentIndex: -1
         delegate: DepartureListItem {}
         header: PageHeader { title: page.title }
         model: ListModel {}
+        PullDownMenu {
+            visible: !page.loading || false
+            MenuItem {
+                text: "Filter lines"
+                onClicked: {
+                    var dialog = pageStack.push("LineFilterPage.qml", {
+                        "codes": py.call_sync(
+                            "hts.app.favorites.get_stop_codes",
+                            [page.props.key]),
+                        "key": page.props.key
+                    });
+                    dialog.accepted.connect(function() {
+                        var skip = dialog.skip;
+                        py.call_sync(
+                            "hts.app.favorites.set_skip_lines",
+                            [page.props.key, skip]);
+                        for (var i = 0; i < listView.model.count; i++) {
+                            var item = listView.model.get(i);
+                            item.visible = skip.indexOf(item.line) < 0;
+                        }
+                    });
+                }
+            }
+        }
         VerticalScrollDecorator {}
     }
     Label {
@@ -95,8 +117,10 @@ Page {
             } else if (results && results.length > 0) {
                 page.results = results;
                 page.title = page.props.name;
+                var skip = py.call_sync("hts.app.favorites.get_skip_lines", [key]);
                 for (var i = 0; i < results.length; i++) {
                     results[i].color = "#aaaaaa";
+                    results[i].visible = skip.indexOf(results[i].line) < 0;
                     listView.model.append(results[i]);
                 }
             } else {

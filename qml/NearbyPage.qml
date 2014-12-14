@@ -30,8 +30,6 @@ Page {
     SilicaListView {
         id: listView
         anchors.fill: parent
-        // Prevent list items from stealing focus.
-        currentIndex: -1
         delegate: StopListItem {
             onClicked: app.pageStack.push("StopPage.qml", {"props": model});
         }

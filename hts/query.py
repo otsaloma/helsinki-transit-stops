@@ -103,8 +103,28 @@ def find_departures(codes):
             # Error value.
             return value
         results.extend(value)
-    results.sort(key=lambda x: (x["unix_time"], x["line"]))
+    results.sort(key=lambda x: (x["unix_time"], line_to_sort_key(x["line"])))
     return results
+
+def find_lines(codes):
+    """
+    Return a list of lines for stops with given codes.
+
+    `codes` can be either a string to get lines for one stop or
+    a list or tuple of strings to get lines for a group of stops.
+    """
+    if isinstance(codes, str):
+        codes = (codes,)
+    lines = []
+    for code in codes:
+        value = find_stops(code, 0, 0)
+        if isinstance(value, dict):
+            # Error value.
+            return value
+        lines.extend(value[0]["lines"])
+    lines = unique_lines(lines)
+    lines.sort(key=lambda x: line_to_sort_key(x["line"]))
+    return lines
 
 @api_query(fallback=[])
 def find_nearby_stops(x, y):
@@ -192,6 +212,15 @@ def guess_type(codes):
     # In addition to actual bus stops,
     # fall back on bus for unrecognized types.
     return "bus"
+
+def line_to_sort_key(line):
+    """Construct a sortable key from `line`."""
+    # Break into line and modifier, pad with zeros.
+    head, tail = line, ""
+    while head and head[0].isdigit() and head[-1].isalpha():
+        tail = head[-1] + tail
+        head = head[:-1]
+    return head.zfill(6), tail.zfill(6)
 
 def parse_destination(destination):
     """Parse human readable destination name."""

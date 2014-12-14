@@ -35,8 +35,6 @@ Page {
     SilicaListView {
         id: listView
         anchors.fill: parent
-        // Prevent list items from stealing focus.
-        currentIndex: -1
         delegate: DepartureListItem {}
         header: PageHeader { title: page.title }
         model: ListModel {}
@@ -60,6 +58,21 @@ Page {
                                      [dialog.key, stop]);
 
                         menu.populate();
+                    });
+                }
+            }
+            MenuItem {
+                text: "Filter lines"
+                onClicked: {
+                    var dialog = pageStack.push("LineFilterPage.qml", {
+                        "codes": [page.props.code]
+                    });
+                    dialog.accepted.connect(function() {
+                        var skip = dialog.skip;
+                        for (var i = 0; i < listView.model.count; i++) {
+                            var item = listView.model.get(i);
+                            item.visible = skip.indexOf(item.line) < 0;
+                        }
                     });
                 }
             }
@@ -121,6 +134,7 @@ Page {
                 page.title = page.props.name;
                 for (var i = 0; i < results.length; i++) {
                     results[i].color = "#aaaaaa";
+                    results[i].visible = true;
                     listView.model.append(results[i]);
                 }
             } else {

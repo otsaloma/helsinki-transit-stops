@@ -26,8 +26,6 @@ Page {
     SilicaListView {
         id: listView
         anchors.fill: parent
-        // Prevent list items from stealing focus.
-        currentIndex: -1
         delegate: FavoriteListItem {
             id: listItem
             menu: ContextMenu {

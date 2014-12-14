@@ -38,7 +38,7 @@ class Favorites:
     def add(self, name):
         """Add `name` to the list of favorites and return key."""
         key = str(int(1000*time.time()))
-        self._favorites.append(dict(key=key, name=name, stops=[]))
+        self._favorites.append(dict(key=key, name=name, stops=[], skip_lines=[]))
         return key
 
     def add_stop(self, key, props):
@@ -88,6 +88,15 @@ class Favorites:
         favorite = self.get(key)
         return favorite["name"]
 
+    def get_skip_lines(self, key):
+        """Return a list of lines to not be displayed."""
+        favorite = self.get(key)
+        return copy.deepcopy(favorite["skip_lines"])
+
+    def get_stop_codes(self, key):
+        """Return a list of stop codes of favorite matching `key`."""
+        return [x["code"] for x in self.get_stops(key)]
+
     def get_stops(self, key):
         """Return a list of stops of favorite matching `key`."""
         favorite = self.get(key)
@@ -102,8 +111,8 @@ class Favorites:
         if os.path.isfile(self._path):
             with hts.util.silent(Exception):
                 self._favorites = hts.util.read_json(self._path)
-        # Favorite format changed in version 0.2.
         for favorite in self._favorites:
+            # Stop grouping added in version 0.2.
             if not "stops" in favorite:
                 favorite["stops"] = [dict(code=favorite.pop("code"),
                                           name=favorite["name"],
@@ -111,6 +120,9 @@ class Favorites:
                                           type=favorite.pop("type"),
                                           x=favorite.pop("x"),
                                           y=favorite.pop("y"))]
+
+            # skip_lines added in version 0.3.
+            favorite.setdefault("skip_lines", [])
 
     def remove(self, key):
         """Remove favorite matching `key` from the list of favorites."""
@@ -129,6 +141,11 @@ class Favorites:
         """Give favorite matching `key` a new name."""
         favorite = self.get(key)
         favorite["name"] = name.strip()
+
+    def set_skip_lines(self, key, skip):
+        """Set list of lines to not be displayed."""
+        favorite = self.get(key)
+        favorite["skip_lines"] = list(skip)
 
     def write(self):
         """Write list of favorites to file."""

@@ -21,7 +21,8 @@ import Sailfish.Silica 1.0
 
 ListItem {
     id: listItem
-    contentHeight: Theme.itemSizeExtraSmall
+    contentHeight: visible ? Theme.itemSizeExtraSmall : 0
+    visible: model.visible
     property var result: page.results[index]
     Label {
         id: lineLabel
