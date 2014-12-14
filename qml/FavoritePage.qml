@@ -49,7 +49,7 @@ Page {
                             [page.props.key]),
                         "skip": py.call_sync(
                             "hts.app.favorites.get_skip_lines",
-                            [page.props.key]);
+                            [page.props.key])
                     });
                     dialog.accepted.connect(function() {
                         var skip = dialog.skip;
