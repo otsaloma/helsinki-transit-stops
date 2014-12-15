@@ -62,7 +62,7 @@ def api_query(fallback):
 
 @api_query(fallback=[])
 def _find_departures(code):
-    """Return a list of departures from stop with given code."""
+    """Return a list of departures from stop matching `code`."""
     url = URL_PREFIX + ("&request=stop"
                         "&code={code}"
                         "&time_limit=360"
@@ -89,7 +89,7 @@ def _find_departures(code):
 
 def find_departures(codes):
     """
-    Return a list of departures from stops with given codes.
+    Return a list of departures from stops matching `codes`.
 
     `codes` can be either a string to get departures from one stop or
     a list or tuple of strings to get departures from a group of stops.
@@ -108,10 +108,10 @@ def find_departures(codes):
 
 def find_lines(codes):
     """
-    Return a list of lines for stops with given codes.
+    Return a list of lines at stops matching `codes`.
 
-    `codes` can be either a string to get lines for one stop or
-    a list or tuple of strings to get lines for a group of stops.
+    `codes` can be either a string to get lines at one stop or
+    a list or tuple of strings to get lines at a group of stops.
     """
     if isinstance(codes, str):
         codes = (codes,)
@@ -157,7 +157,7 @@ def find_nearby_stops(x, y):
         # Strip trailing municipality from stop name.
         result["name"] = re.sub(r",[^,]*$", "", result["name"])
         result["type"] = guess_type(
-            [x.pop("code") for x in result["lines"]])
+            [line.pop("code") for line in result["lines"]])
         result["color"] = hts.util.types_to_color(result["type"])
         result["dist"] = hts.util.format_distance(
             hts.util.calculate_distance(x, y, result["x"], result["y"]))
@@ -190,7 +190,7 @@ def find_stops(name, x, y):
     ) for result in output]
     for result in results:
         result["type"] = guess_type(
-            [x.pop("code") for x in result["lines"]])
+            [line.pop("code") for line in result["lines"]])
         result["color"] = hts.util.types_to_color(result["type"])
         result["dist"] = hts.util.format_distance(
             hts.util.calculate_distance(x, y, result["x"], result["y"]))
@@ -220,7 +220,7 @@ def line_to_sort_key(line):
     while head and head[0].isdigit() and head[-1].isalpha():
         tail = head[-1] + tail
         head = head[:-1]
-    return head.zfill(6), tail.zfill(6)
+    return head.zfill(3), tail.zfill(3)
 
 def parse_destination(destination):
     """Parse human readable destination name."""

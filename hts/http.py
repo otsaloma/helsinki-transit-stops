@@ -55,8 +55,9 @@ def _new_connection(url, timeout=None):
     cls = _get_connection_class(url)
     host = urllib.parse.urlparse(url).netloc
     timeout = timeout or 10
-    _connections[_get_key(url)] = cls(host, timeout=timeout)
-    return _connections[_get_key(url)]
+    connection = cls(host, timeout=timeout)
+    _connections[_get_key(url)] = connection
+    return connection
 
 def _remove_connection(url):
     """Close and remove connection to `url` from the pool."""
