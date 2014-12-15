@@ -34,11 +34,10 @@ ListItem {
         text: model.line
         verticalAlignment: Text.AlignVCenter
         width: page.lineWidth
-        Component.onCompleted: {
-            listView.model.setProperty(
-                model.index, "lineWidth", lineLabel.implicitWidth);
-            if (model.visible && lineLabel.implicitWidth > page.lineWidth)
-                page.lineWidth = lineLabel.implicitWidth;
+        Component.onCompleted: lineLabel.updateWidth();
+        function updateWidth() {
+            listView.model.setProperty(model.index, "lineWidth", lineLabel.implicitWidth);
+            page.lineWidth = Math.max(page.lineWidth, lineLabel.implicitWidth);
         }
     }
     Label {
@@ -49,17 +48,11 @@ ListItem {
         horizontalAlignment: Text.AlignRight
         text: model.time
         width: page.timeWidth
-        onTextChanged: {
-            listView.model.setProperty(
-                model.index, "timeWidth", timeLabel.implicitWidth);
-            if (model.visible && timeLabel.implicitWidth > page.timeWidth)
-                page.timeWidth = timeLabel.implicitWidth;
-        }
-        Component.onCompleted: {
-            listView.model.setProperty(
-                model.index, "timeWidth", timeLabel.implicitWidth);
-            if (model.visible && timeLabel.implicitWidth > page.timeWidth)
-                page.timeWidth = timeLabel.implicitWidth;
+        onTextChanged: timeLabel.updateWidth();
+        Component.onCompleted: timeLabel.updateWidth();
+        function updateWidth() {
+            listView.model.setProperty(model.index, "timeWidth", timeLabel.implicitWidth);
+            page.timeWidth = Math.max(page.timeWidth, timeLabel.implicitWidth);
         }
     }
     Label {

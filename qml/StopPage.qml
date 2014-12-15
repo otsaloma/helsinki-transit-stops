@@ -45,7 +45,8 @@ Page {
                 text: "Add to favorites"
                 onClicked: {
                     var dialog = pageStack.push("AddFavoritePage.qml", {
-                        "code": page.props.code, "name": page.props.name
+                        "code": page.props.code,
+                        "name": page.props.name
                     });
                     dialog.accepted.connect(function() {
                         var stop = {};
@@ -55,9 +56,7 @@ Page {
                         stop.type = page.props.type;
                         stop.x = page.props.x;
                         stop.y = page.props.y;
-                        py.call_sync("hts.app.favorites.add_stop",
-                                     [dialog.key, stop]);
-
+                        py.call_sync("hts.app.favorites.add_stop", [dialog.key, stop]);
                         menu.populate();
                     });
                 }
@@ -70,12 +69,11 @@ Page {
                         "skip": page.skip
                     });
                     dialog.accepted.connect(function() {
-                        var skip = dialog.skip;
                         for (var i = 0; i < listView.model.count; i++) {
                             var item = listView.model.get(i);
-                            item.visible = skip.indexOf(item.line) < 0;
+                            item.visible = dialog.skip.indexOf(item.line) < 0;
                         }
-                        page.skip = skip;
+                        page.skip = dialog.skip;
                         page.update();
                     });
                 }
@@ -163,14 +161,15 @@ Page {
             if (!item.time || item.time.length == 0)
                 listView.model.remove(i);
         }
+        // Update column widths based on visible items.
         var lineWidth = 0;
         var timeWidth = 0;
         for (var i = 0; i < listView.model.count; i++) {
             var item = listView.model.get(i);
-            if (item.visible && item.lineWidth > lineWidth)
-                lineWidth = item.lineWidth;
-            if (item.visible && item.timeWidth > timeWidth)
-                timeWidth = item.timeWidth;
+            if (item.visible) {
+                lineWidth = Math.max(lineWidth, item.lineWidth);
+                timeWidth = Math.max(timeWidth, item.timeWidth);
+            }
         }
         page.lineWidth = lineWidth;
         page.timeWidth = timeWidth;

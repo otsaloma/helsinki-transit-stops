@@ -37,8 +37,7 @@ Page {
             visible: model.visible
             ListItemLabel {
                 anchors.leftMargin: listView.searchField.textLeftMargin
-                color: listItem.highlighted ?
-                    Theme.highlightColor : Theme.primaryColor
+                color: listItem.highlighted ? Theme.highlightColor : Theme.primaryColor
                 height: Theme.itemSizeSmall
                 text: model.name
             }
@@ -93,11 +92,11 @@ Page {
         var query = listView.searchField.text.toLowerCase();
         var found = [], n = 0;
         for (var i = 0; i < page.history.length; i++) {
-            var historyItem = page.history[i].toLowerCase();
-            if (query.length > 0 && historyItem.indexOf(query) == 0) {
+            var item = page.history[i].toLowerCase();
+            if (query.length > 0 && item.indexOf(query) == 0) {
                 found[n++] = page.history[i];
                 if (found.length >= listView.count) break;
-            } else if (query.length == 0 || historyItem.indexOf(query) > 0) {
+            } else if (query.length == 0 || item.indexOf(query) > 0) {
                 found[found.length] = page.history[i];
                 if (found.length >= listView.count) break;
             }

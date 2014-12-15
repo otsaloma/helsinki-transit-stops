@@ -42,11 +42,11 @@ Dialog {
             }
         }
         header: Column {
-            height: header.height + comboBox.height + nameField.height
+            height: header.height + favoriteCombo.height + nameField.height
             width: parent.width
             DialogHeader { id: header }
             ComboBox {
-                id: comboBox
+                id: favoriteCombo
                 anchors.left: parent.left
                 anchors.leftMargin: Theme.paddingLarge + Theme.paddingSmall
                 anchors.right: parent.right
@@ -59,7 +59,7 @@ Dialog {
                 }
                 onCurrentIndexChanged: {
                     // Show either nameField or listView.
-                    nameField.visible = (comboBox.currentIndex == 0);
+                    nameField.visible = (favoriteCombo.currentIndex == 0);
                     listView.model.clear();
                     nameField.visible || page.populate();
                 }

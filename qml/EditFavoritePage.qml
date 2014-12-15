@@ -26,8 +26,8 @@ Dialog {
     canAccept: nameField && nameField.text.length > 0
     property string key: ""
     property string name: ""
-    property var removals: []
     property var nameField
+    property var removals: []
     SilicaListView {
         id: listView
         anchors.fill: parent
@@ -40,8 +40,7 @@ Dialog {
             ListItemLabel {
                 id: nameLabel
                 anchors.leftMargin: 2*Theme.paddingLarge + Theme.paddingSmall
-                color: listItem.highlighted ?
-                    Theme.highlightColor : Theme.primaryColor;
+                color: listItem.highlighted ? Theme.highlightColor : Theme.primaryColor
                 height: Theme.itemSizeSmall
                 text: model.name
                 Component.onCompleted: {

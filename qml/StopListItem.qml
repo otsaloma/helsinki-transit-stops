@@ -29,8 +29,7 @@ ListItem {
     ListItemLabel {
         id: nameLabel
         anchors.leftMargin: 2*Theme.paddingLarge + Theme.paddingSmall
-        color: listItem.highlighted ?
-            Theme.highlightColor : Theme.primaryColor;
+        color: listItem.highlighted ? Theme.highlightColor : Theme.primaryColor;
         height: implicitHeight + Theme.paddingMedium
         text: model.name
         verticalAlignment: Text.AlignBottom
@@ -72,10 +71,8 @@ ListItem {
                 text: line.line
                 width: listItem.lineWidth
                 y: repeater.y + index * row.height
-                Component.onCompleted: {
-                    if (lineLabel.implicitWidth > listItem.lineWidth)
-                        listItem.lineWidth = lineLabel.implicitWidth;
-                }
+                Component.onCompleted: listItem.lineWidth =
+                    Math.max(listItem.lineWidth, lineLabel.implicitWidth);
             }
             Label {
                 id: destinationLabel
@@ -85,13 +82,10 @@ ListItem {
                 anchors.top: lineLabel.top
                 color: Theme.secondaryColor
                 font.pixelSize: Theme.fontSizeSmall
-                text: " → " + line.destination
+                text: index == 2 ?
+                    " → " + line.destination + " …" :
+                    " → " + line.destination
                 truncationMode: TruncationMode.Fade
-                Component.onCompleted: {
-                    // Add an ellipsis to indicate that only
-                    // the first three of all lines are shown.
-                    if (index == 2) destinationLabel.text += " …";
-                }
             }
             Component.onCompleted: repeater.height += row.height;
         }

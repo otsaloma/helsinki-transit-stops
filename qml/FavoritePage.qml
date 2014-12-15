@@ -43,22 +43,18 @@ Page {
             MenuItem {
                 text: "Filter lines"
                 onClicked: {
+                    var getCodes = "hts.app.favorites.get_stop_codes";
+                    var getSkip = "hts.app.favorites.get_skip_lines";
                     var dialog = pageStack.push("LineFilterPage.qml", {
-                        "codes": py.call_sync(
-                            "hts.app.favorites.get_stop_codes",
-                            [page.props.key]),
-                        "skip": py.call_sync(
-                            "hts.app.favorites.get_skip_lines",
-                            [page.props.key])
+                        "codes": py.call_sync(getCodes, [page.props.key]),
+                        "skip": py.call_sync(getSkip, [page.props.key])
                     });
                     dialog.accepted.connect(function() {
-                        var skip = dialog.skip;
-                        py.call_sync(
-                            "hts.app.favorites.set_skip_lines",
-                            [page.props.key, skip]);
+                        var fun = "hts.app.favorites.set_skip_lines";
+                        py.call_sync(fun, [page.props.key, dialog.skip]);
                         for (var i = 0; i < listView.model.count; i++) {
                             var item = listView.model.get(i);
-                            item.visible = skip.indexOf(item.line) < 0;
+                            item.visible = dialog.skip.indexOf(item.line) < 0;
                         }
                         page.update();
                     });
@@ -148,16 +144,18 @@ Page {
             if (!item.time || item.time.length == 0)
                 listView.model.remove(i);
         }
+        // Update column widths based on visible items.
         var lineWidth = 0;
         var timeWidth = 0;
         for (var i = 0; i < listView.model.count; i++) {
             var item = listView.model.get(i);
-            if (item.visible && item.lineWidth > lineWidth)
-                lineWidth = item.lineWidth;
-            if (item.visible && item.timeWidth > timeWidth)
-                timeWidth = item.timeWidth;
+            if (item.visible) {
+                lineWidth = Math.max(lineWidth, item.lineWidth);
+                timeWidth = Math.max(timeWidth, item.timeWidth);
+            }
         }
         page.lineWidth = lineWidth;
         page.timeWidth = timeWidth;
+        listView.forceLayout();
     }
 }

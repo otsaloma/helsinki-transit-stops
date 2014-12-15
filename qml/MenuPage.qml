@@ -34,13 +34,12 @@ Page {
                     text: "Edit"
                     onClicked: {
                         var dialog = pageStack.push("EditFavoritePage.qml", {
-                            "key": model.key, "name": model.name
+                            "key": model.key,
+                            "name": model.name
                         });
                         dialog.accepted.connect(function() {
                             // Rename favorite and/or remove associated stops.
-                            py.call_sync(
-                                "hts.app.favorites.rename",
-                                [model.key, dialog.name]);
+                            py.call_sync("hts.app.favorites.rename", [model.key, dialog.name]);
                             for (var i = 0; i < dialog.removals.length; i++)
                                 py.call_sync("hts.app.favorites.remove_stop",
                                              [model.key, dialog.removals[i]]);
@@ -73,8 +72,7 @@ Page {
                 contentHeight: Theme.itemSizeSmall
                 ListItemLabel {
                     anchors.leftMargin: 2*Theme.paddingLarge + Theme.paddingSmall
-                    color: aboutItem.highlighted ?
-                        Theme.highlightColor : Theme.primaryColor
+                    color: aboutItem.highlighted ? Theme.highlightColor : Theme.primaryColor
                     height: Theme.itemSizeSmall
                     text: "About Helsinki Transit Stops"
                 }
@@ -94,8 +92,7 @@ Page {
                 ListItemLabel {
                     id: nearbyLabel
                     anchors.leftMargin: 2*Theme.paddingLarge + Theme.paddingSmall
-                    color: nearbyItem.highlighted ?
-                        Theme.highlightColor : Theme.primaryColor
+                    color: nearbyItem.highlighted ? Theme.highlightColor : Theme.primaryColor
                     height: Theme.itemSizeSmall
                     opacity: gps.ready ? 1.0 : 0.4
                     text: "List nearby stops"
@@ -114,8 +111,7 @@ Page {
                 contentHeight: Theme.itemSizeSmall
                 ListItemLabel {
                     anchors.leftMargin: 2*Theme.paddingLarge + Theme.paddingSmall
-                    color: searchItem.highlighted ?
-                        Theme.highlightColor : Theme.primaryColor
+                    color: searchItem.highlighted ? Theme.highlightColor : Theme.primaryColor
                     height: Theme.itemSizeSmall
                     text: "Find stop by name"
                 }
