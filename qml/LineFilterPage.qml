@@ -29,25 +29,29 @@ Dialog {
     SilicaGridView {
         id: gridView
         anchors.fill: parent
-        cellWidth: page.width/2
+        cellHeight: listItem.contentHeight
+        cellWidth: (page.width - Theme.paddingLarge) / 3
         delegate: ListItem {
             id: listItem
             clip: true
+            contentHeight: lineSwitch.height
             width: gridView.cellWidth
             TextSwitch {
                 id: lineSwitch
                 checked: model.checked
                 description: model.destination
-                rightMargin: Theme.paddingLarge
                 text: model.line
                 // Avoid wrapping description.
                 width: 3*page.width
-                Component.onCompleted: {
-                    listItem.contentHeight = lineSwitch.height;
-                    gridView.cellHeight = lineSwitch.height;
-                }
                 onCheckedChanged: gridView.model.setProperty(
                     model.index, "checked", lineSwitch.checked);
+            }
+            OpacityRampEffect {
+                // Try to match Label with TruncationMode.Fade.
+                direction: OpacityRamp.LeftToRight
+                offset: (gridView.cellWidth - Theme.paddingLarge) / lineSwitch.width
+                slope: lineSwitch.width / Theme.paddingLarge
+                sourceItem: lineSwitch
             }
         }
         header: DialogHeader {}
@@ -95,7 +99,7 @@ Dialog {
         page.populate();
     }
     onAccepted: {
-        // Put unchecked lines into an array.
+        // Construct an array out of unchecked lines.
         page.skip = [];
         for (var i = 0; i < gridView.model.count; i++) {
             var item = gridView.model.get(i);
