@@ -29,7 +29,6 @@ Dialog {
     SilicaGridView {
         id: gridView
         anchors.fill: parent
-        cellHeight: listItem.contentHeight
         cellWidth: (page.width - Theme.paddingLarge) / 3
         delegate: ListItem {
             id: listItem
@@ -43,6 +42,7 @@ Dialog {
                 text: model.line
                 // Avoid wrapping description.
                 width: 3*page.width
+                Component.onCompleted: gridView.cellHeight = lineSwitch.height;
                 onCheckedChanged: gridView.model.setProperty(
                     model.index, "checked", lineSwitch.checked);
             }
