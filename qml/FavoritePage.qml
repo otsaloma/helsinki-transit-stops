@@ -169,6 +169,5 @@ Page {
         }
         page.lineWidth = lineWidth;
         page.timeWidth = timeWidth;
-        listView.forceLayout();
     }
 }
