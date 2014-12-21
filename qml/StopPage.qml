@@ -154,6 +154,11 @@ Page {
         app.cover.update();
     }
     function update() {
+        page.updateTimes();
+        page.updateWidths();
+        app.cover.update();
+    }
+    function updateTimes() {
         // Update colors and times remaining to departure.
         for (var i = listView.model.count-1; i >= 0; i--) {
             var item = listView.model.get(i);
@@ -167,19 +172,20 @@ Page {
             if (!item.time || item.time.length == 0)
                 listView.model.remove(i);
         }
+    }
+    function updateWidths() {
         // Update column widths based on visible items.
         var lineWidth = 0;
         var timeWidth = 0;
         for (var i = 0; i < listView.model.count; i++) {
             var item = listView.model.get(i);
-            if (item.visible) {
+            if (item.visible && item.lineWidth)
                 lineWidth = Math.max(lineWidth, item.lineWidth);
+            if (item.visible && item.timeWidth)
                 timeWidth = Math.max(timeWidth, item.timeWidth);
-            }
         }
         page.lineWidth = lineWidth;
         page.timeWidth = timeWidth;
         listView.forceLayout();
-        app.cover.update();
     }
 }
