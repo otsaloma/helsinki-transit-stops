@@ -33,6 +33,9 @@ CoverBackground {
     Label {
         id: title
         anchors.centerIn: parent
+        color: Theme.secondaryColor
+        font.family: Theme.fontFamilyHeading
+        font.pixelSize: Theme.fontSizeLarge
         horizontalAlignment: Text.AlignHCenter
         text: "Helsinki\nTransit\nStops"
         width: parent.width
@@ -48,6 +51,7 @@ CoverBackground {
             Label {
                 id: lineLabel
                 anchors.left: parent.left
+                font.pixelSize: Theme.fontSizeLarge
                 height: implicitHeight + 2*Theme.paddingSmall
                 horizontalAlignment: Text.AlignRight
                 text: model.line
@@ -56,6 +60,7 @@ CoverBackground {
                 width: parent.width/2 - Theme.paddingLarge/2
             }
             Label {
+                anchors.baseline: lineLabel.baseline
                 anchors.right: parent.right
                 height: implicitHeight + 2*Theme.paddingSmall
                 horizontalAlignment: Text.AlignLeft
