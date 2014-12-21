@@ -23,10 +23,9 @@ import "."
 ApplicationWindow {
     id: app
     allowedOrientations: Orientation.All
-    cover: undefined
+    cover: Cover {}
     initialPage: MenuPage { id: menu }
-    // TODO: Add cover.status when we have a cover.
-    property bool running: applicationActive
+    property bool running: applicationActive || cover.status == Cover.Active
     property string searchQuery: ""
     PositionSource { id: gps }
     Python { id: py }

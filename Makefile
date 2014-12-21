@@ -26,9 +26,10 @@ install:
 	mkdir -p $(datadir)/hts
 	cp hts/*.py $(datadir)/hts
 	@echo "Installing QML files..."
-	mkdir -p $(datadir)/qml
+	mkdir -p $(datadir)/qml/icons
 	cp qml/helsinki-transit-stops.qml $(datadir)/qml/$(name).qml
 	cp qml/[ABCDEFGHIJKLMNOPQRSTUVXYZ]*.qml $(datadir)/qml
+	cp qml/icons/*.png $(datadir)/qml/icons
 	@echo "Installing desktop file..."
 	mkdir -p $(desktopdir)
 	cp data/$(name).desktop $(desktopdir)

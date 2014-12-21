@@ -24,6 +24,7 @@ import "."
 Page {
     id: page
     allowedOrientations: Orientation.Portrait
+    property bool canCover: true
     property bool loading: false
     property bool populated: false
     property var props: {}
@@ -121,6 +122,10 @@ Page {
             page.populate();
         }
     }
+    function getModel() {
+        // Return list view model with current departures.
+        return listView.model;
+    }
     function populate() {
         // Load departures from the Python backend.
         listView.model.clear();
@@ -146,6 +151,7 @@ Page {
             page.loading = false;
             page.populated = true;
         });
+        app.cover.update();
     }
     function update() {
         // Update colors and times remaining to departure.
@@ -174,5 +180,6 @@ Page {
         page.lineWidth = lineWidth;
         page.timeWidth = timeWidth;
         listView.forceLayout();
+        app.cover.update();
     }
 }
