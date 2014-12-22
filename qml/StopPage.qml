@@ -59,6 +59,7 @@ Page {
                         stop.y = page.props.y;
                         py.call_sync("hts.app.favorites.add_stop", [dialog.key, stop]);
                         menu.populate();
+                        py.call("hts.app.save", [], null);
                     });
                 }
             }

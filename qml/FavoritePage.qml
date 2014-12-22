@@ -58,6 +58,7 @@ Page {
                             item.visible = dialog.skip.indexOf(item.line) < 0;
                         }
                         page.update();
+                        py.call("hts.app.save", [], null);
                     });
                 }
             }

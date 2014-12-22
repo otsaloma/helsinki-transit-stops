@@ -48,6 +48,7 @@ Page {
                             listView.model.setProperty(i, "name", dialog.name);
                             listView.model.setProperty(i, "color", py.call_sync(
                                 "hts.app.favorites.get_color", [model.key]));
+                            py.call("hts.app.save", [], null);
                         });
                     }
                 }
