@@ -65,13 +65,16 @@ def format_departure_time(departure):
     return "{:.0f}:{:02.0f}".format(departure.tm_hour,
                                     departure.tm_min)
 
-def format_distance(distance, n=2, units="m"):
-    """Format `distance` to `n` significant digits and unit label."""
+def format_distance(meters, n=2):
+    """Format `meters` to `n` significant digits and unit label."""
     # XXX: We might need to support for non-SI units here.
-    if units == "km" and abs(distance) < 1:
-        return format_distance(distance*1000, n, "m")
-    if units == "m" and abs(distance) > 1000:
-        return format_distance(distance/1000, n, "km")
+    if meters > 1000:
+        distance = meters/1000
+        units = "km"
+    else:
+        # Let's not use units less than a meter.
+        distance = meters
+        units = "m"
     ndigits = n - math.ceil(math.log10(abs(max(1, distance)) + 1/1000000))
     if units == "m":
         ndigits = min(0, ndigits)
