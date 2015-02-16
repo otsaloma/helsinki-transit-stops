@@ -22,6 +22,7 @@ import Sailfish.Silica 1.0
 CoverBackground {
     id: cover
     anchors.fill: parent
+    property bool active: status == Cover.Active
     Image {
         id: image
         anchors.centerIn: parent

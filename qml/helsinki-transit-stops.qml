@@ -25,7 +25,7 @@ ApplicationWindow {
     allowedOrientations: Orientation.All
     cover: Cover {}
     initialPage: MenuPage { id: menu }
-    property bool running: applicationActive || cover.status == Cover.Active
+    property bool running: applicationActive || cover.active
     property string searchQuery: ""
     PositionSource { id: gps }
     Python { id: py }

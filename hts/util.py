@@ -18,6 +18,7 @@
 """Miscellaneous helper functions."""
 
 import contextlib
+import functools
 import json
 import math
 import os
