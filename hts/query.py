@@ -87,15 +87,8 @@ def _find_departures(code):
     ) for departure in output[0]["departures"] or []]
     return results
 
-def find_departures(codes):
-    """
-    Return a list of departures from stops matching `codes`.
-
-    `codes` can be either a string to get departures from one stop or
-    a list or tuple of strings to get departures from a group of stops.
-    """
-    if isinstance(codes, str):
-        return _find_departures(codes)
+def find_departures(*codes):
+    """Return a list of departures from stops matching `codes`."""
     results = []
     for code in codes:
         value = _find_departures(code)
@@ -107,14 +100,7 @@ def find_departures(codes):
     return results
 
 def find_lines(codes):
-    """
-    Return a list of lines at stops matching `codes`.
-
-    `codes` can be either a string to get lines at one stop or
-    a list or tuple of strings to get lines at a group of stops.
-    """
-    if isinstance(codes, str):
-        codes = (codes,)
+    """Return a list of lines at stops matching `codes`."""
     lines = []
     for code in codes:
         value = find_stops(code, 0, 0)

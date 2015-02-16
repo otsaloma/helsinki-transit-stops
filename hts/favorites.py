@@ -31,8 +31,8 @@ class Favorites:
 
     def __init__(self):
         """Initialize a :class:`Favorites` instance."""
-        self._path = os.path.join(hts.CONFIG_HOME_DIR, "favorites.json")
         self._favorites = []
+        self._path = os.path.join(hts.CONFIG_HOME_DIR, "favorites.json")
         self._read()
 
     def add(self, name):
@@ -67,7 +67,7 @@ class Favorites:
         """Return a list of departures from favorite matching `key`."""
         favorite = self.get(key)
         return hts.query.find_departures(
-            [x["code"] for x in favorite["stops"]])
+            *[x["code"] for x in favorite["stops"]])
 
     def get(self, key):
         """Return favorite matching `key` or raise :exc:`LookupError`."""
