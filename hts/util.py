@@ -82,6 +82,18 @@ def format_distance(meters, n=2):
     fstring = "{{:.{:d}f}} {{}}".format(max(0, ndigits))
     return fstring.format(distance, units)
 
+def locked_method(function):
+    """
+    Decorator for methods to be run thread-safe.
+
+    Requires class to have an instance variable '_lock'.
+    """
+    @functools.wraps(function)
+    def wrapper(*args, **kwargs):
+        with args[0]._lock:
+            return function(*args, **kwargs)
+    return wrapper
+
 def makedirs(directory):
     """Create and return `directory` or raise :exc:`OSError`."""
     directory = os.path.abspath(directory)
