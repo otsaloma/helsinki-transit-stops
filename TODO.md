@@ -1,5 +1,5 @@
-Helsinki Transit Stops 0.3.1
-============================
+Helsinki Transit Stops 0.4
+==========================
 
  * [X] Allow landscape in pages adding and editing favorites
  * [X] Fix application icon rasterization

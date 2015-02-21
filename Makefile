@@ -3,7 +3,7 @@
 name       = harbour-helsinki-transit-stops
 version    = 0.3
 DESTDIR    =
-PREFIX     = /usr/local
+PREFIX     = /usr
 datadir    = $(DESTDIR)$(PREFIX)/share/$(name)
 desktopdir = $(DESTDIR)$(PREFIX)/share/applications
 icondir    = $(DESTDIR)$(PREFIX)/share/icons/hicolor/86x86/apps
