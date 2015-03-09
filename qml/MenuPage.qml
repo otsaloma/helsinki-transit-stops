@@ -73,7 +73,7 @@ Page {
                 contentHeight: Theme.itemSizeSmall
                 ListItemLabel {
                     anchors.leftMargin: 2*Theme.paddingLarge + Theme.paddingSmall
-                    color: aboutItem.highlighted ? Theme.highlightColor : Theme.primaryColor
+                    color: aboutItem.highlighted ? Theme.highlightColor : Theme.secondaryColor
                     height: Theme.itemSizeSmall
                     text: "About Helsinki Transit Stops"
                 }
@@ -96,7 +96,7 @@ Page {
                     color: nearbyItem.highlighted ? Theme.highlightColor : Theme.primaryColor
                     height: Theme.itemSizeSmall
                     opacity: gps.ready ? 1.0 : 0.4
-                    text: "List nearby stops"
+                    text: "Nearby"
                 }
                 BusyIndicator {
                     anchors.right: nearbyLabel.right
@@ -114,7 +114,7 @@ Page {
                     anchors.leftMargin: 2*Theme.paddingLarge + Theme.paddingSmall
                     color: searchItem.highlighted ? Theme.highlightColor : Theme.primaryColor
                     height: Theme.itemSizeSmall
-                    text: "Find stop by name"
+                    text: "Search"
                 }
                 onClicked: {
                     app.pageStack.push("SearchPage.qml");
