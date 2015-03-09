@@ -81,44 +81,58 @@ Page {
             }
         }
         header: Column {
-            height: header.height + nearbyItem.height + searchItem.height
+            height: header.height + row.height + Theme.paddingMedium
             width: parent.width
             PageHeader {
                 id: header
                 title: "Helsinki Transit Stops"
             }
-            ListItem {
-                id: nearbyItem
-                contentHeight: Theme.itemSizeSmall
-                ListItemLabel {
-                    id: nearbyLabel
-                    anchors.leftMargin: 2*Theme.paddingLarge + Theme.paddingSmall
-                    color: nearbyItem.highlighted ? Theme.highlightColor : Theme.primaryColor
-                    height: Theme.itemSizeSmall
-                    opacity: gps.ready ? 1.0 : 0.4
-                    text: "Nearby"
+            Row {
+                id: row
+                height: Theme.itemSizeSmall
+                width: parent.width
+                ListItem {
+                    id: nearbyItem
+                    contentHeight: Theme.itemSizeSmall
+                    width: parent.width/2
+                    Rectangle {
+                        anchors.fill: parent
+                        color: Theme.primaryColor
+                        opacity: 0.1
+                    }
+                    ListItemLabel {
+                        id: nearbyLabel
+                        anchors.fill: parent
+                        anchors.leftMargin: 2*Theme.paddingLarge + Theme.paddingSmall
+                        color: nearbyItem.highlighted ? Theme.highlightColor : Theme.primaryColor
+                        height: Theme.itemSizeSmall
+                        horizontalAlignment: Text.AlignLeft
+                        opacity: gps.ready ? 1.0 : 0.4
+                        text: "Nearby"
+                    }
+                    onClicked: gps.ready && app.pageStack.push("NearbyPage.qml");
                 }
-                BusyIndicator {
-                    anchors.right: nearbyLabel.right
-                    anchors.rightMargin: Theme.paddingLarge
-                    anchors.verticalCenter: nearbyLabel.verticalCenter
-                    running: !gps.ready
-                    size: BusyIndicatorSize.Medium
-                }
-                onClicked: gps.ready && app.pageStack.push("NearbyPage.qml");
-            }
-            ListItem {
-                id: searchItem
-                contentHeight: Theme.itemSizeSmall
-                ListItemLabel {
-                    anchors.leftMargin: 2*Theme.paddingLarge + Theme.paddingSmall
-                    color: searchItem.highlighted ? Theme.highlightColor : Theme.primaryColor
-                    height: Theme.itemSizeSmall
-                    text: "Search"
-                }
-                onClicked: {
-                    app.pageStack.push("SearchPage.qml");
-                    app.pageStack.pushAttached("SearchResultsPage.qml");
+                ListItem {
+                    id: searchItem
+                    contentHeight: Theme.itemSizeSmall
+                    width: parent.width/2
+                    Rectangle {
+                        anchors.fill: parent
+                        color: Theme.primaryColor
+                        opacity: 0.1
+                    }
+                    ListItemLabel {
+                        anchors.fill: parent
+                        anchors.rightMargin: 2*Theme.paddingLarge + Theme.paddingSmall
+                        color: searchItem.highlighted ? Theme.highlightColor : Theme.primaryColor
+                        height: Theme.itemSizeSmall
+                        horizontalAlignment: Text.AlignRight
+                        text: "Search"
+                    }
+                    onClicked: {
+                        app.pageStack.push("SearchPage.qml");
+                        app.pageStack.pushAttached("SearchResultsPage.qml");
+                    }
                 }
             }
         }
