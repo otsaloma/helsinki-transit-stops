@@ -115,16 +115,22 @@ CoverBackground {
         // Query departures from the current page.
         var page = app.pageStack.currentPage;
         var model = null;
+        var countVisible = 0;
         if (page && page.canCover) {
             var model = page.getModel();
-            if (model && model.count > 0) {
+            for (var i = 0; i < model.count; i++) {
+                // Departures can be hidden by line filters.
+                if (model.get(i).visible)
+                    countVisible++;
+            }
+            if (model && countVisible > 0) {
                 // Show the first five departures.
                 cover.copyFrom(model);
                 image.opacity = 0.05;
                 title.visible = false;
             }
         }
-        if (!model || model.count == 0) {
+        if (!model || countVisible == 0) {
             // No departures; show icon and title.
             cover.clear();
             image.opacity = 0.1;

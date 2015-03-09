@@ -2,6 +2,7 @@ Helsinki Transit Stops 0.4
 ==========================
 
  * [X] Allow landscape in pages adding and editing favorites
+ * [X] Fix cover display if no departures left
  * [X] Fix application icon rasterization
 
 Helsinki Transit Stops 1.0
