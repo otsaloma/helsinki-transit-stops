@@ -72,7 +72,8 @@ Dialog {
                     }
                 }
             }
-            ListView.onRemove: animateRemoval(listItem)
+            ListView.onRemove: animateRemoval(listItem);
+            onClicked: listItem.showMenu();
         }
         header: Column {
             height: header.height + nameField.height + titleLabel.height
