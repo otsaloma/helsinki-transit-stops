@@ -73,8 +73,10 @@ Page {
                 contentHeight: Theme.itemSizeSmall
                 ListItemLabel {
                     anchors.leftMargin: 2*Theme.paddingLarge + Theme.paddingSmall
+                    anchors.rightMargin: 2*Theme.paddingLarge + Theme.paddingSmall
                     color: aboutItem.highlighted ? Theme.highlightColor : Theme.secondaryColor
                     height: Theme.itemSizeSmall
+                    horizontalAlignment: Text.AlignRight
                     text: "About Helsinki Transit Stops"
                 }
                 onClicked: app.pageStack.push("AboutPage.qml");
