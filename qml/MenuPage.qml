@@ -97,7 +97,7 @@ Page {
                     width: parent.width/2
                     Rectangle {
                         anchors.fill: parent
-                        color: Theme.primaryColor
+                        color: Theme.highlightColor
                         opacity: 0.1
                     }
                     ListItemLabel {
@@ -118,10 +118,11 @@ Page {
                     width: parent.width/2
                     Rectangle {
                         anchors.fill: parent
-                        color: Theme.primaryColor
+                        color: Theme.highlightColor
                         opacity: 0.1
                     }
                     ListItemLabel {
+                        id: searchLabel
                         anchors.fill: parent
                         anchors.rightMargin: 2*Theme.paddingLarge + Theme.paddingSmall
                         color: searchItem.highlighted ? Theme.highlightColor : Theme.primaryColor
