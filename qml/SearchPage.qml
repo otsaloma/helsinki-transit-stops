@@ -39,7 +39,7 @@ Page {
                 anchors.leftMargin: listView.searchField.textLeftMargin
                 color: listItem.highlighted ? Theme.highlightColor : Theme.primaryColor
                 height: Theme.itemSizeSmall
-                text: model.name
+                text: model.text
             }
             ContextMenu {
                 id: contextMenu
@@ -102,7 +102,9 @@ Page {
             }
         }
         for (var i = 0; i < found.length; i++) {
+            var text = Theme.highlightText(found[i], query, Theme.highlightColor);
             listView.model.setProperty(i, "name", found[i]);
+            listView.model.setProperty(i, "text", text);
             listView.model.setProperty(i, "visible", true);
         }
         for (var i = found.length; i < listView.count; i++)
@@ -112,6 +114,6 @@ Page {
         // Load search history and preallocate list items.
         page.history = py.evaluate("hts.app.history.names");
         while (listView.model.count < 50)
-            listView.model.append({"name": "", "visible": false});
+            listView.model.append({"name": "", "text": "", "visible": false});
     }
 }
