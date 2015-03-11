@@ -1,3 +1,11 @@
+Helsinki Transit Stops 0.4
+==========================
+
+ * Allow landscape in pages adding and editing favorites
+ * Change main menu layout to be simpler and more compact
+ * Fix cover display if no departures left
+ * Fix application icon rasterization
+
 Helsinki Transit Stops 0.3
 ==========================
 
