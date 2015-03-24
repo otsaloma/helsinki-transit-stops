@@ -13,6 +13,7 @@ Releasing a New Version
    - `make dist`
    - `make rpm`
  * Check that RPM is Harbour-OK, installs and works
+   - `rpm -qpil rpm/*.noarch.rpm`
    - `rpmvalidation.sh rpm/*.noarch.rpm`
    - `pkcon install-local rpm/*.noarch.rpm`
  * Commit changes
