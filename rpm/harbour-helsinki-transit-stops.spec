@@ -1,6 +1,9 @@
 # Prevent brp-python-bytecompile from running.
 %define __os_install_post %{___build_post}
 
+# "Harbour RPM packages should not provide anything".
+%define __provides_exclude_from ^%{_datadir}/.*$
+
 Name: harbour-helsinki-transit-stops
 Version: 0.4
 Release: 1
@@ -25,6 +28,7 @@ Departures from Helsinki Region Transport (HSL) public transportation stops.
 make DESTDIR=%{buildroot} PREFIX=/usr install
 
 %files
+%defattr(-,root,root,-)
 %{_datadir}/%{name}
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
