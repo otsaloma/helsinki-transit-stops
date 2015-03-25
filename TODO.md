@@ -1,11 +1,3 @@
-Helsinki Transit Stops 0.4.1
-============================
-
- * [X] Use QtPositioning 5.2 API instead of 5.0
- * [X] Don't install %doc files (COPYING, README, etc.)
- * [X] Remove python3-base from RPM dependencies
- * [X] Prevent provides in RPM package
-
 Helsinki Transit Stops 1.0
 ==========================
 

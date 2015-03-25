@@ -1,11 +1,11 @@
 # Prevent brp-python-bytecompile from running.
 %define __os_install_post %{___build_post}
 
-# "Harbour RPM packages should not provide anything".
+# "Harbour RPM packages should not provide anything."
 %define __provides_exclude_from ^%{_datadir}/.*$
 
 Name: harbour-helsinki-transit-stops
-Version: 0.4
+Version: 0.4.1
 Release: 1
 Summary: Departures from HSL public transportation stops
 License: GPLv3+
