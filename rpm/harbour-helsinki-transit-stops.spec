@@ -10,6 +10,7 @@ URL: http://github.com/otsaloma/helsinki-transit-stops
 Source: %{name}-%{version}.tar.xz
 BuildArch: noarch
 BuildRequires: make
+BuildRequires: qt5-qttools-linguist
 Requires: libsailfishapp-launcher
 Requires: pyotherside-qml-plugin-python3-qt5 >= 1.2
 Requires: python3-base

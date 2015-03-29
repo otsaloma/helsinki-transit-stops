@@ -1,6 +1,9 @@
 Releasing a New Version
 =======================
 
+ * Update translations
+   - `make translations`
+   - `virtaal translations/*-fi.ts`
  * Do final quality checks
    - `pyflakes3 hts`
    - `py.test-3 hts`

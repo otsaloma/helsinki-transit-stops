@@ -8,7 +8,7 @@ datadir    = $(DESTDIR)$(PREFIX)/share/$(name)
 desktopdir = $(DESTDIR)$(PREFIX)/share/applications
 icondir    = $(DESTDIR)$(PREFIX)/share/icons/hicolor/86x86/apps
 
-.PHONY: clean dist install rpm
+.PHONY: clean dist install rpm translations
 
 clean:
 	rm -rf dist
@@ -30,6 +30,11 @@ install:
 	cp qml/helsinki-transit-stops.qml $(datadir)/qml/$(name).qml
 	cp qml/[ABCDEFGHIJKLMNOPQRSTUVXYZ]*.qml $(datadir)/qml
 	cp qml/icons/*.png $(datadir)/qml/icons
+	@echo "Installing translations..."
+	mkdir -p $(datadir)/translations
+	for LANG in `cat translations/LANGS`; do \
+	    lrelease translations/$$LANG.ts \
+	        -qm $(datadir)/translations/$(name)-$$LANG.qm; done
 	@echo "Installing desktop file..."
 	mkdir -p $(desktopdir)
 	cp data/$(name).desktop $(desktopdir)
@@ -43,3 +48,10 @@ rpm:
 	rpmbuild -ba rpm/$(name).spec
 	cp $$HOME/rpmbuild/RPMS/noarch/$(name)-$(version)-*.rpm rpm
 	cp $$HOME/rpmbuild/SRPMS/$(name)-$(version)-*.rpm rpm
+
+translations:
+	rm -f translations/helsinki-transit-stops.ts
+	lupdate qml/*.qml -ts qml.ts
+	pylupdate5 -verbose hts/*.py -ts py.ts
+	lconvert qml.ts py.ts -o translations/helsinki-transit-stops.ts
+	rm -f qml.ts py.ts

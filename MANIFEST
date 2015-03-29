@@ -2,6 +2,7 @@ data
 hts
 qml
 rpm
+translations
 AUTHORS.md
 COPYING
 Makefile
