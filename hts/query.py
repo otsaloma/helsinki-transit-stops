@@ -25,6 +25,7 @@ import copy
 import datetime
 import functools
 import hts
+import locale
 import math
 import re
 import socket
@@ -32,14 +33,24 @@ import traceback
 import urllib.parse
 tr = lambda x: x
 
+
+def get_default_language():
+    """Return the system default language code."""
+    language, encoding = locale.getdefaultlocale()
+    with hts.util.silent(Exception):
+        for prefix in ("fi", "sv", "en"):
+            if language.startswith(prefix):
+                return prefix
+    # XXX: Fall back on Finnish?
+    return "fi"
+
 URL_PREFIX = ("http://api.reittiopas.fi/hsl/prod/"
               "?user=helsinki-transit-stops"
               "&pass=38220661"
               "&format=json"
               "&epsg_in=4326"
               "&epsg_out=4326"
-              "&lang=fi")
-
+              "&lang={LANG}").format(LANG=get_default_language())
 
 def api_query(fallback):
     """Decorator for API requests with graceful error handling."""
