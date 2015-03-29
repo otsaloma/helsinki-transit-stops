@@ -29,11 +29,11 @@ Page {
         Column {
             id: column
             width: parent.width
-            PageHeader { title: "About Helsinki Transit Stops" }
+            PageHeader { title: qsTr("About Helsinki Transit Stops") }
             ListItemLabel {
                 height: Theme.itemSizeExtraSmall
                 horizontalAlignment: Text.AlignHCenter
-                text: "version " + py.evaluate("hts.__version__")
+                text: qsTr("version %1").arg(py.evaluate("hts.__version__"))
             }
             ListItemLabel {
                 font.pixelSize: Theme.fontSizeSmall
@@ -54,7 +54,7 @@ Page {
                 color: Theme.primaryColor
                 font.pixelSize: Theme.fontSizeExtraSmall
                 height: implicitHeight + Theme.paddingLarge
-                text: "Helsinki Transit Stops is free software released under the GNU General Public License (GPL), version 3 or later."
+                text: qsTr("Helsinki Transit Stops is free software released under the GNU General Public License (GPL), version 3 or later.")
                 wrapMode: Text.WordWrap
             }
         }

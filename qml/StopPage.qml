@@ -43,7 +43,7 @@ Page {
         PullDownMenu {
             visible: !page.loading || false
             MenuItem {
-                text: "Add to favorites"
+                text: qsTr("Add to favorites")
                 onClicked: {
                     var dialog = pageStack.push("AddFavoritePage.qml", {
                         "code": page.props.code,
@@ -64,7 +64,7 @@ Page {
                 }
             }
             MenuItem {
-                text: "Filter lines"
+                text: qsTr("Filter lines")
                 onClicked: {
                     var dialog = pageStack.push("LineFilterPage.qml", {
                         "codes": [page.props.code],
@@ -91,7 +91,7 @@ Page {
         height: Theme.itemSizeLarge
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
-        visible: page.loading || text != "Loading"
+        visible: page.loading || text != qsTr("Loading")
         width: parent.width
     }
     BusyIndicator {
@@ -118,7 +118,7 @@ Page {
             listView.model.clear();
             page.loading = true;
             page.title = "";
-            busyLabel.text = "Loading"
+            busyLabel.text = qsTr("Loading")
         } else if (page.status == PageStatus.Active) {
             page.populate();
         }
@@ -136,7 +136,7 @@ Page {
         py.call("hts.query.find_departures", [code], function(results) {
             if (results && results.error && results.message) {
                 page.title = "";
-                busyLabel.text = results.message;
+                busyLabel.text = qsTr(results.message);
             } else if (results && results.length > 0) {
                 page.results = results;
                 page.title = page.props.name;
@@ -147,7 +147,7 @@ Page {
                 }
             } else {
                 page.title = "";
-                busyLabel.text = "No departures found";
+                busyLabel.text = qsTr("No departures found");
             }
             page.loading = false;
             page.populated = true;

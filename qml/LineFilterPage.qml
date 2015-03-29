@@ -59,14 +59,14 @@ Dialog {
         PullDownMenu {
             visible: !page.loading && gridView.model.count > 0
             MenuItem {
-                text: "Mark all"
+                text: qsTr("Mark all")
                 onClicked: {
                     for (var i = 0; i < gridView.model.count; i++)
                         gridView.model.setProperty(i, "checked", true);
                 }
             }
             MenuItem {
-                text: "Unmark all"
+                text: qsTr("Unmark all")
                 onClicked: {
                     for (var i = 0; i < gridView.model.count; i++)
                         gridView.model.setProperty(i, "checked", false);
@@ -83,7 +83,7 @@ Dialog {
         height: Theme.itemSizeLarge
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
-        visible: page.loading || text != "Loading"
+        visible: page.loading || text != qsTr("Loading")
         width: parent.width
     }
     BusyIndicator {
@@ -95,7 +95,7 @@ Dialog {
     }
     Component.onCompleted: {
         page.loading = true;
-        busyLabel.text = "Loading"
+        busyLabel.text = qsTr("Loading")
         page.populate();
     }
     onAccepted: {
@@ -111,14 +111,14 @@ Dialog {
         gridView.model.clear();
         py.call("hts.query.find_lines", [page.codes], function(results) {
             if (results && results.error && results.message) {
-                busyLabel.text = results.message;
+                busyLabel.text = qsTr(results.message);
             } else if (results && results.length > 0) {
                 for (var i = 0; i < results.length; i++) {
                     results[i].checked = page.skip.indexOf(results[i].line) < 0;
                     gridView.model.append(results[i]);
                 }
             } else {
-                busyLabel.text = "No lines found";
+                busyLabel.text = qsTr("No lines found");
             }
             page.loading = false;
         });

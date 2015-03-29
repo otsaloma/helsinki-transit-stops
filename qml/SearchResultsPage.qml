@@ -45,7 +45,7 @@ Page {
         height: Theme.itemSizeLarge
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
-        visible: page.loading || text != "Searching"
+        visible: page.loading || text != qsTr("Searching")
         width: parent.width
     }
     BusyIndicator {
@@ -62,7 +62,7 @@ Page {
             listView.model.clear();
             page.loading = true;
             page.title = "";
-            busyLabel.text = "Searching"
+            busyLabel.text = qsTr("Searching")
         } else if (page.status == PageStatus.Active) {
             page.populate(app.searchQuery);
         }
@@ -76,16 +76,15 @@ Page {
         py.call("hts.query.find_stops", [query, x, y], function(results) {
             if (results && results.error && results.message) {
                 page.title = "";
-                busyLabel.text = results.message;
+                busyLabel.text = qsTr(results.message);
             } else if (results && results.length > 0) {
                 page.results = results;
-                page.title = results.length == 1 ?
-                    "1 Stop" : results.length + " Stops";
+                page.title = qsTr("%n Stop(s)", "", results.length);
                 for (var i = 0; i < results.length; i++)
                     listView.model.append(results[i]);
             } else {
                 page.title = "";
-                busyLabel.text = "No stops found";
+                busyLabel.text = qsTr("No stops found");
             }
             page.loading = false;
             page.populatedQuery = query;

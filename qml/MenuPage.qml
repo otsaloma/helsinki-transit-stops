@@ -31,7 +31,7 @@ Page {
             menu: ContextMenu {
                 id: contextMenu
                 MenuItem {
-                    text: "Edit"
+                    text: qsTr("Edit")
                     onClicked: {
                         var dialog = pageStack.push("EditFavoritePage.qml", {
                             "key": model.key,
@@ -53,9 +53,9 @@ Page {
                     }
                 }
                 MenuItem {
-                    text: "Remove"
+                    text: qsTr("Remove")
                     onClicked: {
-                        remorseAction("Removing", function() {
+                        remorseAction(qsTr("Removing"), function() {
                             py.call_sync("hts.app.favorites.remove", [model.key]);
                             listView.model.remove(index);
                         });
@@ -77,7 +77,7 @@ Page {
                     color: aboutItem.highlighted ? Theme.highlightColor : Theme.secondaryColor
                     height: Theme.itemSizeSmall
                     horizontalAlignment: Text.AlignRight
-                    text: "About Helsinki Transit Stops"
+                    text: qsTr("About Helsinki Transit Stops")
                 }
                 onClicked: app.pageStack.push("AboutPage.qml");
             }
@@ -110,7 +110,7 @@ Page {
                         height: Theme.itemSizeSmall
                         horizontalAlignment: Text.AlignLeft
                         opacity: gps.ready ? 1.0 : 0.4
-                        text: "Nearby"
+                        text: ("Nearby")
                     }
                     onClicked: gps.ready && app.pageStack.push("NearbyPage.qml");
                 }
@@ -130,7 +130,7 @@ Page {
                         color: searchItem.highlighted ? Theme.highlightColor : Theme.primaryColor
                         height: Theme.itemSizeSmall
                         horizontalAlignment: Text.AlignRight
-                        text: "Search"
+                        text: qsTr("Search")
                     }
                     onClicked: {
                         app.pageStack.push("SearchPage.qml");

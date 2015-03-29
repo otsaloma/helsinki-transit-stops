@@ -64,7 +64,7 @@ Dialog {
             ContextMenu {
                 id: contextMenu
                 MenuItem {
-                    text: "Remove"
+                    text: qsTr("Remove")
                     onClicked: {
                         // Mark stop to be removed once dialog is accepted.
                         page.removals.push(model.code);
@@ -85,7 +85,7 @@ Dialog {
                 anchors.leftMargin: Theme.paddingLarge
                 anchors.right: parent.right
                 anchors.rightMargin: Theme.paddingLarge
-                label: "Name"
+                label: qsTr("Name")
                 text: page.name
                 EnterKey.enabled: text.length > 0
                 EnterKey.onClicked: nameField.focus = false;
@@ -96,7 +96,7 @@ Dialog {
                 font.pixelSize: Theme.fontSizeSmall
                 height: implicitHeight
                 horizontalAlignment: Text.AlignRight
-                text: "Stops"
+                text: qsTr("Stops")
             }
             Component.onCompleted: page.nameField = nameField;
         }
