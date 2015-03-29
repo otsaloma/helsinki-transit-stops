@@ -30,6 +30,7 @@ import re
 import socket
 import traceback
 import urllib.parse
+tr = lambda x: x
 
 URL_PREFIX = ("http://api.reittiopas.fi/hsl/prod/"
               "?user=helsinki-transit-stops"
@@ -53,7 +54,7 @@ def api_query(fallback):
                 # a traceback and return blank of correct type.
                 return function(*args, **kwargs)
             except socket.timeout:
-                return dict(error=True, message="Connection timed out")
+                return dict(error=True, message=tr("Connection timed out"))
             except Exception:
                 traceback.print_exc()
                 return copy.deepcopy(fallback)
