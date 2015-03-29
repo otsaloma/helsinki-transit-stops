@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE TS>
-<TS version="2.0" language="fi" sourcelanguage="en">
+<TS version="2.0" language="fi" sourcelanguage="en_US">
 <context>
     <name>AboutPage</name>
     <message>
@@ -76,7 +76,7 @@
     <message>
         <location filename="qml/FavoritePage.qml" line="133"/>
         <source>No departures found</source>
-        <translation>Ei löydetty lähtöjä</translation>
+        <translation>Ei löytynyt lähtöjä</translation>
     </message>
 </context>
 <context>
@@ -100,7 +100,7 @@
     <message>
         <location filename="qml/LineFilterPage.qml" line="121"/>
         <source>No lines found</source>
-        <translation>Ei löydetty linjoja</translation>
+        <translation>Ei löytynyt linjoja</translation>
     </message>
 </context>
 <context>
@@ -155,7 +155,7 @@
     <message>
         <location filename="qml/NearbyPage.qml" line="86"/>
         <source>No stops found</source>
-        <translation>Ei löydetty pysäkkejä</translation>
+        <translation>Ei löytynyt pysäkkejä</translation>
     </message>
 </context>
 <context>
@@ -195,7 +195,7 @@
     <message>
         <location filename="qml/SearchResultsPage.qml" line="87"/>
         <source>No stops found</source>
-        <translation>Ei löydetty pysäkkejä</translation>
+        <translation>Ei löytynyt pysäkkejä</translation>
     </message>
 </context>
 <context>
@@ -219,7 +219,7 @@
     <message>
         <location filename="qml/StopPage.qml" line="150"/>
         <source>No departures found</source>
-        <translation>Ei löydetty lähtöjä</translation>
+        <translation>Ei löytynyt lähtöjä</translation>
     </message>
 </context>
 <context>
