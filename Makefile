@@ -54,5 +54,11 @@ translations:
 	rm -f translations/helsinki-transit-stops.ts
 	lupdate qml/*.qml -ts qml.ts
 	pylupdate5 -verbose hts/*.py -ts py.ts
-	lconvert qml.ts py.ts -o translations/helsinki-transit-stops.ts
+	lconvert -o translations/helsinki-transit-stops.ts qml.ts py.ts
 	rm -f qml.ts py.ts
+	for LANG in `cat translations/LANGS`; do \
+	    lconvert -o translations/$$LANG.ts \
+	        --source-language en \
+	        --target-language $$LANG \
+	        translations/helsinki-transit-stops.ts \
+	        translations/$$LANG.ts; done

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE TS>
 <TS version="2.0" language="fi" sourcelanguage="en">
 <context>
@@ -126,6 +126,11 @@
         <translation>Tietoja Helsinki Transit Stopsista</translation>
     </message>
     <message>
+        <location filename="qml/MenuPage.qml" line="113"/>
+        <source>Nearby</source>
+        <translation>Lähellä</translation>
+    </message>
+    <message>
         <location filename="qml/MenuPage.qml" line="133"/>
         <source>Search</source>
         <translation>Etsi</translation>
@@ -143,8 +148,8 @@
         <location filename="qml/NearbyPage.qml" line="81"/>
         <source>%n Stop(s)</source>
         <translation>
-          <numerusform>%n pysäkki</numerusform>
-          <numerusform>%n pysäkkiä</numerusform>
+            <numerusform>%n pysäkki</numerusform>
+            <numerusform>%n pysäkkiä</numerusform>
         </translation>
     </message>
     <message>
@@ -183,8 +188,8 @@
         <location filename="qml/SearchResultsPage.qml" line="82"/>
         <source>%n Stop(s)</source>
         <translation>
-          <numerusform>%n pysäkki</numerusform>
-          <numerusform>%n pysäkkiä</numerusform>
+            <numerusform>%n pysäkki</numerusform>
+            <numerusform>%n pysäkkiä</numerusform>
         </translation>
     </message>
     <message>

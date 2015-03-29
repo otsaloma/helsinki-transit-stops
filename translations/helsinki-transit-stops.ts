@@ -126,6 +126,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="qml/MenuPage.qml" line="113"/>
+        <source>Nearby</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="qml/MenuPage.qml" line="133"/>
         <source>Search</source>
         <translation type="unfinished"></translation>

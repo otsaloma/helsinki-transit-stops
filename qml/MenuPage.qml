@@ -110,7 +110,7 @@ Page {
                         height: Theme.itemSizeSmall
                         horizontalAlignment: Text.AlignLeft
                         opacity: gps.ready ? 1.0 : 0.4
-                        text: ("Nearby")
+                        text: qsTr("Nearby")
                     }
                     onClicked: gps.ready && app.pageStack.push("NearbyPage.qml");
                 }
