@@ -9,7 +9,7 @@ country code.
 
 To get your translation included, fork the [repository][3] on GitHub,
 commit your changes and send a pull request, or if you prefer, send
-the translation file by email to `otsaloma@iki.fi`.
+the translation file by email to <otsaloma@iki.fi>.
 
  [1]: http://doc.qt.io/qt-5/linguist-translators.html
  [2]: http://virtaal.translatehouse.org/

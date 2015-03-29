@@ -32,9 +32,11 @@ install:
 	cp qml/icons/*.png $(datadir)/qml/icons
 	@echo "Installing translations..."
 	mkdir -p $(datadir)/translations
-	for LANG in `cat translations/LANGS`; do \
+	for TSFILE in translations/??[!l]*ts; do \
+	    LANG=`basename $$TSFILE .ts`; \
 	    lrelease translations/$$LANG.ts \
-	        -qm $(datadir)/translations/$(name)-$$LANG.qm; done
+	        -qm $(datadir)/translations/$(name)-$$LANG.qm; \
+	done
 	@echo "Installing desktop file..."
 	mkdir -p $(desktopdir)
 	cp data/$(name).desktop $(desktopdir)
@@ -56,9 +58,11 @@ translations:
 	pylupdate5 -verbose hts/*.py -ts py.ts
 	lconvert -o translations/helsinki-transit-stops.ts qml.ts py.ts
 	rm -f qml.ts py.ts
-	for LANG in `cat translations/LANGS`; do \
-	    lconvert -o translations/$$LANG.ts \
-	        --source-language en \
-	        --target-language $$LANG \
-	        translations/helsinki-transit-stops.ts \
-	        translations/$$LANG.ts; done
+	for TSFILE in translations/??[!l]*ts; do \
+	    LANG=`basename $$TSFILE .ts`; \
+	    lconvert --source-language en_US \
+	             --target-language $$LANG \
+	             -o translations/$$LANG.ts \
+	             translations/helsinki-transit-stops.ts \
+	             translations/$$LANG.ts; \
+	done
