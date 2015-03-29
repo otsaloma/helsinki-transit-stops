@@ -1,7 +1,7 @@
 # -*- coding: us-ascii-unix -*-
 
 name       = harbour-helsinki-transit-stops
-version    = 0.4
+version    = 0.4.1
 DESTDIR    =
 PREFIX     = /usr
 datadir    = $(DESTDIR)$(PREFIX)/share/$(name)
@@ -45,6 +45,7 @@ install:
 rpm:
 	mkdir -p $$HOME/rpmbuild/SOURCES
 	cp dist/$(name)-$(version).tar.xz $$HOME/rpmbuild/SOURCES
+	rm -rf $$HOME/rpmbuild/BUILD*/$(name)-$(version)*
 	rpmbuild -ba rpm/$(name).spec
 	cp $$HOME/rpmbuild/RPMS/noarch/$(name)-$(version)-*.rpm rpm
 	cp $$HOME/rpmbuild/SRPMS/$(name)-$(version)-*.rpm rpm
