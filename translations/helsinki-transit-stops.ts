@@ -146,7 +146,7 @@
     </message>
     <message numerus="yes">
         <location filename="qml/NearbyPage.qml" line="81"/>
-        <source>%n Stop(s)</source>
+        <source>%n Stops</source>
         <translation type="unfinished">
             <numerusform></numerusform>
         </translation>
@@ -185,7 +185,7 @@
     </message>
     <message numerus="yes">
         <location filename="qml/SearchResultsPage.qml" line="82"/>
-        <source>%n Stop(s)</source>
+        <source>%n Stops</source>
         <translation type="unfinished">
             <numerusform></numerusform>
         </translation>
@@ -223,7 +223,7 @@
 <context>
     <name>@default</name>
     <message>
-        <location filename="query.py" line="57"/>
+        <location filename="query.py" line="68"/>
         <source>Connection timed out</source>
         <translation type="unfinished"></translation>
     </message>

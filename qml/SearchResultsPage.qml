@@ -79,7 +79,7 @@ Page {
                 busyLabel.text = qsTr(results.message);
             } else if (results && results.length > 0) {
                 page.results = results;
-                page.title = qsTr("%n Stop(s)", "", results.length);
+                page.title = qsTr("%n Stops", "", results.length);
                 for (var i = 0; i < results.length; i++)
                     listView.model.append(results[i]);
             } else {

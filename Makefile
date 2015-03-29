@@ -8,12 +8,15 @@ datadir    = $(DESTDIR)$(PREFIX)/share/$(name)
 desktopdir = $(DESTDIR)$(PREFIX)/share/applications
 icondir    = $(DESTDIR)$(PREFIX)/share/icons/hicolor/86x86/apps
 
+export PATH := $(PATH):/usr/lib/qt5/bin
+
 .PHONY: clean dist install rpm translations
 
 clean:
 	rm -rf dist
 	rm -rf __pycache__ */__pycache__ */*/__pycache__
 	rm -f rpm/*.rpm
+	rm -f translations/*.qm
 
 dist:
 	$(MAKE) clean
@@ -53,16 +56,19 @@ rpm:
 	cp $$HOME/rpmbuild/SRPMS/$(name)-$(version)-*.rpm rpm
 
 translations:
-	rm -f translations/helsinki-transit-stops.ts
 	lupdate qml/*.qml -ts qml.ts
 	pylupdate5 -verbose hts/*.py -ts py.ts
+	lupdate -pluralonly qml/*.qml -ts plural.ts
+	rm -f translations/helsinki-transit-stops.ts
 	lconvert -o translations/helsinki-transit-stops.ts qml.ts py.ts
-	rm -f qml.ts py.ts
 	for TSFILE in translations/??[!l]*ts; do \
 	    LANG=`basename $$TSFILE .ts`; \
-	    lconvert --source-language en_US \
+	    TSSOURCE=translations/helsinki-transit-stops.ts; \
+	    [ $$LANG = en ] && TSSOURCE=plural.ts; \
+	    lconvert --source-language en \
 	             --target-language $$LANG \
 	             -o translations/$$LANG.ts \
-	             translations/helsinki-transit-stops.ts \
+	             $$TSSOURCE \
 	             translations/$$LANG.ts; \
 	done
+	rm -f qml.ts py.ts plural.ts

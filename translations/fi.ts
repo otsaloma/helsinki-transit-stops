@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE TS>
-<TS version="2.0" language="fi" sourcelanguage="en_US">
+<TS version="2.0" language="fi" sourcelanguage="en">
 <context>
     <name>AboutPage</name>
     <message>
@@ -133,7 +133,7 @@
     <message>
         <location filename="qml/MenuPage.qml" line="133"/>
         <source>Search</source>
-        <translation>Etsi</translation>
+        <translation>Haku</translation>
     </message>
 </context>
 <context>
@@ -142,13 +142,13 @@
         <location filename="qml/NearbyPage.qml" line="48"/>
         <location filename="qml/NearbyPage.qml" line="65"/>
         <source>Searching</source>
-        <translation>Etsitään</translation>
+        <translation>Haetaan</translation>
     </message>
     <message numerus="yes">
         <location filename="qml/NearbyPage.qml" line="81"/>
-        <source>%n Stop(s)</source>
+        <source>%n Stops</source>
         <translation>
-            <numerusform>%n pysäkki</numerusform>
+            <numerusform>Yksi pysäkki</numerusform>
             <numerusform>%n pysäkkiä</numerusform>
         </translation>
     </message>
@@ -168,7 +168,7 @@
     <message>
         <location filename="qml/SearchPage.qml" line="65"/>
         <source>Search</source>
-        <translation>Etsi</translation>
+        <translation>Haku</translation>
     </message>
     <message>
         <location filename="qml/SearchPage.qml" line="69"/>
@@ -182,13 +182,13 @@
         <location filename="qml/SearchResultsPage.qml" line="48"/>
         <location filename="qml/SearchResultsPage.qml" line="65"/>
         <source>Searching</source>
-        <translation>Etsitään</translation>
+        <translation>Haetaan</translation>
     </message>
     <message numerus="yes">
         <location filename="qml/SearchResultsPage.qml" line="82"/>
-        <source>%n Stop(s)</source>
+        <source>%n Stops</source>
         <translation>
-            <numerusform>%n pysäkki</numerusform>
+            <numerusform>Yksi pysäkki</numerusform>
             <numerusform>%n pysäkkiä</numerusform>
         </translation>
     </message>

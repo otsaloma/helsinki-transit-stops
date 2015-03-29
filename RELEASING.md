@@ -3,6 +3,7 @@ Releasing a New Version
 
  * Update translations
    - `make translations`
+   - `virtaal translations/en.ts`
    - `virtaal translations/fi.ts`
  * Do final quality checks
    - `pyflakes3 hts`
