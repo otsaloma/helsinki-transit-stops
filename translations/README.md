@@ -9,8 +9,9 @@ country code.
 
 To try your translation, you can compile it and run qmlscene.
 
-    /usr/lib/qt5/bin/lrelease translations/xx.ts -qm translations/xx.qm
-    /usr/lib/qt5/bin/qmlscene -translation translations/xx.qm qml/helsinki-transit-stops.qml
+    export PATH=$PATH:/usr/lib/qt5/bin
+    lrelease translations/xx.ts -qm translations/xx.qm
+    qmlscene -translation translations/xx.qm qml/helsinki-transit-stops.qml
 
 To get your translation included, fork the [repository][3] on GitHub,
 commit your changes and send a pull request, or if you prefer, send
