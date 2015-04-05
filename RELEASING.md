@@ -22,7 +22,7 @@ Releasing a New Version
    - `pkcon install-local rpm/*.noarch.rpm`
  * Commit changes
    - `git commit -a -m "RELEASE X.Y.Z"`
-   - `git tag -s helsinki-transit-stops-X.Y.Z`
+   - `git tag -s X.Y.Z`
    - `git push`
    - `git push --tags`
  * Build final tarball and RPM
