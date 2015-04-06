@@ -29,4 +29,5 @@ Releasing a New Version
    - `make dist`
    - `make rpm`
    - `pkcon install-local rpm/*.noarch.rpm`
+ * Add release notes on GitHub
  * Upload and announce
