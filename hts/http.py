@@ -45,7 +45,7 @@ class ConnectionPool:
         """Initialize a queue of HTTP connections to `url`."""
         key = self._get_key(url)
         if key in self._queue: return
-        self._queue[key] = queue.Queue()
+        self._queue[key] = queue.LifoQueue()
         for i in range(self._threads):
             self._queue[key].put(None)
 
