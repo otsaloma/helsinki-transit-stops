@@ -33,7 +33,7 @@ class Application:
 
     def quit(self):
         """Quit the application."""
-        hts.http.pool.close()
+        hts.http.pool.terminate()
         self.save()
 
     def save(self):

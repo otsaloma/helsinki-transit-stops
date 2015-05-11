@@ -35,7 +35,7 @@ class ConnectionPool:
 
     def __init__(self, threads):
         """Initialize a :class:`ConnectionPool` instance."""
-        self._closed = False
+        self._alive = True
         self._lock = threading.Lock()
         self._queue = {}
         self._threads = threads
@@ -49,24 +49,15 @@ class ConnectionPool:
         for i in range(self._threads):
             self._queue[key].put(None)
 
-    @hts.util.locked_method
-    def close(self):
-        """Close all connections and terminate."""
-        for key in self._queue:
-            with hts.util.silent(queue.Empty):
-                while True:
-                    connection = self._queue[key].get(block=False)
-                    with hts.util.silent(Exception):
-                        connection.close()
-        self._closed = True
-
     def get(self, url):
         """Return an HTTP connection to `url`."""
         key = self._get_key(url)
         if not key in self._queue:
             self._allocate(url)
         while True:
-            if self._closed:
+            # Make sure no Queue.get call is left blocking
+            # once the connection pool has been terminated.
+            if not self._alive:
                 raise Exception("Pool closed, get terminated")
             with hts.util.silent(queue.Empty):
                 connection = self._queue[key].get(timeout=1)
@@ -80,9 +71,9 @@ class ConnectionPool:
         components = urllib.parse.urlparse(url)
         return "{}://{}".format(components.scheme, components.netloc)
 
-    def is_closed(self):
-        """Return ``True`` is pool is closed."""
-        return self._closed
+    def is_alive(self):
+        """Return ``True`` if pool is in use."""
+        return self._alive
 
     def _new(self, url):
         """Initialize and return a new HTTP connection to `url`."""
@@ -106,6 +97,18 @@ class ConnectionPool:
         with hts.util.silent(Exception):
             connection.close()
         self.put(url, None)
+
+    @hts.util.locked_method
+    def terminate(self):
+        """Close all connections and terminate."""
+        for key in self._queue:
+            with hts.util.silent(queue.Empty):
+                while True:
+                    connection = self._queue[key].get(block=False)
+                    with hts.util.silent(Exception):
+                        connection.close()
+        # Mark as dead so that subsequent operations fail.
+        self._alive = False
 
 
 pool = ConnectionPool(1)
@@ -157,7 +160,7 @@ def request_url(url, encoding=None, retry=1):
         if encoding is None: return blob
         return blob.decode(encoding, errors="replace")
     except Exception as error:
-        if pool.is_closed(): raise
+        if not pool.is_alive(): raise
         connection.close()
         connection = None
         # These probably mean that the connection was broken.
@@ -168,7 +171,7 @@ def request_url(url, encoding=None, retry=1):
                   file=sys.stderr)
             raise # Exception
     finally:
-        if not pool.is_closed():
+        if pool.is_alive():
             pool.put(url, connection)
     assert retry > 0
     return request_url(url, encoding, retry-1)
