@@ -31,6 +31,6 @@ ApplicationWindow {
     Python { id: py }
     onApplicationActiveChanged: {
         if (!app.applicationActive && py.ready)
-            py.call_sync("hts.app.save", []);
+            py.call_sync("hts.app.quit", []);
     }
 }

@@ -35,6 +35,7 @@ class ConnectionPool:
 
     def __init__(self, threads):
         """Initialize a :class:`ConnectionPool` instance."""
+        self._closed = False
         self._lock = threading.Lock()
         self._queue = {}
         self._threads = threads
@@ -48,12 +49,28 @@ class ConnectionPool:
         for i in range(self._threads):
             self._queue[key].put(None)
 
+    @hts.util.locked_method
+    def close(self):
+        """Close all connections and terminate."""
+        for key in self._queue:
+            with hts.util.silent(queue.Empty):
+                while True:
+                    connection = self._queue[key].get(block=False)
+                    with hts.util.silent(Exception):
+                        connection.close()
+        self._closed = True
+
     def get(self, url):
         """Return an HTTP connection to `url`."""
         key = self._get_key(url)
         if not key in self._queue:
             self._allocate(url)
-        connection = self._queue[key].get()
+        while True:
+            if self._closed:
+                raise Exception("Pool closed, get terminated")
+            with hts.util.silent(queue.Empty):
+                connection = self._queue[key].get(timeout=1)
+                break
         if connection is None:
             connection = self._new(url)
         return connection
@@ -62,6 +79,10 @@ class ConnectionPool:
         """Return a dictionary key for the host of `url`."""
         components = urllib.parse.urlparse(url)
         return "{}://{}".format(components.scheme, components.netloc)
+
+    def is_closed(self):
+        """Return ``True`` is pool is closed."""
+        return self._closed
 
     def _new(self, url):
         """Initialize and return a new HTTP connection to `url`."""
@@ -136,6 +157,7 @@ def request_url(url, encoding=None, retry=1):
         if encoding is None: return blob
         return blob.decode(encoding, errors="replace")
     except Exception as error:
+        if pool.is_closed(): raise
         connection.close()
         connection = None
         # These probably mean that the connection was broken.
@@ -146,6 +168,7 @@ def request_url(url, encoding=None, retry=1):
                   file=sys.stderr)
             raise # Exception
     finally:
-        pool.put(url, connection)
+        if not pool.is_closed():
+            pool.put(url, connection)
     assert retry > 0
     return request_url(url, encoding, retry-1)

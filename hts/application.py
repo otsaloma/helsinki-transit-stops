@@ -31,6 +31,11 @@ class Application:
         self.favorites = hts.Favorites()
         self.history = hts.HistoryManager()
 
+    def quit(self):
+        """Quit the application."""
+        hts.http.pool.close()
+        self.save()
+
     def save(self):
         """Write configuration files."""
         self.favorites.write()
