@@ -29,8 +29,7 @@ ApplicationWindow {
     property string searchQuery: ""
     PositionSource { id: gps }
     Python { id: py }
-    onApplicationActiveChanged: {
-        if (!app.applicationActive && py.ready)
-            py.call_sync("hts.app.quit", []);
+    Component.onDestruction: {
+        py.ready && py.call_sync("hts.app.quit", []);
     }
 }

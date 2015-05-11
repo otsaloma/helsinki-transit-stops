@@ -58,7 +58,7 @@ class ConnectionPool:
             # Make sure no Queue.get call is left blocking
             # once the connection pool has been terminated.
             if not self._alive:
-                raise Exception("Pool closed, get terminated")
+                raise Exception("Pool terminated, get aborted")
             with hts.util.silent(queue.Empty):
                 connection = self._queue[key].get(timeout=1)
                 break
@@ -69,7 +69,7 @@ class ConnectionPool:
     def _get_key(self, url):
         """Return a dictionary key for the host of `url`."""
         components = urllib.parse.urlparse(url)
-        return "{}://{}".format(components.scheme, components.netloc)
+        return "{}:{}".format(components.scheme, components.netloc)
 
     def is_alive(self):
         """Return ``True`` if pool is in use."""

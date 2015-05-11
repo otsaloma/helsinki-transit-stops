@@ -43,4 +43,3 @@ def main():
     """Initialize application."""
     global app
     app = Application()
-    pyotherside.atexit(app.save)
