@@ -1,3 +1,8 @@
+Helsinki Transit Stops 1.0.1
+============================
+
+ * [X] Fix error resetting HTTP connection
+
 Helsinki Transit Stops 2.0
 ==========================
 

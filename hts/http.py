@@ -84,7 +84,7 @@ class ConnectionPool:
         connection = self.get(url)
         with hts.util.silent(Exception):
             connection.close()
-        self.put(None)
+        self.put(url, None)
 
 
 pool = ConnectionPool(1)
