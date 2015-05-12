@@ -82,7 +82,7 @@ class TestConnectionPool(hts.test.TestCase):
 class TestModule(hts.test.TestCase):
 
     def test_request_json(self):
-        url = "https://api.github.com/repos/otsaloma/helsinki-transit-live/releases"
+        url = "https://api.github.com/repos/otsaloma/helsinki-transit-stops/releases"
         json = hts.http.request_json(url)
         assert isinstance(json, list)
 
