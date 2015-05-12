@@ -1,3 +1,11 @@
+Helsinki Transit Stops 1.0.1
+============================
+
+ * Fix error resetting HTTP connection
+ * Ensure that blocking HTTP connection pool operations terminate
+   immediately and gracefully on application exit
+ * Write favorites and history to file only once on application exit
+
 Helsinki Transit Stops 1.0
 ==========================
 
