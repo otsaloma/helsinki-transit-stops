@@ -20,7 +20,13 @@ Requires: qt5-qtdeclarative-import-positioning >= 5.2
 Requires: sailfishsilica-qt5
 
 %description
-Departures from Helsinki Region Transport (HSL) public transportation stops.
+View next buses, trams, trains, metro or ferries departing from a stop. View a
+listing of nearby stops or search for stops by name. Mark frequently used stops
+as favorites along with line filters.
+
+Included are Helsinki Region Transport (HSL) public transportation stops.
+Departures are from the Reittiopas API and based on schedules. Real-time
+departures are not supported.
 
 %prep
 %setup -q

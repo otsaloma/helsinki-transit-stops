@@ -1,7 +1,7 @@
 Helsinki Transit Stops
 ======================
 
-Helsinki Transit Stops is an application for Sailfish OS to show
+Helsinki Transit Stops is an application for Sailfish OS to view
 departures from Helsinki Region Transport (HSL) public transportation
 stops.
 
