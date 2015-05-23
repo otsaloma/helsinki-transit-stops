@@ -87,12 +87,14 @@ class ConnectionPool:
 
     def put(self, url, connection):
         """Return `connection` to the pool of connections."""
+        if not self._alive: return
         key = self._get_key(url)
         self._queue[key].task_done()
         self._queue[key].put(connection)
 
     def reset(self, url):
         """Close and re-establish HTTP connection to `url`."""
+        if not self._alive: return
         connection = self.get(url)
         with hts.util.silent(Exception):
             connection.close()
@@ -101,6 +103,7 @@ class ConnectionPool:
     @hts.util.locked_method
     def terminate(self):
         """Close all connections and terminate."""
+        if not self._alive: return
         for key in self._queue:
             with hts.util.silent(queue.Empty):
                 while True:
@@ -171,7 +174,6 @@ def request_url(url, encoding=None, retry=1):
                   file=sys.stderr)
             raise # Exception
     finally:
-        if pool.is_alive():
-            pool.put(url, connection)
+        pool.put(url, connection)
     assert retry > 0
     return request_url(url, encoding, retry-1)
