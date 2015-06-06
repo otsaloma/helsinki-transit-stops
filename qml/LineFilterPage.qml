@@ -22,7 +22,7 @@ import "."
 
 Dialog {
     id: page
-    allowedOrientations: Orientation.Portrait
+    allowedOrientations: app.defaultAllowedOrientations
     property var codes: []
     property bool loading: false
     property var skip: []

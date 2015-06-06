@@ -1,7 +1,11 @@
+Helsinki Transit Stops 1.0.2
+============================
+
+* [X] Allow all default orientations (all on a tablet and all except
+      inverted portrait on a phone)
+
 Helsinki Transit Stops 2.0
 ==========================
 
-* Don't allow inverted portait orientation
-* Allow landscape for all pages? (to accomodate tablet)
 * Use `short_name` for stops once HSL Reittiopas API 1.2.0 is stable?
 * Add disruption listing from Poikkeusinfo XML API?

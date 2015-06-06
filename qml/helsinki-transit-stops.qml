@@ -22,7 +22,7 @@ import "."
 
 ApplicationWindow {
     id: app
-    allowedOrientations: Orientation.All
+    allowedOrientations: defaultAllowedOrientations
     cover: Cover {}
     initialPage: MenuPage { id: menu }
     property bool running: applicationActive || cover.active

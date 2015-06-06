@@ -22,7 +22,7 @@ import "."
 
 Page {
     id: page
-    allowedOrientations: Orientation.All
+    allowedOrientations: app.defaultAllowedOrientations
     canNavigateForward: app.searchQuery.length > 0
     property var history: []
     SilicaListView {

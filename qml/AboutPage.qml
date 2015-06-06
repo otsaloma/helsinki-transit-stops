@@ -22,7 +22,7 @@ import "."
 
 Page {
     id: page
-    allowedOrientations: Orientation.Portrait
+    allowedOrientations: app.defaultAllowedOrientations
     SilicaFlickable {
         anchors.fill: parent
         contentHeight: column.height

@@ -22,7 +22,7 @@ import "."
 
 Page {
     id: page
-    allowedOrientations: Orientation.Portrait
+    allowedOrientations: app.defaultAllowedOrientations
     property bool loading: false
     property string populatedQuery: ""
     property var results: {}

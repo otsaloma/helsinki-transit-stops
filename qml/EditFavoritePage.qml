@@ -22,7 +22,7 @@ import "."
 
 Dialog {
     id: page
-    allowedOrientations: Orientation.All
+    allowedOrientations: app.defaultAllowedOrientations
     canAccept: nameField && nameField.text.length > 0
     property string key: ""
     property string name: ""
