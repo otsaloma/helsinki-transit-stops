@@ -1,16 +1,15 @@
 # -*- coding: us-ascii-unix -*-
 
-name       = harbour-helsinki-transit-stops
-version    = 1.0.1
+NAME       = harbour-helsinki-transit-stops
+VERSION    = 1.0.1
+
 DESTDIR    =
 PREFIX     = /usr
-datadir    = $(DESTDIR)$(PREFIX)/share/$(name)
-desktopdir = $(DESTDIR)$(PREFIX)/share/applications
-icondir    = $(DESTDIR)$(PREFIX)/share/icons/hicolor/86x86/apps
+DATADIR    = $(DESTDIR)$(PREFIX)/share/$(NAME)
+DESKTOPDIR = $(DESTDIR)$(PREFIX)/share/applications
+ICONDIR    = $(DESTDIR)$(PREFIX)/share/icons/hicolor/86x86/apps
 
 export PATH := $(PATH):/usr/lib/qt5/bin
-
-.PHONY: clean dist install rpm translations
 
 clean:
 	rm -rf dist
@@ -20,40 +19,40 @@ clean:
 
 dist:
 	$(MAKE) clean
-	mkdir -p dist/$(name)-$(version)
-	cp -r `cat MANIFEST` dist/$(name)-$(version)
-	tar -C dist -cJf dist/$(name)-$(version).tar.xz $(name)-$(version)
+	mkdir -p dist/$(NAME)-$(VERSION)
+	cp -r `cat MANIFEST` dist/$(NAME)-$(VERSION)
+	tar -C dist -cJf dist/$(NAME)-$(VERSION).tar.xz $(NAME)-$(VERSION)
 
 install:
 	@echo "Installing Python files..."
-	mkdir -p $(datadir)/hts
-	cp hts/*.py $(datadir)/hts
+	mkdir -p $(DATADIR)/hts
+	cp hts/*.py $(DATADIR)/hts
 	@echo "Installing QML files..."
-	mkdir -p $(datadir)/qml/icons
-	cp qml/helsinki-transit-stops.qml $(datadir)/qml/$(name).qml
-	cp qml/[ABCDEFGHIJKLMNOPQRSTUVXYZ]*.qml $(datadir)/qml
-	cp qml/icons/*.png $(datadir)/qml/icons
+	mkdir -p $(DATADIR)/qml/icons
+	cp qml/helsinki-transit-stops.qml $(DATADIR)/qml/$(NAME).qml
+	cp qml/[ABCDEFGHIJKLMNOPQRSTUVXYZ]*.qml $(DATADIR)/qml
+	cp qml/icons/*.png $(DATADIR)/qml/icons
 	@echo "Installing translations..."
-	mkdir -p $(datadir)/translations
+	mkdir -p $(DATADIR)/translations
 	for TSFILE in translations/??[!l]*ts; do \
 	    LANG=`basename $$TSFILE .ts`; \
 	    lrelease translations/$$LANG.ts \
-	        -qm $(datadir)/translations/$(name)-$$LANG.qm; \
+	        -qm $(DATADIR)/translations/$(NAME)-$$LANG.qm; \
 	done
 	@echo "Installing desktop file..."
-	mkdir -p $(desktopdir)
-	cp data/$(name).desktop $(desktopdir)
+	mkdir -p $(DESKTOPDIR)
+	cp data/$(NAME).desktop $(DESKTOPDIR)
 	@echo "Installing icon..."
-	mkdir -p $(icondir)
-	cp data/helsinki-transit-stops.png $(icondir)/$(name).png
+	mkdir -p $(ICONDIR)
+	cp data/helsinki-transit-stops.png $(ICONDIR)/$(NAME).png
 
 rpm:
 	mkdir -p $$HOME/rpmbuild/SOURCES
-	cp dist/$(name)-$(version).tar.xz $$HOME/rpmbuild/SOURCES
-	rm -rf $$HOME/rpmbuild/BUILD*/$(name)-$(version)*
-	rpmbuild -ba rpm/$(name).spec
-	cp $$HOME/rpmbuild/RPMS/noarch/$(name)-$(version)-*.rpm rpm
-	cp $$HOME/rpmbuild/SRPMS/$(name)-$(version)-*.rpm rpm
+	cp dist/$(NAME)-$(VERSION).tar.xz $$HOME/rpmbuild/SOURCES
+	rm -rf $$HOME/rpmbuild/BUILD*/$(NAME)-$(VERSION)*
+	rpmbuild -ba rpm/$(NAME).spec
+	cp $$HOME/rpmbuild/RPMS/noarch/$(NAME)-$(VERSION)-*.rpm rpm
+	cp $$HOME/rpmbuild/SRPMS/$(NAME)-$(VERSION)-*.rpm rpm
 
 translations:
 	lupdate qml/*.qml -ts qml.ts
@@ -72,3 +71,5 @@ translations:
 	             translations/$$LANG.ts; \
 	done
 	rm -f qml.ts py.ts plural.ts
+
+.PHONY: clean dist install rpm translations
