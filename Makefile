@@ -2,6 +2,9 @@
 
 NAME       = harbour-helsinki-transit-stops
 VERSION    = 1.0.1
+LANGS      = $(basename $(notdir $(filter-out \
+    translations/helsinki-transit-stops.ts,\
+    $(wildcard translations/*.ts))))
 
 DESTDIR    =
 PREFIX     = /usr
@@ -34,11 +37,8 @@ install:
 	cp qml/icons/*.png $(DATADIR)/qml/icons
 	@echo "Installing translations..."
 	mkdir -p $(DATADIR)/translations
-	for TSFILE in translations/??[!l]*ts; do \
-	    LANG=`basename $$TSFILE .ts`; \
-	    lrelease translations/$$LANG.ts \
-	        -qm $(DATADIR)/translations/$(NAME)-$$LANG.qm; \
-	done
+	$(foreach lang,$(LANGS),lrelease translations/$(lang).ts \
+	    -qm $(DATADIR)/translations/$(NAME)-$(lang).qm;)
 	@echo "Installing desktop file..."
 	mkdir -p $(DESKTOPDIR)
 	cp data/$(NAME).desktop $(DESKTOPDIR)
@@ -47,6 +47,7 @@ install:
 	cp data/helsinki-transit-stops.png $(ICONDIR)/$(NAME).png
 
 rpm:
+	$(MAKE) dist
 	mkdir -p $$HOME/rpmbuild/SOURCES
 	cp dist/$(NAME)-$(VERSION).tar.xz $$HOME/rpmbuild/SOURCES
 	rm -rf $$HOME/rpmbuild/BUILD*/$(NAME)-$(VERSION)*
@@ -54,22 +55,23 @@ rpm:
 	cp $$HOME/rpmbuild/RPMS/noarch/$(NAME)-$(VERSION)-*.rpm rpm
 	cp $$HOME/rpmbuild/SRPMS/$(NAME)-$(VERSION)-*.rpm rpm
 
+define merge-translations =
+lconvert \
+    --source-language en \
+    --target-language $(1) \
+    -o translations/$(1).ts \
+    $(2) translations/$(1).ts
+endef
+
 translations:
 	lupdate qml/*.qml -ts qml.ts
 	pylupdate5 -verbose hts/*.py -ts py.ts
 	lupdate -pluralonly qml/*.qml -ts plural.ts
 	rm -f translations/helsinki-transit-stops.ts
 	lconvert -o translations/helsinki-transit-stops.ts qml.ts py.ts
-	for TSFILE in translations/??[!l]*ts; do \
-	    LANG=`basename $$TSFILE .ts`; \
-	    TSSOURCE=translations/helsinki-transit-stops.ts; \
-	    [ $$LANG = en ] && TSSOURCE=plural.ts; \
-	    lconvert --source-language en \
-	             --target-language $$LANG \
-	             -o translations/$$LANG.ts \
-	             $$TSSOURCE \
-	             translations/$$LANG.ts; \
-	done
+	$(call merge-translations,en,plural.ts)
+	$(foreach lang,$(filter-out en,$(LANGS)),$(call \
+	    merge-translations,$(lang),translations/helsinki-transit-stops.ts))
 	rm -f qml.ts py.ts plural.ts
 
 .PHONY: clean dist install rpm translations
