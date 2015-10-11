@@ -36,7 +36,7 @@ ListItem {
         Component.onCompleted: {
             if (model.short_code && model.short_code.length > 0) {
                 nameLabel.textFormat = Text.RichText;
-                nameLabel.text += " <small>(" + model.short_code + ")</small>";
+                nameLabel.text += " <small>(%1)</small>".arg(model.short_code);
             }
         }
     }
@@ -46,7 +46,7 @@ ListItem {
         anchors.top: nameLabel.bottom
         color: Theme.secondaryColor
         font.pixelSize: Theme.fontSizeSmall
-        text: model.address + " · " + model.dist
+        text: "%1 · %2".arg(model.address).arg(model.dist)
     }
     Repeater {
         // List at most three lines using the stop along with their
@@ -83,8 +83,8 @@ ListItem {
                 color: Theme.secondaryColor
                 font.pixelSize: Theme.fontSizeSmall
                 text: index === 2 ?
-                    " → " + line.destination + " …" :
-                    " → " + line.destination
+                    " → %1 …".arg(line.destination) :
+                    " → %1".arg(line.destination)
                 truncationMode: TruncationMode.Fade
             }
             Component.onCompleted: repeater.height += row.height;

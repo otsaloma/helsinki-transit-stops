@@ -70,7 +70,9 @@ CoverBackground {
                 verticalAlignment: Text.AlignVCenter
                 width: parent.width/2 - Theme.paddingLarge/2
             }
-            Component.onCompleted: listView.height = listView.model.count * listItem.height;
+            Component.onCompleted: {
+                listView.height = listView.model.count * listItem.height;
+            }
         }
         model: ListModel {}
     }
