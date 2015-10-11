@@ -3,7 +3,6 @@ Helsinki Transit Stops 1.1
 
 * [X] Allow all default orientations (all on a tablet and all except
       inverted portrait on a phone)
-* [ ] Use Busy.qml from Poor Maps
 
 Helsinki Transit Stops 2.0
 ==========================

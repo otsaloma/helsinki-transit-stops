@@ -37,23 +37,9 @@ Page {
         model: ListModel {}
         VerticalScrollDecorator {}
     }
-    Label {
-        id: busyLabel
-        anchors.bottom: busyIndicator.top
-        color: Theme.highlightColor
-        font.pixelSize: Theme.fontSizeLarge
-        height: Theme.itemSizeLarge
-        horizontalAlignment: Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
-        visible: page.loading || text !== qsTr("Searching")
-        width: parent.width
-    }
-    BusyIndicator {
-        id: busyIndicator
-        anchors.centerIn: parent
+    BusyModal {
+        id: busy
         running: page.loading
-        size: BusyIndicatorSize.Large
-        visible: page.loading
     }
     onStatusChanged: {
         if (page.populatedQuery === app.searchQuery) {
@@ -62,7 +48,7 @@ Page {
             listView.model.clear();
             page.loading = true;
             page.title = "";
-            busyLabel.text = qsTr("Searching")
+            busy.text = qsTr("Searching")
         } else if (page.status === PageStatus.Active) {
             page.populate(app.searchQuery);
         }
@@ -76,7 +62,7 @@ Page {
         py.call("hts.query.find_stops", [query, x, y], function(results) {
             if (results && results.error && results.message) {
                 page.title = "";
-                busyLabel.text = qsTr(results.message);
+                busy.error = qsTr(results.message);
             } else if (results && results.length > 0) {
                 page.results = results;
                 page.title = qsTr("%n Stops", "", results.length);
@@ -84,7 +70,7 @@ Page {
                     listView.model.append(results[i]);
             } else {
                 page.title = "";
-                busyLabel.text = qsTr("No stops found");
+                busy.error = qsTr("No stops found");
             }
             page.loading = false;
             page.populatedQuery = query;

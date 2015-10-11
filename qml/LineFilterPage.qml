@@ -75,27 +75,13 @@ Dialog {
         }
         VerticalScrollDecorator {}
     }
-    Label {
-        id: busyLabel
-        anchors.bottom: busyIndicator.top
-        color: Theme.highlightColor
-        font.pixelSize: Theme.fontSizeLarge
-        height: Theme.itemSizeLarge
-        horizontalAlignment: Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
-        visible: page.loading || text !== qsTr("Loading")
-        width: parent.width
-    }
-    BusyIndicator {
-        id: busyIndicator
-        anchors.centerIn: parent
+    BusyModal {
+        id: busy
         running: page.loading
-        size: BusyIndicatorSize.Large
-        visible: page.loading
     }
     Component.onCompleted: {
         page.loading = true;
-        busyLabel.text = qsTr("Loading")
+        busy.text = qsTr("Loading")
         page.populate();
     }
     onAccepted: {
@@ -111,14 +97,14 @@ Dialog {
         gridView.model.clear();
         py.call("hts.query.find_lines", [page.codes], function(results) {
             if (results && results.error && results.message) {
-                busyLabel.text = qsTr(results.message);
+                busy.error = qsTr(results.message);
             } else if (results && results.length > 0) {
                 for (var i = 0; i < results.length; i++) {
                     results[i].checked = page.skip.indexOf(results[i].line) < 0;
                     gridView.model.append(results[i]);
                 }
             } else {
-                busyLabel.text = qsTr("No lines found");
+                busy.error = qsTr("No lines found");
             }
             page.loading = false;
         });

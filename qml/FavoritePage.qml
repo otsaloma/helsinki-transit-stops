@@ -65,23 +65,9 @@ Page {
         }
         VerticalScrollDecorator {}
     }
-    Label {
-        id: busyLabel
-        anchors.bottom: busyIndicator.top
-        color: Theme.highlightColor
-        font.pixelSize: Theme.fontSizeLarge
-        height: Theme.itemSizeLarge
-        horizontalAlignment: Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
-        visible: page.loading || text !== qsTr("Loading")
-        width: parent.width
-    }
-    BusyIndicator {
-        id: busyIndicator
-        anchors.centerIn: parent
+    BusyModal {
+        id: busy
         running: page.loading
-        size: BusyIndicatorSize.Large
-        visible: page.loading
     }
     Timer {
         // Assuming we have only schedule data, i.e. not real-time,
@@ -100,7 +86,7 @@ Page {
             listView.model.clear();
             page.loading = true;
             page.title = "";
-            busyLabel.text = qsTr("Loading")
+            busy.text = qsTr("Loading")
         } else if (page.status === PageStatus.Active) {
             page.populate();
         }
@@ -118,7 +104,7 @@ Page {
         py.call("hts.app.favorites.find_departures", [key], function(results) {
             if (results && results.error && results.message) {
                 page.title = "";
-                busyLabel.text = qsTr(results.message);
+                busy.error = qsTr(results.message);
             } else if (results && results.length > 0) {
                 page.results = results;
                 page.title = page.props.name;
@@ -130,7 +116,7 @@ Page {
                 }
             } else {
                 page.title = "";
-                busyLabel.text = qsTr("No departures found");
+                busy.error = qsTr("No departures found");
             }
             page.loading = false;
             page.populated = true;
