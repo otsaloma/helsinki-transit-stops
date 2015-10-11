@@ -82,7 +82,7 @@ ListItem {
                 anchors.top: lineLabel.top
                 color: Theme.secondaryColor
                 font.pixelSize: Theme.fontSizeSmall
-                text: index == 2 ?
+                text: index === 2 ?
                     " → " + line.destination + " …" :
                     " → " + line.destination
                 truncationMode: TruncationMode.Fade

@@ -82,7 +82,7 @@ Page {
         VerticalScrollDecorator {}
     }
     onStatusChanged: {
-        if (page.status == PageStatus.Activating) {
+        if (page.status === PageStatus.Activating) {
             page.loadHistory();
             page.filterHistory();
         }
@@ -93,10 +93,10 @@ Page {
         var found = [], n = 0;
         for (var i = 0; i < page.history.length; i++) {
             var item = page.history[i].toLowerCase();
-            if (query.length > 0 && item.indexOf(query) == 0) {
+            if (query.length > 0 && item.indexOf(query) === 0) {
                 found[n++] = page.history[i];
                 if (found.length >= listView.count) break;
-            } else if (query.length == 0 || item.indexOf(query) > 0) {
+            } else if (query.length === 0 || item.indexOf(query) > 0) {
                 found[found.length] = page.history[i];
                 if (found.length >= listView.count) break;
             }

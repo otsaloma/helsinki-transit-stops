@@ -45,7 +45,7 @@ Page {
         height: Theme.itemSizeLarge
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
-        visible: page.loading || text != qsTr("Searching")
+        visible: page.loading || text !== qsTr("Searching")
         width: parent.width
     }
     BusyIndicator {
@@ -58,12 +58,12 @@ Page {
     onStatusChanged: {
         if (page.populated) {
             return;
-        } else if (page.status == PageStatus.Activating) {
+        } else if (page.status === PageStatus.Activating) {
             listView.model.clear();
             page.loading = true;
             page.title = "";
             busyLabel.text = qsTr("Searching");
-        } else if (page.status == PageStatus.Active) {
+        } else if (page.status === PageStatus.Active) {
             page.populate();
         }
     }

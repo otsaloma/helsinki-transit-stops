@@ -22,7 +22,7 @@ import Sailfish.Silica 1.0
 CoverBackground {
     id: cover
     anchors.fill: parent
-    property bool active: status == Cover.Active
+    property bool active: status === Cover.Active
     Image {
         id: image
         anchors.centerIn: parent
@@ -130,7 +130,7 @@ CoverBackground {
                 title.visible = false;
             }
         }
-        if (!model || countVisible == 0) {
+        if (!model || countVisible === 0) {
             // No departures; show icon and title.
             cover.clear();
             image.opacity = 0.1;

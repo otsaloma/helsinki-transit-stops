@@ -83,7 +83,7 @@ Dialog {
         height: Theme.itemSizeLarge
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
-        visible: page.loading || text != qsTr("Loading")
+        visible: page.loading || text !== qsTr("Loading")
         width: parent.width
     }
     BusyIndicator {

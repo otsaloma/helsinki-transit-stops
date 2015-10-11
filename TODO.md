@@ -3,6 +3,7 @@ Helsinki Transit Stops 1.0.2
 
 * [X] Allow all default orientations (all on a tablet and all except
       inverted portrait on a phone)
+* [ ] <http://doc.qt.io/qt-5/qml-qtqml-string.html#arg-method>
 
 Helsinki Transit Stops 2.0
 ==========================

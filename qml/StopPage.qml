@@ -91,7 +91,7 @@ Page {
         height: Theme.itemSizeLarge
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
-        visible: page.loading || text != qsTr("Loading")
+        visible: page.loading || text !== qsTr("Loading")
         width: parent.width
     }
     BusyIndicator {
@@ -114,12 +114,12 @@ Page {
     onStatusChanged: {
         if (page.populated) {
             return;
-        } else if (page.status == PageStatus.Activating) {
+        } else if (page.status === PageStatus.Activating) {
             listView.model.clear();
             page.loading = true;
             page.title = "";
             busyLabel.text = qsTr("Loading")
-        } else if (page.status == PageStatus.Active) {
+        } else if (page.status === PageStatus.Active) {
             page.populate();
         }
     }
@@ -170,7 +170,7 @@ Page {
             var fun = "hts.util.departure_time_to_color";
             item.color = py.call_sync(fun, [dist, item.unix_time]);
             // Remove departures already passed.
-            if (!item.time || item.time.length == 0)
+            if (!item.time || item.time.length === 0)
                 listView.model.remove(i);
         }
     }

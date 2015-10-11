@@ -59,7 +59,7 @@ Dialog {
                 }
                 onCurrentIndexChanged: {
                     // Show either nameField or listView.
-                    nameField.visible = (favoriteCombo.currentIndex == 0);
+                    nameField.visible = (favoriteCombo.currentIndex === 0);
                     listView.model.clear();
                     nameField.visible || page.populate();
                 }
