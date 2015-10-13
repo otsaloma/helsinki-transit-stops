@@ -20,6 +20,59 @@ import hts.test
 
 class TestModule(hts.test.TestCase):
 
+    def test_find_departures(self):
+        # Departures might be empty at night time,
+        # in which case query should return a blank list.
+        departures = hts.query.find_departures("1020444")
+        assert isinstance(departures, list)
+        for departure in departures:
+            assert departure["destination"]
+            assert departure["line"]
+            assert departure["time"]
+            assert departure["unix_time"]
+            assert departure["x"]
+            assert departure["y"]
+
+    def test_find_lines(self):
+        lines = hts.query.find_lines(["1020601"])
+        assert isinstance(lines, list)
+        assert len(lines) > 0
+        for line in lines:
+            assert line["destination"]
+            assert line["line"]
+
+    def test_find_nearby_stops(self):
+        stops = hts.query.find_nearby_stops(24.951, 60.167)
+        assert isinstance(stops, list)
+        assert len(stops) > 0
+        for stop in stops:
+            assert stop["address"]
+            assert stop["code"]
+            assert stop["color"]
+            assert stop["dist"]
+            assert stop["lines"]
+            assert stop["name"]
+            assert stop["short_code"]
+            assert stop["type"]
+            assert stop["x"]
+            assert stop["y"]
+
+    def test_find_stops(self):
+        stops = hts.query.find_stops("Erottaja", 24.941, 60.169)
+        assert isinstance(stops, list)
+        assert len(stops) > 0
+        for stop in stops:
+            assert stop["address"]
+            assert stop["code"]
+            assert stop["color"]
+            assert stop["dist"]
+            assert stop["lines"]
+            assert stop["name"]
+            assert stop["short_code"]
+            assert stop["type"]
+            assert stop["x"]
+            assert stop["y"]
+
     def test_guess_type(self):
         assert hts.query.guess_type(("3002A 1",)) == "train"
         assert hts.query.guess_type(("1300M 1",)) == "metro"
