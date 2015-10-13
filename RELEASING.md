@@ -6,8 +6,8 @@ Releasing a New Version
     - `virtaal translations/en.ts`
     - `virtaal translations/fi.ts`
 * Do final quality checks
-    - `pyflakes3 hts`
-    - `py.test-3 hts`
+    - `make check`
+    - `make test`
 * Bump version numbers
     - `hts/__init__.py`
     - `rpm/*.spec`

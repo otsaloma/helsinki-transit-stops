@@ -14,6 +14,9 @@ ICONDIR    = $(DESTDIR)$(PREFIX)/share/icons/hicolor/86x86/apps
 
 export PATH := $(PATH):/usr/lib/qt5/bin
 
+check:
+	pyflakes hts
+
 clean:
 	rm -rf dist
 	rm -rf __pycache__ */__pycache__ */*/__pycache__
@@ -51,9 +54,12 @@ rpm:
 	mkdir -p $$HOME/rpmbuild/SOURCES
 	cp dist/$(NAME)-$(VERSION).tar.xz $$HOME/rpmbuild/SOURCES
 	rm -rf $$HOME/rpmbuild/BUILD*/$(NAME)-$(VERSION)*
-	rpmbuild -ba rpm/$(NAME).spec
+	rpmbuild -ba --nodeps rpm/$(NAME).spec
 	cp $$HOME/rpmbuild/RPMS/noarch/$(NAME)-$(VERSION)-*.rpm rpm
 	cp $$HOME/rpmbuild/SRPMS/$(NAME)-$(VERSION)-*.rpm rpm
+
+test:
+	py.test hts
 
 define merge-translations =
 lconvert \
@@ -74,4 +80,4 @@ translations:
 	    merge-translations,$(lang),translations/helsinki-transit-stops.ts))
 	rm -f qml.ts py.ts plural.ts
 
-.PHONY: clean dist install rpm translations
+.PHONY: check clean dist install rpm test translations
