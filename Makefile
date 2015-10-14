@@ -1,7 +1,7 @@
 # -*- coding: us-ascii-unix -*-
 
 NAME       = harbour-helsinki-transit-stops
-VERSION    = 1.0.1
+VERSION    = 1.1
 LANGS      = $(basename $(notdir $(filter-out \
     translations/helsinki-transit-stops.ts,\
     $(wildcard translations/*.ts))))

@@ -1,9 +1,3 @@
-Helsinki Transit Stops 1.1
-==========================
-
-* [X] Allow all default orientations (all on a tablet and all except
-      inverted portrait on a phone)
-
 Helsinki Transit Stops 2.0
 ==========================
 
