@@ -1,3 +1,8 @@
+Helsinki Transit Stops 1.2
+==========================
+
+* [X] Write config files atomically
+
 Helsinki Transit Stops 2.0
 ==========================
 
