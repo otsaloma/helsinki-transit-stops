@@ -1,7 +1,7 @@
 Helsinki Transit Stops 1.2
 ==========================
 
-* [X] Write config files atomically
+* [X] Write config files atomically to avoid data loss in case of crash
 
 Helsinki Transit Stops 2.0
 ==========================

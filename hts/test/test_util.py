@@ -16,9 +16,28 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import hts.test
+import os
+import tempfile
 
 
 class TestModule(hts.test.TestCase):
+
+    def test_atomic_open__file_exists(self):
+        text = "testing\ntesting\n"
+        handle, path = tempfile.mkstemp()
+        with hts.util.atomic_open(path, "w") as f:
+            f.write(text)
+        assert open(path, "r").read() == text
+        os.remove(path)
+
+    def test_atomic_open__new_file(self):
+        text = "testing\ntesting\n"
+        handle, path = tempfile.mkstemp()
+        os.remove(path)
+        with hts.util.atomic_open(path, "w") as f:
+            f.write(text)
+        assert open(path, "r").read() == text
+        os.remove(path)
 
     def test_calculate_distance(self):
         # From Helsinki to Lissabon.

@@ -39,6 +39,9 @@ def atomic_open(path, mode="w", *args, **kwargs):
     temp_path = "{}.tmp{}".format(path, suffix)
     try:
         if os.path.isfile(path):
+            # If the file exists, use the same permissions.
+            # Note that all other file metadata, including
+            # owner and group, is not preserved.
             with open(temp_path, "w") as f: pass
             st = os.stat(path)
             os.chmod(temp_path, stat.S_IMODE(st.st_mode))
@@ -47,6 +50,9 @@ def atomic_open(path, mode="w", *args, **kwargs):
             f.flush()
             os.fsync(f.fileno())
         try:
+            # Requires Python 3.3 or later.
+            # Can fail in the unlikely case that
+            # paths are on different filesystems.
             os.replace(temp_path, path)
         except OSError:
             # Fall back on a non-atomic operation.
