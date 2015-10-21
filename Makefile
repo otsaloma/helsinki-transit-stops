@@ -10,7 +10,7 @@ DESTDIR    =
 PREFIX     = /usr
 DATADIR    = $(DESTDIR)$(PREFIX)/share/$(NAME)
 DESKTOPDIR = $(DESTDIR)$(PREFIX)/share/applications
-ICONDIR    = $(DESTDIR)$(PREFIX)/share/icons/hicolor/86x86/apps
+ICONDIR    = $(DESTDIR)$(PREFIX)/share/icons/hicolor
 
 export PATH := $(PATH):/usr/lib/qt5/bin
 
@@ -45,9 +45,15 @@ install:
 	@echo "Installing desktop file..."
 	mkdir -p $(DESKTOPDIR)
 	cp data/$(NAME).desktop $(DESKTOPDIR)
-	@echo "Installing icon..."
-	mkdir -p $(ICONDIR)
-	cp data/helsinki-transit-stops.png $(ICONDIR)/$(NAME).png
+	@echo "Installing icons..."
+	mkdir -p $(ICONDIR)/86x86/apps
+	mkdir -p $(ICONDIR)/108x108/apps
+	mkdir -p $(ICONDIR)/128x128/apps
+	mkdir -p $(ICONDIR)/256x256/apps
+	cp data/helsinki-transit-stops-86.png  $(ICONDIR)/86x86/apps/$(NAME).png
+	cp data/helsinki-transit-stops-108.png $(ICONDIR)/108x108/apps/$(NAME).png
+	cp data/helsinki-transit-stops-128.png $(ICONDIR)/128x128/apps/$(NAME).png
+	cp data/helsinki-transit-stops-256.png $(ICONDIR)/256x256/apps/$(NAME).png
 
 rpm:
 	$(MAKE) dist
