@@ -21,7 +21,7 @@ import QtPositioning 5.2
 
 PositionSource {
     id: gps
-    active: app.running
+    active: app.applicationActive
     updateInterval: 1000
     property bool ready: false
     onPositionChanged: {
