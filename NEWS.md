@@ -1,3 +1,9 @@
+Helsinki Transit Stops 1.2
+==========================
+
+* Write config files atomically to avoid data loss in case of crash
+* Add new application icon sizes for tablet and whatever else
+
 Helsinki Transit Stops 1.1
 ==========================
 
