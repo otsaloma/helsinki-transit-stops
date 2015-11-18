@@ -122,8 +122,8 @@
     </message>
     <message>
         <location filename="qml/MenuPage.qml" line="80"/>
-        <source>About Helsinki Transit Stops</source>
-        <translation>Tietoja Helsinki Transit Stopsista</translation>
+        <source>About</source>
+        <translation>Tietoja</translation>
     </message>
     <message>
         <location filename="qml/MenuPage.qml" line="113"/>

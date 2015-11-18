@@ -39,6 +39,7 @@ class Favorites:
         """Add `name` to the list of favorites and return key."""
         key = str(int(1000*time.time()))
         self._favorites.append(dict(key=key, name=name, stops=[], skip_lines=[]))
+        self._update_coordinates()
         return key
 
     def add_stop(self, key, props):
@@ -51,6 +52,8 @@ class Favorites:
                                       type=props["type"],
                                       x=props["x"],
                                       y=props["y"]))
+
+        self._update_coordinates()
 
     @property
     def favorites(self):
@@ -123,6 +126,7 @@ class Favorites:
 
             # skip_lines added in version 0.3.
             favorite.setdefault("skip_lines", [])
+        self._update_coordinates()
 
     def remove(self, key):
         """Remove favorite matching `key` from the list of favorites."""
@@ -136,6 +140,7 @@ class Favorites:
         for i in list(reversed(range(len(favorite["stops"])))):
             if favorite["stops"][i]["code"] == code:
                 favorite["stops"].pop(i)
+        self._update_coordinates()
 
     def rename(self, key, name):
         """Give favorite matching `key` a new name."""
@@ -146,6 +151,18 @@ class Favorites:
         """Set list of lines to not be displayed."""
         favorite = self.get(key)
         favorite["skip_lines"] = list(skip)
+
+    def _update_coordinates(self):
+        """Update mean coordinates of favorites."""
+        for favorite in self._favorites:
+            sumx = sumy = n = 0
+            for stop in favorite["stops"]:
+                with hts.util.silent(Exception):
+                    sumx += stop["x"]
+                    sumy += stop["y"]
+                    n += 1
+            favorite["x"] = (sumx/n if n > 0 else 0)
+            favorite["y"] = (sumy/n if n > 0 else 0)
 
     def write(self):
         """Write list of favorites to file."""

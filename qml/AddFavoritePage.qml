@@ -92,7 +92,11 @@ Dialog {
         // Load favorites from the Python backend.
         listView.model.clear();
         var favorites = py.evaluate("hts.app.favorites.favorites");
-        for (var i = 0; i < favorites.length; i++)
+        for (var i = 0; i < favorites.length; i++) {
+            favorites[i].dist = "";
+            favorites[i].highlight = false;
+            favorites[i].fade = false;
             listView.model.append(favorites[i]);
+        }
     }
 }

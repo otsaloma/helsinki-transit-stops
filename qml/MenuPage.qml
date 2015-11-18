@@ -17,6 +17,7 @@
  */
 
 import QtQuick 2.0
+import QtPositioning 5.2
 import Sailfish.Silica 1.0
 import "."
 
@@ -64,23 +65,6 @@ Page {
             }
             ListView.onRemove: animateRemoval(listItem);
             onClicked: app.pageStack.push("FavoritePage.qml", {"props": model});
-        }
-        footer: Column {
-            height: aboutItem.height
-            width: parent.width
-            ListItem {
-                id: aboutItem
-                contentHeight: Theme.itemSizeSmall
-                ListItemLabel {
-                    anchors.leftMargin: 2*Theme.paddingLarge + Theme.paddingSmall
-                    anchors.rightMargin: 2*Theme.paddingLarge + Theme.paddingSmall
-                    color: aboutItem.highlighted ? Theme.highlightColor : Theme.secondaryColor
-                    height: Theme.itemSizeSmall
-                    horizontalAlignment: Text.AlignRight
-                    text: qsTr("About Helsinki Transit Stops")
-                }
-                onClicked: app.pageStack.push("AboutPage.qml");
-            }
         }
         header: Column {
             height: header.height + row.height + Theme.paddingMedium
@@ -140,7 +124,20 @@ Page {
             }
         }
         model: ListModel {}
+        PullDownMenu {
+            MenuItem {
+                text: qsTr("About")
+                onClicked: app.pageStack.push("AboutPage.qml");
+            }
+        }
         VerticalScrollDecorator {}
+    }
+    Timer {
+        interval: 5000
+        repeat: true
+        running: app.running && gps.ready
+        triggeredOnStart: true
+        onTriggered: page.update();
     }
     Component.onCompleted: {
         if (py.ready) {
@@ -155,7 +152,22 @@ Page {
         // Load favorites from the Python backend.
         listView.model.clear();
         var favorites = py.evaluate("hts.app.favorites.favorites");
-        for (var i = 0; i < favorites.length; i++)
+        for (var i = 0; i < favorites.length; i++) {
+            favorites[i].dist = "";
+            favorites[i].highlight = false;
+            favorites[i].fade = false;
             listView.model.append(favorites[i]);
+        }
+    }
+    function update() {
+        // Update distances based on positioning.
+        for (var i = 0; i < listView.model.count; i++) {
+            var item = listView.model.get(i);
+            var dist = gps.position.coordinate.distanceTo(
+                QtPositioning.coordinate(item.y, item.x));
+            item.dist = py.call_sync("hts.util.format_distance", [dist]);
+            item.highlight = dist < 1500;
+            item.fade = dist >= 1500;
+        }
     }
 }

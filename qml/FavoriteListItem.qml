@@ -18,26 +18,51 @@
 
 import QtQuick 2.0
 import Sailfish.Silica 1.0
-import "."
 
 ListItem {
     id: listItem
     contentHeight: Theme.itemSizeSmall
-    ListItemLabel {
-        id: label
+    Rectangle {
+        anchors.fill: parent
+        color: Theme.highlightColor
+        opacity: model.highlight ? 0.1 : 0
+    }
+    Label {
+        id: nameLabel
+        anchors.left: parent.left
         anchors.leftMargin: 2*Theme.paddingLarge + Theme.paddingSmall
-        color: listItem.highlighted ? Theme.highlightColor : Theme.primaryColor
+        anchors.right: distLabel.left
+        anchors.rightMargin: 0
+        color: listItem.highlighted ? Theme.highlightColor : (
+            model.fade ? Theme.secondaryColor : Theme.primaryColor)
         height: Theme.itemSizeSmall
+        horizontalAlignment: Text.AlignLeft
         text: model.name
+        truncationMode: TruncationMode.Fade
+        verticalAlignment: Text.AlignVCenter
+    }
+    Label {
+        id: distLabel
+        anchors.right: parent.right
+        anchors.rightMargin: 2*Theme.paddingLarge + Theme.paddingSmall
+        color: listItem.highlighted ? Theme.highlightColor : (
+            model.fade ? Theme.secondaryColor : Theme.primaryColor)
+        font.pixelSize: Theme.fontSizeSmall
+        height: Theme.itemSizeSmall
+        horizontalAlignment: Text.AlignRight
+        text: model.dist
+        truncationMode: TruncationMode.Fade
+        verticalAlignment: Text.AlignVCenter
     }
     Rectangle {
-        anchors.bottom: label.bottom
+        anchors.bottom: nameLabel.bottom
         anchors.bottomMargin: Theme.paddingMedium
-        anchors.right: label.left
+        anchors.right: nameLabel.left
         anchors.rightMargin: Theme.paddingLarge
-        anchors.top: label.top
+        anchors.top: nameLabel.top
         anchors.topMargin: Theme.paddingMedium
         color: model.color
+        opacity: model.fade ? 0.65 : 1
         radius: Theme.paddingSmall/3
         width: Theme.paddingSmall
     }

@@ -122,7 +122,7 @@
     </message>
     <message>
         <location filename="qml/MenuPage.qml" line="80"/>
-        <source>About Helsinki Transit Stops</source>
+        <source>About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
