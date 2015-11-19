@@ -134,14 +134,12 @@ Page {
     }
     Timer {
         id: timer
-        interval: 1000
+        interval: 5000
         repeat: true
-        running: app.applicationActive && gps.ready
+        running: app.applicationActive && gps.ready &&
+            listView.model.count > 0
         triggeredOnStart: true
-        onTriggered: {
-            page.update();
-            timer.interval = 5000;
-        }
+        onTriggered: page.update();
     }
     Component.onCompleted: {
         if (py.ready) {
