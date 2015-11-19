@@ -43,6 +43,7 @@ ListItem {
     }
     Label {
         id: distLabel
+        anchors.baseline: nameLabel.baseline
         anchors.right: parent.right
         anchors.rightMargin: 2*Theme.paddingLarge + Theme.paddingSmall
         color: listItem.highlighted ? Theme.highlightColor : (
@@ -52,13 +53,24 @@ ListItem {
         horizontalAlignment: Text.AlignRight
         text: model.dist
         truncationMode: TruncationMode.Fade
-        verticalAlignment: Text.AlignVCenter
     }
     Rectangle {
         anchors.bottom: nameLabel.bottom
         anchors.bottomMargin: Theme.paddingMedium
         anchors.right: nameLabel.left
         anchors.rightMargin: Theme.paddingLarge
+        anchors.top: nameLabel.top
+        anchors.topMargin: Theme.paddingMedium
+        color: model.color
+        opacity: model.fade ? 0.65 : 1
+        radius: Theme.paddingSmall/3
+        width: Theme.paddingSmall
+    }
+    Rectangle {
+        anchors.bottom: nameLabel.bottom
+        anchors.bottomMargin: Theme.paddingMedium
+        anchors.left: distLabel.right
+        anchors.leftMargin: Theme.paddingLarge
         anchors.top: nameLabel.top
         anchors.topMargin: Theme.paddingMedium
         color: model.color

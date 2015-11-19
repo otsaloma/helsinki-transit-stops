@@ -67,7 +67,7 @@ Page {
             onClicked: app.pageStack.push("FavoritePage.qml", {"props": model});
         }
         header: Column {
-            height: header.height + row.height + Theme.paddingMedium
+            height: header.height + row.height
             width: parent.width
             PageHeader {
                 id: header
@@ -133,11 +133,15 @@ Page {
         VerticalScrollDecorator {}
     }
     Timer {
-        interval: 5000
+        id: timer
+        interval: 1000
         repeat: true
-        running: app.running && gps.ready
+        running: app.applicationActive && gps.ready
         triggeredOnStart: true
-        onTriggered: page.update();
+        onTriggered: {
+            page.update();
+            timer.interval = 5000;
+        }
     }
     Component.onCompleted: {
         if (py.ready) {
@@ -166,8 +170,8 @@ Page {
             var dist = gps.position.coordinate.distanceTo(
                 QtPositioning.coordinate(item.y, item.x));
             item.dist = py.call_sync("hts.util.format_distance", [dist]);
-            item.highlight = dist < 1500;
-            item.fade = dist >= 1500;
+            item.highlight = dist < 1000;
+            item.fade = dist >= 1000;
         }
     }
 }
