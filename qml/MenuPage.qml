@@ -78,27 +78,6 @@ Page {
                 height: Theme.itemSizeSmall
                 width: parent.width
                 ListItem {
-                    id: nearbyItem
-                    contentHeight: Theme.itemSizeSmall
-                    width: parent.width/2
-                    Rectangle {
-                        anchors.fill: parent
-                        color: Theme.highlightColor
-                        opacity: 0.1
-                    }
-                    ListItemLabel {
-                        id: nearbyLabel
-                        anchors.fill: parent
-                        anchors.leftMargin: 2*Theme.paddingLarge + Theme.paddingSmall
-                        color: nearbyItem.highlighted ? Theme.highlightColor : Theme.primaryColor
-                        height: Theme.itemSizeSmall
-                        horizontalAlignment: Text.AlignLeft
-                        opacity: gps.ready ? 1.0 : 0.4
-                        text: qsTr("Nearby")
-                    }
-                    onClicked: gps.ready && app.pageStack.push("NearbyPage.qml");
-                }
-                ListItem {
                     id: searchItem
                     contentHeight: Theme.itemSizeSmall
                     width: parent.width/2
@@ -110,16 +89,37 @@ Page {
                     ListItemLabel {
                         id: searchLabel
                         anchors.fill: parent
-                        anchors.rightMargin: 2*Theme.paddingLarge + Theme.paddingSmall
+                        anchors.leftMargin: 2*Theme.paddingLarge + Theme.paddingSmall
                         color: searchItem.highlighted ? Theme.highlightColor : Theme.primaryColor
                         height: Theme.itemSizeSmall
-                        horizontalAlignment: Text.AlignRight
+                        horizontalAlignment: Text.AlignLeft
                         text: qsTr("Search")
                     }
                     onClicked: {
                         app.pageStack.push("SearchPage.qml");
                         app.pageStack.pushAttached("SearchResultsPage.qml");
                     }
+                }
+                ListItem {
+                    id: nearbyItem
+                    contentHeight: Theme.itemSizeSmall
+                    width: parent.width/2
+                    Rectangle {
+                        anchors.fill: parent
+                        color: Theme.highlightColor
+                        opacity: 0.1
+                    }
+                    ListItemLabel {
+                        id: nearbyLabel
+                        anchors.fill: parent
+                        anchors.rightMargin: 2*Theme.paddingLarge + Theme.paddingSmall
+                        color: nearbyItem.highlighted ? Theme.highlightColor : Theme.primaryColor
+                        height: Theme.itemSizeSmall
+                        horizontalAlignment: Text.AlignRight
+                        opacity: gps.ready ? 1.0 : 0.4
+                        text: qsTr("Nearby")
+                    }
+                    onClicked: gps.ready && app.pageStack.push("NearbyPage.qml");
                 }
             }
         }
