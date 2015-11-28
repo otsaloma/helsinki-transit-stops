@@ -163,13 +163,27 @@ Page {
     }
     function update() {
         // Update distances based on positioning.
+        // Find out which favorite is closest, then round up that distance
+        // and highlight all stops closer than that threshold -- e.g.
+        // if the closest is 1.3 km away, highlight all closer than 1.5 km.
+        if (listView.model.count === 0) return;
+        var dists = [];
+        for (var i = 0; i < listView.model.count; i++) {
+            var item = listView.model.get(i);
+            var dist = gps.position.coordinate.distanceTo(
+                QtPositioning.coordinate(item.y, item.x));
+            dists.push(dist);
+        }
+        var minDist = Math.min.apply(null, dists);
+        var threshold = Math.ceil(minDist / 500) * 500;
+        threshold = Math.max(1000, Math.min(3000, threshold));
         for (var i = 0; i < listView.model.count; i++) {
             var item = listView.model.get(i);
             var dist = gps.position.coordinate.distanceTo(
                 QtPositioning.coordinate(item.y, item.x));
             item.dist = py.call_sync("hts.util.format_distance", [dist]);
-            item.highlight = dist < 1000;
-            item.fade = dist >= 1000;
+            item.highlight = dist < threshold;
+            item.fade = dist >= threshold;
         }
     }
 }
