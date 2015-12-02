@@ -1,8 +1,3 @@
-Helsinki Transit Stops 1.3
-==========================
-
-* [X] Show distances to favorites on main page and highlight nearest ones
-
 Helsinki Transit Stops 2.0
 ==========================
 
