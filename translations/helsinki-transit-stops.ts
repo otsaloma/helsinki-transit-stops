@@ -68,13 +68,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qml/FavoritePage.qml" line="76"/>
-        <location filename="qml/FavoritePage.qml" line="103"/>
+        <location filename="qml/FavoritePage.qml" line="89"/>
         <source>Loading</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qml/FavoritePage.qml" line="133"/>
+        <location filename="qml/FavoritePage.qml" line="119"/>
         <source>No departures found</source>
         <translation type="unfinished"></translation>
     </message>
@@ -92,13 +91,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qml/LineFilterPage.qml" line="86"/>
-        <location filename="qml/LineFilterPage.qml" line="98"/>
+        <location filename="qml/LineFilterPage.qml" line="84"/>
         <source>Loading</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qml/LineFilterPage.qml" line="121"/>
+        <location filename="qml/LineFilterPage.qml" line="107"/>
         <source>No lines found</source>
         <translation type="unfinished"></translation>
     </message>
@@ -106,17 +104,17 @@
 <context>
     <name>MenuPage</name>
     <message>
-        <location filename="qml/MenuPage.qml" line="34"/>
+        <location filename="qml/MenuPage.qml" line="35"/>
         <source>Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qml/MenuPage.qml" line="56"/>
+        <location filename="qml/MenuPage.qml" line="57"/>
         <source>Remove</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qml/MenuPage.qml" line="58"/>
+        <location filename="qml/MenuPage.qml" line="59"/>
         <source>Removing</source>
         <translation type="unfinished"></translation>
     </message>
@@ -126,33 +124,37 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qml/MenuPage.qml" line="113"/>
+        <location filename="qml/MenuPage.qml" line="84"/>
+        <source>Search</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qml/MenuPage.qml" line="92"/>
         <source>Nearby</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qml/MenuPage.qml" line="133"/>
-        <source>Search</source>
+        <location filename="qml/MenuPage.qml" line="106"/>
+        <source>Once added, favorites appear here. Pull down to search for nearby stops or stops by name or number</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>NearbyPage</name>
     <message>
-        <location filename="qml/NearbyPage.qml" line="48"/>
-        <location filename="qml/NearbyPage.qml" line="65"/>
+        <location filename="qml/NearbyPage.qml" line="51"/>
         <source>Searching</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="qml/NearbyPage.qml" line="81"/>
+        <location filename="qml/NearbyPage.qml" line="67"/>
         <source>%n Stops</source>
         <translation type="unfinished">
             <numerusform></numerusform>
         </translation>
     </message>
     <message>
-        <location filename="qml/NearbyPage.qml" line="86"/>
+        <location filename="qml/NearbyPage.qml" line="72"/>
         <source>No stops found</source>
         <translation type="unfinished"></translation>
     </message>
@@ -178,20 +180,19 @@
 <context>
     <name>SearchResultsPage</name>
     <message>
-        <location filename="qml/SearchResultsPage.qml" line="48"/>
-        <location filename="qml/SearchResultsPage.qml" line="65"/>
+        <location filename="qml/SearchResultsPage.qml" line="51"/>
         <source>Searching</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="qml/SearchResultsPage.qml" line="82"/>
+        <location filename="qml/SearchResultsPage.qml" line="68"/>
         <source>%n Stops</source>
         <translation type="unfinished">
             <numerusform></numerusform>
         </translation>
     </message>
     <message>
-        <location filename="qml/SearchResultsPage.qml" line="87"/>
+        <location filename="qml/SearchResultsPage.qml" line="73"/>
         <source>No stops found</source>
         <translation type="unfinished"></translation>
     </message>
@@ -209,13 +210,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qml/StopPage.qml" line="94"/>
-        <location filename="qml/StopPage.qml" line="121"/>
+        <location filename="qml/StopPage.qml" line="107"/>
         <source>Loading</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qml/StopPage.qml" line="150"/>
+        <location filename="qml/StopPage.qml" line="136"/>
         <source>No departures found</source>
         <translation type="unfinished"></translation>
     </message>
