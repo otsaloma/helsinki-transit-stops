@@ -34,7 +34,7 @@ CoverBackground {
     Label {
         id: title
         anchors.centerIn: parent
-        color: Theme.secondaryColor
+        color: Theme.primaryColor
         font.family: Theme.fontFamilyHeading
         font.pixelSize: Theme.fontSizeLarge
         horizontalAlignment: Text.AlignHCenter
