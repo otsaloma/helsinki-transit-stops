@@ -46,7 +46,7 @@ Dialog {
                 Component.onCompleted: {
                     if (model.short_code && model.short_code.length > 0) {
                         nameLabel.textFormat = Text.RichText;
-                        nameLabel.text += " <small>(%1)</small>".arg(model.short_code);
+                        nameLabel.text += " (%1)".arg(model.short_code);
                     }
                 }
             }

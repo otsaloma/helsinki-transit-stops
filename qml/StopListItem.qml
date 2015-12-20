@@ -36,7 +36,7 @@ ListItem {
         Component.onCompleted: {
             if (model.short_code && model.short_code.length > 0) {
                 nameLabel.textFormat = Text.RichText;
-                nameLabel.text += " <small>(%1)</small>".arg(model.short_code);
+                nameLabel.text += " (%1)".arg(model.short_code);
             }
         }
     }
@@ -68,6 +68,7 @@ ListItem {
                 anchors.leftMargin: 2*Theme.paddingLarge + Theme.paddingSmall
                 color: Theme.secondaryColor
                 font.pixelSize: Theme.fontSizeSmall
+                horizontalAlignment: Text.AlignRight
                 text: line.line
                 width: listItem.lineWidth
                 y: repeater.y + index * row.height

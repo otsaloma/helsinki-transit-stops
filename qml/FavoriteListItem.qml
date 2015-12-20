@@ -21,60 +21,46 @@ import Sailfish.Silica 1.0
 
 ListItem {
     id: listItem
-    contentHeight: Theme.itemSizeSmall
-    Rectangle {
-        anchors.fill: parent
-        color: Theme.highlightColor
-        opacity: model.highlight ? 0.1 : 0
-    }
+    contentHeight: nameLabel.height + linesLabel.height
     Label {
         id: nameLabel
         anchors.left: parent.left
         anchors.leftMargin: 2*Theme.paddingLarge + Theme.paddingSmall
-        anchors.right: distLabel.left
-        anchors.rightMargin: 0
+        anchors.right: parent.right
+        anchors.rightMargin: Theme.paddingLarge
         color: listItem.highlighted ? Theme.highlightColor : (
             model.fade ? Theme.secondaryColor : Theme.primaryColor)
-        height: Theme.itemSizeSmall
+        height: implicitHeight + Theme.paddingMedium
         horizontalAlignment: Text.AlignLeft
         text: model.name
         truncationMode: TruncationMode.Fade
-        verticalAlignment: Text.AlignVCenter
+        verticalAlignment: Text.AlignBottom
     }
     Label {
-        id: distLabel
-        anchors.baseline: nameLabel.baseline
+        id: linesLabel
+        anchors.left: parent.left
+        anchors.leftMargin: 2*Theme.paddingLarge + Theme.paddingSmall
         anchors.right: parent.right
-        anchors.rightMargin: 2*Theme.paddingLarge + Theme.paddingSmall
+        anchors.rightMargin: Theme.paddingLarge
+        anchors.top: nameLabel.bottom
         color: listItem.highlighted ? Theme.highlightColor : (
             model.fade ? Theme.secondaryColor : Theme.primaryColor)
         font.pixelSize: Theme.fontSizeSmall
-        height: Theme.itemSizeSmall
-        horizontalAlignment: Text.AlignRight
-        text: model.dist
+        height: implicitHeight + Theme.paddingMedium
+        horizontalAlignment: Text.AlignLeft
+        text: model.lines_label
         truncationMode: TruncationMode.Fade
+        verticalAlignment: Text.AlignTop
     }
     Rectangle {
-        anchors.bottom: nameLabel.bottom
+        anchors.bottom: linesLabel.bottom
         anchors.bottomMargin: Theme.paddingMedium
         anchors.right: nameLabel.left
         anchors.rightMargin: Theme.paddingLarge
         anchors.top: nameLabel.top
         anchors.topMargin: Theme.paddingMedium
         color: model.color
-        opacity: model.fade ? 0.65 : 1
-        radius: Theme.paddingSmall/3
-        width: Theme.paddingSmall
-    }
-    Rectangle {
-        anchors.bottom: nameLabel.bottom
-        anchors.bottomMargin: Theme.paddingMedium
-        anchors.left: distLabel.right
-        anchors.leftMargin: Theme.paddingLarge
-        anchors.top: nameLabel.top
-        anchors.topMargin: Theme.paddingMedium
-        color: model.color
-        opacity: model.fade ? 0.65 : 1
+        opacity: model.fade ? 0 : 1
         radius: Theme.paddingSmall/3
         width: Theme.paddingSmall
     }

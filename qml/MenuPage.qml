@@ -67,60 +67,11 @@ Page {
             onClicked: app.pageStack.push("FavoritePage.qml", {"props": model});
         }
         header: Column {
-            height: header.height + row.height
+            height: header.height
             width: parent.width
             PageHeader {
                 id: header
                 title: "Helsinki Transit Stops"
-            }
-            Row {
-                id: row
-                height: Theme.itemSizeSmall
-                width: parent.width
-                ListItem {
-                    id: searchItem
-                    contentHeight: Theme.itemSizeSmall
-                    width: parent.width/2
-                    Rectangle {
-                        anchors.fill: parent
-                        color: Theme.highlightColor
-                        opacity: 0.1
-                    }
-                    ListItemLabel {
-                        id: searchLabel
-                        anchors.fill: parent
-                        anchors.leftMargin: 2*Theme.paddingLarge + Theme.paddingSmall
-                        color: searchItem.highlighted ? Theme.highlightColor : Theme.primaryColor
-                        height: Theme.itemSizeSmall
-                        horizontalAlignment: Text.AlignLeft
-                        text: qsTr("Search")
-                    }
-                    onClicked: {
-                        app.pageStack.push("SearchPage.qml");
-                        app.pageStack.pushAttached("SearchResultsPage.qml");
-                    }
-                }
-                ListItem {
-                    id: nearbyItem
-                    contentHeight: Theme.itemSizeSmall
-                    width: parent.width/2
-                    Rectangle {
-                        anchors.fill: parent
-                        color: Theme.highlightColor
-                        opacity: 0.1
-                    }
-                    ListItemLabel {
-                        id: nearbyLabel
-                        anchors.fill: parent
-                        anchors.rightMargin: 2*Theme.paddingLarge + Theme.paddingSmall
-                        color: nearbyItem.highlighted ? Theme.highlightColor : Theme.primaryColor
-                        height: Theme.itemSizeSmall
-                        horizontalAlignment: Text.AlignRight
-                        opacity: gps.ready ? 1.0 : 0.4
-                        text: qsTr("Nearby")
-                    }
-                    onClicked: gps.ready && app.pageStack.push("NearbyPage.qml");
-                }
             }
         }
         model: ListModel {}
@@ -129,8 +80,34 @@ Page {
                 text: qsTr("About")
                 onClicked: app.pageStack.push("AboutPage.qml");
             }
+            MenuItem {
+                text: qsTr("Search")
+                onClicked: {
+                    app.pageStack.push("SearchPage.qml");
+                    app.pageStack.pushAttached("SearchResultsPage.qml");
+                }
+            }
+            MenuItem {
+                enabled: gps.ready
+                text: qsTr("Nearby")
+                onClicked: app.pageStack.push("NearbyPage.qml");
+            }
         }
         VerticalScrollDecorator {}
+    }
+    Label {
+        id: onboardLabel
+        anchors.centerIn: parent
+        color: Theme.highlightColor
+        font.family: Theme.fontFamilyHeading
+        font.pixelSize: Theme.fontSizeExtraLarge
+        horizontalAlignment: Text.AlignHCenter
+        opacity: 0.6
+        text: qsTr("Once added, favorites appear here. Pull down to search for nearby stops or stops by name or number")
+        verticalAlignment: Text.AlignVCenter
+        visible: false
+        width: parent.width - Theme.paddingLarge*2
+        wrapMode: Text.WordWrap
     }
     Timer {
         id: timer
@@ -160,6 +137,8 @@ Page {
             favorites[i].fade = false;
             listView.model.append(favorites[i]);
         }
+        if (listView.model.count === 0)
+            onboardLabel.visible = true;
     }
     function update() {
         // Update distances based on positioning.

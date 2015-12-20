@@ -20,6 +20,7 @@
 import copy
 import hts
 import os
+import threading
 import time
 
 __all__ = ("Favorites",)
@@ -38,7 +39,7 @@ class Favorites:
     def add(self, name):
         """Add `name` to the list of favorites and return key."""
         key = str(int(1000*time.time()))
-        self._favorites.append(dict(key=key, name=name, stops=[], skip_lines=[]))
+        self._favorites.append(dict(key=key, name=name, stops=[]))
         self._update_coordinates()
         return key
 
@@ -54,6 +55,8 @@ class Favorites:
                                       y=props["y"]))
 
         self._update_coordinates()
+        favorite["updated"] = -1
+        self._update_meta()
 
     @property
     def favorites(self):
@@ -64,6 +67,7 @@ class Favorites:
             favorite["color"] = hts.util.types_to_color(
                 *[x["type"] for x in favorite["stops"]])
             favorite["stops"].sort(key=lambda x: x["name"])
+            favorite["lines_label"] = ", ".join(favorite.get("lines", []))
         return favorites
 
     def find_departures(self, key):
@@ -94,7 +98,7 @@ class Favorites:
     def get_skip_lines(self, key):
         """Return a list of lines to not be displayed."""
         favorite = self.get(key)
-        return copy.deepcopy(favorite["skip_lines"])
+        return copy.deepcopy(favorite.get("skip_lines", []))
 
     def get_stop_codes(self, key):
         """Return a list of stop codes of favorite matching `key`."""
@@ -124,9 +128,8 @@ class Favorites:
                                           x=favorite.pop("x"),
                                           y=favorite.pop("y"))]
 
-            # skip_lines added in version 0.3.
-            favorite.setdefault("skip_lines", [])
         self._update_coordinates()
+        self._update_meta()
 
     def remove(self, key):
         """Remove favorite matching `key` from the list of favorites."""
@@ -141,6 +144,8 @@ class Favorites:
             if favorite["stops"][i]["code"] == code:
                 favorite["stops"].pop(i)
         self._update_coordinates()
+        favorite["updated"] = -1
+        self._update_meta()
 
     def rename(self, key, name):
         """Give favorite matching `key` a new name."""
@@ -151,6 +156,8 @@ class Favorites:
         """Set list of lines to not be displayed."""
         favorite = self.get(key)
         favorite["skip_lines"] = list(skip)
+        favorite["updated"] = -1
+        self._update_meta()
 
     def _update_coordinates(self):
         """Update mean coordinates of favorites."""
@@ -163,6 +170,25 @@ class Favorites:
                     n += 1
             favorite["x"] = (sumx/n if n > 0 else 0)
             favorite["y"] = (sumy/n if n > 0 else 0)
+
+    def _update_lines(self, favorite):
+        """Update list of lines using stops of `favorite`."""
+        with hts.util.silent(Exception):
+            codes = [x["code"] for x in favorite["stops"]]
+            lines = [x["line"] for x in hts.query.find_lines(codes)]
+            for line in favorite.get("skip_lines", []):
+                with hts.util.silent(ValueError):
+                    lines.remove(line)
+            favorite["lines"] = lines
+
+    def _update_meta(self):
+        """Update metadata for all favorites."""
+        for favorite in self._favorites:
+            if time.time() - favorite.get("updated", -1) > 14*3600:
+                favorite["updated"] = int(time.time())
+                threading.Thread(target=self._update_lines,
+                                 args=[favorite],
+                                 daemon=True).start()
 
     def write(self):
         """Write list of favorites to file."""

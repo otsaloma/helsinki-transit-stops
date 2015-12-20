@@ -1,3 +1,8 @@
+Helsinki Transit Stops 1.4
+==========================
+
+* Move Search and Nearby to the pulldown menu
+
 Helsinki Transit Stops 2.0
 ==========================
 
