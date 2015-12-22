@@ -268,8 +268,9 @@ def parse_unix_time(departure):
 
 def unique_lines(lines):
     """Return `lines` with duplicates discarded."""
+    ll = [x["line"] for x in lines]
     ulines = []
-    for line in lines:
-        if not line["line"] in (x["line"] for x in ulines):
-            ulines.append(line)
+    for i in range(len(lines)):
+        if not lines[i]["line"] in ll[:i]:
+            ulines.append(lines[i])
     return ulines

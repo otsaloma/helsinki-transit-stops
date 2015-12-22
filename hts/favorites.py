@@ -40,7 +40,7 @@ class Favorites:
         """Add `name` to the list of favorites and return key."""
         key = str(int(1000*time.time()))
         self._favorites.append(dict(key=key, name=name, stops=[]))
-        self._update_coordinates()
+        self._update_meta(key)
         return key
 
     def add_stop(self, key, props):
@@ -54,9 +54,7 @@ class Favorites:
                                       x=props["x"],
                                       y=props["y"]))
 
-        self._update_coordinates()
-        favorite["updated"] = -1
-        self._update_meta()
+        self._update_meta(key)
 
     @property
     def favorites(self):
@@ -66,8 +64,8 @@ class Favorites:
         for favorite in favorites:
             favorite["color"] = hts.util.types_to_color(
                 *[x["type"] for x in favorite["stops"]])
-            favorite["stops"].sort(key=lambda x: x["name"])
             favorite["lines_label"] = ", ".join(favorite.get("lines", []))
+            favorite["stops"].sort(key=lambda x: x["name"])
         return favorites
 
     def find_departures(self, key):
@@ -128,7 +126,6 @@ class Favorites:
                                           x=favorite.pop("x"),
                                           y=favorite.pop("y"))]
 
-        self._update_coordinates()
         self._update_meta()
 
     def remove(self, key):
@@ -143,9 +140,7 @@ class Favorites:
         for i in list(reversed(range(len(favorite["stops"])))):
             if favorite["stops"][i]["code"] == code:
                 favorite["stops"].pop(i)
-        self._update_coordinates()
-        favorite["updated"] = -1
-        self._update_meta()
+        self._update_meta(key)
 
     def rename(self, key, name):
         """Give favorite matching `key` a new name."""
@@ -156,8 +151,7 @@ class Favorites:
         """Set list of lines to not be displayed."""
         favorite = self.get(key)
         favorite["skip_lines"] = list(skip)
-        favorite["updated"] = -1
-        self._update_meta()
+        self._update_meta(key)
 
     def _update_coordinates(self):
         """Update mean coordinates of favorites."""
@@ -181,8 +175,13 @@ class Favorites:
                     lines.remove(line)
             favorite["lines"] = lines
 
-    def _update_meta(self):
-        """Update metadata for all favorites."""
+    def _update_meta(self, *keys):
+        """Update metadata, forcing update of favorites matching `keys`."""
+        for key in keys:
+            # Force update by marking as old.
+            favorite = self.get(key)
+            favorite["updated"] = -1
+        self._update_coordinates()
         for favorite in self._favorites:
             if time.time() - favorite.get("updated", -1) > 14*3600:
                 favorite["updated"] = int(time.time())

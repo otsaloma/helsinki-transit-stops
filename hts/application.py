@@ -38,5 +38,6 @@ class Application:
 
     def save(self):
         """Write configuration files."""
+        hts.conf.write()
         self.favorites.write()
         self.history.write()

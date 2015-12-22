@@ -37,9 +37,12 @@ from hts import http
 from hts import query
 from hts.favorites import *
 from hts.history import *
+from hts.config import *
+conf = ConfigurationStore()
 from hts.application import *
 
 def main():
     """Initialize application."""
+    conf.read()
     global app
     app = Application()
