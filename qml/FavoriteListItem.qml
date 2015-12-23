@@ -48,7 +48,7 @@ ListItem {
         font.pixelSize: Theme.fontSizeSmall
         height: implicitHeight + Theme.paddingMedium
         horizontalAlignment: Text.AlignLeft
-        text: model.lines_label
+        text: model.lines_label || "—"
         truncationMode: TruncationMode.Fade
         verticalAlignment: Text.AlignTop
     }

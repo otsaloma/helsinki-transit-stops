@@ -46,7 +46,9 @@ ListItem {
         anchors.top: nameLabel.bottom
         color: Theme.secondaryColor
         font.pixelSize: Theme.fontSizeSmall
+        height: implicitHeight + Theme.paddingSmall
         text: "%1 · %2".arg(model.address).arg(model.dist)
+        verticalAlignment: Text.AlignVCenter
     }
     Repeater {
         // List at most three lines using the stop along with their
@@ -68,8 +70,10 @@ ListItem {
                 anchors.leftMargin: 2*Theme.paddingLarge + Theme.paddingSmall
                 color: Theme.secondaryColor
                 font.pixelSize: Theme.fontSizeSmall
+                height: implicitHeight + Theme.paddingSmall
                 horizontalAlignment: Text.AlignRight
                 text: line.line
+                verticalAlignment: Text.AlignVCenter
                 width: listItem.lineWidth
                 y: repeater.y + index * row.height
                 Component.onCompleted: listItem.lineWidth =
@@ -83,10 +87,12 @@ ListItem {
                 anchors.top: lineLabel.top
                 color: Theme.secondaryColor
                 font.pixelSize: Theme.fontSizeSmall
+                height: implicitHeight + Theme.paddingSmall
                 text: index === 2 ?
                     " → %1 …".arg(line.destination) :
                     " → %1".arg(line.destination)
                 truncationMode: TruncationMode.Fade
+                verticalAlignment: Text.AlignVCenter
             }
             Component.onCompleted: repeater.height += row.height;
         }
