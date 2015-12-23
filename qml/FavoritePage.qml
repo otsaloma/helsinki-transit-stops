@@ -51,8 +51,8 @@ Page {
                         "skip": py.call_sync(getSkip, [page.props.key])
                     });
                     dialog.accepted.connect(function() {
-                        var fun = "hts.app.favorites.set_skip_lines";
-                        py.call_sync(fun, [page.props.key, dialog.skip]);
+                        var setSkip = "hts.app.favorites.set_skip_lines";
+                        py.call_sync(setSkip, [page.props.key, dialog.skip]);
                         for (var i = 0; i < listView.model.count; i++) {
                             var item = listView.model.get(i);
                             item.visible = dialog.skip.indexOf(item.line) < 0;
@@ -134,13 +134,12 @@ Page {
             var item = listView.model.get(i);
             var dist = gps.position.coordinate.distanceTo(
                 QtPositioning.coordinate(item.y, item.x));
-            var fun = "hts.util.format_departure_time";
-            item.time = py.call_sync(fun, [item.unix_time]);
-            var fun = "hts.util.departure_time_to_color";
-            item.color = py.call_sync(fun, [dist, item.unix_time]);
+            var getTime = "hts.util.format_departure_time";
+            var getColor = "hts.util.departure_time_to_color";
+            item.time = py.call_sync(getTime, [item.unix_time]);
+            item.color = py.call_sync(getColor, [dist, item.unix_time]);
             // Remove departures already passed.
-            if (!item.time || item.time.length === 0)
-                listView.model.remove(i);
+            item.time || listView.model.remove(i);
         }
     }
     function updateWidths() {

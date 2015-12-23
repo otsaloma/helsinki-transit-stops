@@ -35,16 +35,14 @@ Page {
                     text: qsTr("Edit")
                     onClicked: {
                         var dialog = pageStack.push("EditFavoritePage.qml", {
-                            "key": model.key,
-                            "name": model.name
-                        });
+                            "key": model.key, "name": model.name});
                         dialog.accepted.connect(function() {
                             // Rename favorite and/or remove associated stops.
                             py.call_sync("hts.app.favorites.rename", [model.key, dialog.name]);
                             for (var i = 0; i < dialog.removals.length; i++)
-                                py.call_sync("hts.app.favorites.remove_stop",
-                                             [model.key, dialog.removals[i]]);
-
+                                py.call_sync(
+                                    "hts.app.favorites.remove_stop",
+                                    [model.key, dialog.removals[i]]);
                             var i = model.index;
                             listView.model.setProperty(i, "name", dialog.name);
                             listView.model.setProperty(i, "color", py.call_sync(
@@ -81,6 +79,10 @@ Page {
                 onClicked: app.pageStack.push("AboutPage.qml");
             }
             MenuItem {
+                text: qsTr("Preferences")
+                onClicked: app.pageStack.push("PreferencesPage.qml");
+            }
+            MenuItem {
                 text: qsTr("Search")
                 onClicked: {
                     app.pageStack.push("SearchPage.qml");
@@ -103,7 +105,7 @@ Page {
         font.pixelSize: Theme.fontSizeExtraLarge
         horizontalAlignment: Text.AlignHCenter
         opacity: 0.6
-        text: qsTr("Once added, favorites appear here. Pull down to search for nearby stops or stops by name or number")
+        text: qsTr("Once added, favorites appear here. Pull down to search for nearby stops or stops by name or number.")
         verticalAlignment: Text.AlignVCenter
         visible: false
         width: parent.width - Theme.paddingLarge*2
@@ -127,14 +129,15 @@ Page {
             });
         }
     }
+    onStatusChanged: {
+        page.status === PageStatus.Activating && page.update();
+    }
     function populate() {
         // Load favorites from the Python backend.
         listView.model.clear();
         var favorites = py.evaluate("hts.app.favorites.favorites");
         for (var i = 0; i < favorites.length; i++) {
-            favorites[i].dist = "";
-            favorites[i].highlight = false;
-            favorites[i].fade = false;
+            favorites[i].near = false;
             listView.model.append(favorites[i]);
         }
         if (listView.model.count === 0)
@@ -142,27 +145,19 @@ Page {
     }
     function update() {
         // Update distances based on positioning.
-        // Find out which favorite is closest, then round up that distance
-        // and highlight all stops closer than that threshold -- e.g.
-        // if the closest is 1.3 km away, highlight all closer than 1.5 km.
         if (listView.model.count === 0) return;
-        var dists = [];
+        var threshold = app.conf.get("favorite_highlight_radius");
+        var favorites = py.evaluate("hts.app.favorites.favorites");
         for (var i = 0; i < listView.model.count; i++) {
             var item = listView.model.get(i);
             var dist = gps.position.coordinate.distanceTo(
                 QtPositioning.coordinate(item.y, item.x));
-            dists.push(dist);
-        }
-        var minDist = Math.min.apply(null, dists);
-        var threshold = Math.ceil(minDist / 500) * 500;
-        threshold = Math.max(1000, Math.min(3000, threshold));
-        for (var i = 0; i < listView.model.count; i++) {
-            var item = listView.model.get(i);
-            var dist = gps.position.coordinate.distanceTo(
-                QtPositioning.coordinate(item.y, item.x));
-            item.dist = py.call_sync("hts.util.format_distance", [dist]);
-            item.highlight = dist < threshold;
-            item.fade = dist >= threshold;
+            item.near = dist < threshold;
+            if (i < favorites.length && favorites[i].key === item.key) {
+                item.name = favorites[i].name;
+                item.lines_label = favorites[i].lines_label;
+                item.color = favorites[i].color;
+            }
         }
     }
 }

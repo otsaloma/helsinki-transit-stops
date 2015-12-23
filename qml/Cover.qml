@@ -88,6 +88,7 @@ CoverBackground {
     }
     Component.onCompleted: {
         // Pre-fill list view model with blank entries.
+        // XXX: Item count should depend on screen size.
         for (var i = 0; i < 5; i++)
             listView.model.append({"line": "", "time": ""});
         app.pageStack.onCurrentPageChanged.connect(cover.update);
@@ -126,7 +127,7 @@ CoverBackground {
                     countVisible++;
             }
             if (model && countVisible > 0) {
-                // Show the first five departures.
+                // Show the first few departures.
                 cover.copyFrom(model);
                 image.opacity = 0.05;
                 title.visible = false;

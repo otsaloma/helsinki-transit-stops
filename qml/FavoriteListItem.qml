@@ -29,7 +29,7 @@ ListItem {
         anchors.right: parent.right
         anchors.rightMargin: Theme.paddingLarge
         color: listItem.highlighted ? Theme.highlightColor : (
-            model.fade ? Theme.secondaryColor : Theme.primaryColor)
+            model.near ? Theme.primaryColor : Theme.secondaryColor)
         height: implicitHeight + Theme.paddingMedium
         horizontalAlignment: Text.AlignLeft
         text: model.name
@@ -44,7 +44,7 @@ ListItem {
         anchors.rightMargin: Theme.paddingLarge
         anchors.top: nameLabel.bottom
         color: listItem.highlighted ? Theme.highlightColor : (
-            model.fade ? Theme.secondaryColor : Theme.primaryColor)
+            model.near ? Theme.primaryColor : Theme.secondaryColor)
         font.pixelSize: Theme.fontSizeSmall
         height: implicitHeight + Theme.paddingMedium
         horizontalAlignment: Text.AlignLeft
@@ -60,7 +60,7 @@ ListItem {
         anchors.top: nameLabel.top
         anchors.topMargin: Theme.paddingMedium
         color: model.color
-        opacity: model.fade ? 0 : 1
+        opacity: model.near ? 1 : 0
         radius: Theme.paddingSmall/3
         width: Theme.paddingSmall
     }

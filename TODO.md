@@ -1,14 +1,12 @@
 Helsinki Transit Stops 1.4
 ==========================
 
-* Move Search and Nearby to the pulldown menu
+* [ ] Add preferences dialog with time display and highlight radius options
+* [X] Redesign main page, move Search and Nearby to the pulldown menu
 
 Helsinki Transit Stops 2.0
 ==========================
 
 * Use `short_name` for stops once API 1.2.0 is stable?
 * Use a userhash once API 1.2.1 is stable?
-* Add a preferences dialog
-    - Radius for highlighted nearby favorites
-    - Seconds vs. time display cutoff
 * Add disruption listing from Poikkeusinfo XML API?

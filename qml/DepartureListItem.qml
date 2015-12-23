@@ -49,8 +49,8 @@ ListItem {
         horizontalAlignment: Text.AlignRight
         text: model.time
         width: page.timeWidth
-        onTextChanged: timeLabel.updateWidth();
         Component.onCompleted: timeLabel.updateWidth();
+        onTextChanged: timeLabel.updateWidth();
         function updateWidth() {
             var width = timeLabel.implicitWidth;
             listView.model.setProperty(model.index, "timeWidth", width);
@@ -69,13 +69,12 @@ ListItem {
         Component.onCompleted: {
             // Add a dotted line long enough for all orientations.
             var dots = " . . . . . . . . . . . . . . . . . . . .";
-            while (dots.length < 200)
-                dots += dots.substr(0, 20);
+            var dots = dots + dots + dots + dots + dots;
             var size = Math.max(page.width, page.height);
             while (destinationLabel.implicitWidth < size) {
                 var prev = destinationLabel.implicitWidth;
                 destinationLabel.text += dots;
-                if (destinationLabel.implicitWidth < prev+1) break;
+                if (destinationLabel.implicitWidth < prev + 1) break;
             }
         }
     }

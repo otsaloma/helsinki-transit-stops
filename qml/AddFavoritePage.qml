@@ -93,9 +93,7 @@ Dialog {
         listView.model.clear();
         var favorites = py.evaluate("hts.app.favorites.favorites");
         for (var i = 0; i < favorites.length; i++) {
-            favorites[i].dist = "";
-            favorites[i].highlight = false;
-            favorites[i].fade = false;
+            favorites[i].near = true;
             listView.model.append(favorites[i]);
         }
     }

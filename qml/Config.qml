@@ -17,20 +17,14 @@
  */
 
 import QtQuick 2.0
-import Sailfish.Silica 1.0
-import "."
 
-ApplicationWindow {
-    id: app
-    allowedOrientations: defaultAllowedOrientations
-    cover: Cover {}
-    initialPage: MenuPage { id: menu }
-    property var conf: Config {}
-    property bool running: applicationActive || cover.active
-    property string searchQuery: ""
-    PositionSource { id: gps }
-    Python { id: py }
-    Component.onDestruction: {
-        py.ready && py.call_sync("hts.app.quit", []);
+QtObject {
+    function get(option) {
+        // Return value of configuration option.
+        return py.call_sync("hts.conf.get", [option]);
+    }
+    function set(option, value) {
+        // Set the value of configuration option.
+        return py.call_sync("hts.conf.set", [option, value]);
     }
 }

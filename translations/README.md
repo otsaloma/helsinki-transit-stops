@@ -9,7 +9,7 @@ country code.
 
 To try your translation, you can compile it and run qmlscene.
 
-```sh
+```bash
 export PATH=$PATH:/usr/lib/qt5/bin
 lrelease translations/xx.ts -qm translations/xx.qm
 qmlscene -translation translations/xx.qm qml/helsinki-transit-stops.qml
