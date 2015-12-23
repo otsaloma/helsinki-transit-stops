@@ -76,7 +76,7 @@ class ConfigurationStore(AttrDict):
     def write(self, path=None):
         """Write values of options to JSON file at `path`."""
         if path is None:
-            path = os.path.join(hts.CONFIG_HOME_DIR, "hts-maps.json")
+            path = os.path.join(hts.CONFIG_HOME_DIR, "helsinki-transit-stops.json")
         out = dict((x, self.get(x)) for x in DEFAULTS)
         out["version"] = hts.__version__
         with hts.util.silent(Exception):
