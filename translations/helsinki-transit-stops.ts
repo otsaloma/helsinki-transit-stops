@@ -109,33 +109,38 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qml/MenuPage.qml" line="57"/>
+        <location filename="qml/MenuPage.qml" line="55"/>
         <source>Remove</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qml/MenuPage.qml" line="59"/>
+        <location filename="qml/MenuPage.qml" line="57"/>
         <source>Removing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qml/MenuPage.qml" line="80"/>
+        <location filename="qml/MenuPage.qml" line="78"/>
         <source>About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qml/MenuPage.qml" line="84"/>
+        <location filename="qml/MenuPage.qml" line="82"/>
+        <source>Preferences</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qml/MenuPage.qml" line="86"/>
         <source>Search</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qml/MenuPage.qml" line="92"/>
+        <location filename="qml/MenuPage.qml" line="94"/>
         <source>Nearby</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qml/MenuPage.qml" line="106"/>
-        <source>Once added, favorites appear here. Pull down to search for nearby stops or stops by name or number</source>
+        <location filename="qml/MenuPage.qml" line="108"/>
+        <source>Once added, favorites appear here. Pull down to search for nearby stops or stops by name or number.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -156,6 +161,39 @@
     <message>
         <location filename="qml/NearbyPage.qml" line="72"/>
         <source>No stops found</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>PreferencesPage</name>
+    <message>
+        <location filename="qml/PreferencesPage.qml" line="32"/>
+        <source>Preferences</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qml/PreferencesPage.qml" line="38"/>
+        <source>Favorites</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qml/PreferencesPage.qml" line="47"/>
+        <source>Highlight nearby favorites</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qml/PreferencesPage.qml" line="62"/>
+        <source>Radius</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qml/PreferencesPage.qml" line="87"/>
+        <source>Departures</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qml/PreferencesPage.qml" line="96"/>
+        <source>Display minutes remaining when below</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

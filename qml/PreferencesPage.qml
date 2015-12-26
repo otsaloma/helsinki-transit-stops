@@ -29,7 +29,7 @@ Page {
         Column {
             id: column
             anchors.fill: parent
-            PageHeader { title: "Preferences" }
+            PageHeader { title: qsTr("Preferences") }
             ListItemLabel {
                 color: Theme.highlightColor
                 font.pixelSize: Theme.fontSizeSmall
@@ -44,7 +44,7 @@ Page {
                 anchors.leftMargin: Theme.paddingLarge
                 anchors.right: parent.right
                 anchors.rightMargin: Theme.paddingLarge
-                text: "Highlight nearby favorites"
+                text: qsTr("Highlight nearby favorites")
                 property bool ready: false
                 Component.onCompleted: {
                     var radius = app.conf.get("favorite_highlight_radius") / 1000;

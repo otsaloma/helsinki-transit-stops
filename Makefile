@@ -72,6 +72,7 @@ define merge-translations =
 lconvert \
     --source-language en \
     --target-language $(1) \
+    --no-obsolete \
     -o translations/$(1).ts \
     $(2) translations/$(1).ts
 endef
