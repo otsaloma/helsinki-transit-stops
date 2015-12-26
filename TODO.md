@@ -1,8 +1,8 @@
 Helsinki Transit Stops 1.4
 ==========================
 
-* [ ] Add preferences dialog with time display and highlight radius options
-* [X] Redesign favorite listing, move Search and Nearby to the pulldown menu
+* [x] Add preferences dialog with time display and highlight radius options
+* [x] Redesign favorite listing, move Search and Nearby to the pulldown menu
 
 Helsinki Transit Stops 2.0
 ==========================

@@ -98,7 +98,7 @@ def format_departure_time(departure):
         return ""
     # Use minutes if below defined threshold,
     # otherwise time as HH:MM.
-    if min_left < hts.conf.departure_time_cutoff:
+    if min_left < max((0, hts.conf.departure_time_cutoff)):
         return "{:d} min".format(round(min_left))
     departure = time.localtime(departure)
     return "{:.0f}:{:02.0f}".format(departure.tm_hour,
