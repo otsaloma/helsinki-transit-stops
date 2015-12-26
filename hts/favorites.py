@@ -170,6 +170,8 @@ class Favorites:
         with hts.util.silent(Exception):
             codes = [x["code"] for x in favorite["stops"]]
             lines = [x["line"] for x in hts.query.find_lines(codes)]
+            if "?" in lines:
+                lines.remove("?")
             for line in favorite.get("skip_lines", []):
                 with hts.util.silent(ValueError):
                     lines.remove(line)
