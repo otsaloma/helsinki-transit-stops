@@ -121,6 +121,8 @@ def find_lines(codes):
             return value
         lines.extend(value[0]["lines"])
     lines = unique_lines(lines)
+    if "?" in lines:
+        lines.remove("?")
     lines.sort(key=lambda x: line_to_sort_key(x["line"]))
     return lines
 
