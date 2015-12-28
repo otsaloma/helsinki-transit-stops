@@ -41,9 +41,7 @@ Page {
             TextSwitch {
                 id: highlightSwitch
                 anchors.left: parent.left
-                anchors.leftMargin: Theme.paddingLarge
                 anchors.right: parent.right
-                anchors.rightMargin: Theme.paddingLarge
                 text: qsTr("Highlight nearby favorites")
                 property bool ready: false
                 Component.onCompleted: {
@@ -56,9 +54,7 @@ Page {
             Slider {
                 id: highlightSlider
                 anchors.left: parent.left
-                anchors.leftMargin: Theme.paddingLarge
                 anchors.right: parent.right
-                anchors.rightMargin: Theme.paddingLarge
                 label: qsTr("Radius")
                 maximumValue: 5
                 minimumValue: 0
@@ -90,9 +86,7 @@ Page {
             Slider {
                 id: timeSlider
                 anchors.left: parent.left
-                anchors.leftMargin: Theme.paddingLarge
                 anchors.right: parent.right
-                anchors.rightMargin: Theme.paddingLarge
                 label: qsTr("Display minutes remaining when below")
                 maximumValue: 60
                 minimumValue: 0
