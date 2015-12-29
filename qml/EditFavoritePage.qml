@@ -90,14 +90,7 @@ Dialog {
                 EnterKey.enabled: text.length > 0
                 EnterKey.onClicked: nameField.focus = false;
             }
-            ListItemLabel {
-                id: titleLabel
-                color: Theme.highlightColor
-                font.pixelSize: Theme.fontSizeSmall
-                height: implicitHeight
-                horizontalAlignment: Text.AlignRight
-                text: qsTr("Stops")
-            }
+            SectionHeader { text: qsTr("Stops") }
             Component.onCompleted: page.nameField = nameField;
         }
         model: ListModel {}
