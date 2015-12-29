@@ -185,7 +185,7 @@ class Favorites:
             favorite["updated"] = -1
         self._update_coordinates()
         for favorite in self._favorites:
-            if time.time() - favorite.get("updated", -1) > 14*3600:
+            if time.time() - favorite.get("updated", -1) > 7*86400:
                 favorite["updated"] = int(time.time())
                 threading.Thread(target=self._update_lines,
                                  args=[favorite],
