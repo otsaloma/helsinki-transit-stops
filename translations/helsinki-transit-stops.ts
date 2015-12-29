@@ -55,7 +55,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qml/EditFavoritePage.qml" line="99"/>
+        <location filename="qml/EditFavoritePage.qml" line="93"/>
         <source>Stops</source>
         <translation type="unfinished"></translation>
     </message>
@@ -139,7 +139,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qml/MenuPage.qml" line="108"/>
+        <location filename="qml/MenuPage.qml" line="101"/>
         <source>Once added, favorites appear here. Pull down to search for nearby stops or stops by name or number.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -172,28 +172,33 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qml/PreferencesPage.qml" line="38"/>
+        <location filename="qml/PreferencesPage.qml" line="33"/>
         <source>Favorites</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qml/PreferencesPage.qml" line="47"/>
+        <location filename="qml/PreferencesPage.qml" line="38"/>
         <source>Highlight nearby favorites</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qml/PreferencesPage.qml" line="62"/>
-        <source>Radius</source>
+        <location filename="qml/PreferencesPage.qml" line="51"/>
+        <source>Highlight radius</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qml/PreferencesPage.qml" line="87"/>
+        <location filename="qml/PreferencesPage.qml" line="71"/>
         <source>Departures</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qml/PreferencesPage.qml" line="96"/>
-        <source>Display minutes remaining when below</source>
+        <location filename="qml/PreferencesPage.qml" line="75"/>
+        <source>Show minutes remaining to departure instead of departure time when departure is sooner than cutoff.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qml/PreferencesPage.qml" line="82"/>
+        <source>Departure time cutoff</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
