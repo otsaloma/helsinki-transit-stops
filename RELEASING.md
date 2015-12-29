@@ -5,6 +5,9 @@ Releasing a New Version
     - `make translations`
     - `virtaal translations/en.ts`
     - `virtaal translations/fi.ts`
+    - XXX: lconvert fucks shit up, check manually:
+    - `make translations`
+    - `meld translations/helsinki-transit-stops.ts translations/fi.ts`
 * Do final quality checks
     - `make check`
     - `make test`
