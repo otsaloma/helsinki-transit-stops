@@ -30,14 +30,7 @@ Page {
             id: column
             anchors.fill: parent
             PageHeader { title: qsTr("Preferences") }
-            ListItemLabel {
-                color: Theme.highlightColor
-                font.pixelSize: Theme.fontSizeSmall
-                height: implicitHeight + Theme.paddingLarge
-                horizontalAlignment: Text.AlignRight
-                text: qsTr("Favorites")
-                verticalAlignment: Text.AlignBottom
-            }
+            SectionHeader { text: qsTr("Favorites") }
             TextSwitch {
                 id: highlightSwitch
                 anchors.left: parent.left
@@ -55,7 +48,7 @@ Page {
                 id: highlightSlider
                 anchors.left: parent.left
                 anchors.right: parent.right
-                label: qsTr("Radius")
+                label: qsTr("Highlight radius")
                 maximumValue: 5
                 minimumValue: 0
                 stepSize: 0.1
@@ -75,19 +68,18 @@ Page {
                     app.conf.set("favorite_highlight_radius", radius * 1000);
                 }
             }
+            SectionHeader { text: qsTr("Departures") }
             ListItemLabel {
-                color: Theme.highlightColor
+                color: Theme.secondaryColor
                 font.pixelSize: Theme.fontSizeSmall
-                height: implicitHeight + 2*Theme.paddingLarge
-                horizontalAlignment: Text.AlignRight
-                text: qsTr("Departures")
-                verticalAlignment: Text.AlignBottom
+                text: qsTr("Show minutes remaining to departure instead of departure time when departure is sooner than cutoff.")
+                wrapMode: Text.WordWrap
             }
             Slider {
                 id: timeSlider
                 anchors.left: parent.left
                 anchors.right: parent.right
-                label: qsTr("Display minutes remaining when below")
+                label: qsTr("Departure time cutoff")
                 maximumValue: 60
                 minimumValue: 0
                 stepSize: 1
