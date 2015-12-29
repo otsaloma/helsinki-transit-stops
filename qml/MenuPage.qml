@@ -95,28 +95,18 @@ Page {
                 onClicked: app.pageStack.push("NearbyPage.qml");
             }
         }
+        ViewPlaceholder {
+            id: viewPlaceholder
+            enabled: false
+            text: qsTr("Once added, favorites appear here. Pull down to search for nearby stops or stops by name or number.")
+        }
         VerticalScrollDecorator {}
-    }
-    Label {
-        id: onboardLabel
-        anchors.centerIn: parent
-        color: Theme.highlightColor
-        font.family: Theme.fontFamilyHeading
-        font.pixelSize: Theme.fontSizeExtraLarge
-        horizontalAlignment: Text.AlignHCenter
-        opacity: 0.6
-        text: qsTr("Once added, favorites appear here. Pull down to search for nearby stops or stops by name or number.")
-        verticalAlignment: Text.AlignVCenter
-        visible: false
-        width: parent.width - Theme.paddingLarge*2
-        wrapMode: Text.WordWrap
     }
     Timer {
         id: timer
         interval: 5000
         repeat: true
-        running: app.applicationActive && gps.ready &&
-            view.model.count > 0
+        running: app.applicationActive && gps.ready && view.model.count > 0
         triggeredOnStart: true
         onTriggered: page.update();
     }
@@ -141,10 +131,10 @@ Page {
             view.model.append(favorites[i]);
         }
         if (view.model.count === 0)
-            onboardLabel.visible = true;
+            viewPlaceholder.enabled = true;
     }
     function update() {
-        // Update distances based on positioning.
+        // Update favorite display based on positioning.
         if (view.model.count === 0) return;
         var threshold = app.conf.get("favorite_highlight_radius");
         var favorites = py.evaluate("hts.app.favorites.favorites");
@@ -154,9 +144,9 @@ Page {
                 QtPositioning.coordinate(item.y, item.x));
             item.near = dist < threshold;
             if (i < favorites.length && favorites[i].key === item.key) {
-                item.name = favorites[i].name;
-                item.lines_label = favorites[i].lines_label;
                 item.color = favorites[i].color;
+                item.lines_label = favorites[i].lines_label;
+                item.name = favorites[i].name;
             }
         }
     }
