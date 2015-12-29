@@ -29,7 +29,7 @@ Dialog {
     property string name: ""
     property var nameField
     SilicaListView {
-        id: listView
+        id: view
         anchors.fill: parent
         // Prevent list items from stealing focus.
         currentIndex: -1
@@ -58,9 +58,9 @@ Dialog {
                     MenuItem { text: qsTr("Add to existing") }
                 }
                 onCurrentIndexChanged: {
-                    // Show either nameField or listView.
+                    // Show either nameField or view.
                     nameField.visible = (favoriteCombo.currentIndex === 0);
-                    listView.model.clear();
+                    view.model.clear();
                     nameField.visible || page.populate();
                 }
             }
@@ -90,11 +90,11 @@ Dialog {
     }
     function populate() {
         // Load favorites from the Python backend.
-        listView.model.clear();
+        view.model.clear();
         var favorites = py.evaluate("hts.app.favorites.favorites");
         for (var i = 0; i < favorites.length; i++) {
             favorites[i].near = true;
-            listView.model.append(favorites[i]);
+            view.model.append(favorites[i]);
         }
     }
 }

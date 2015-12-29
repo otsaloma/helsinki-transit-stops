@@ -27,14 +27,14 @@ Dialog {
     property bool loading: false
     property var skip: []
     SilicaGridView {
-        id: gridView
+        id: view
         anchors.fill: parent
         cellWidth: (page.width - Theme.paddingLarge) / 3
         delegate: ListItem {
             id: listItem
             clip: true
             contentHeight: lineSwitch.height
-            width: gridView.cellWidth
+            width: view.cellWidth
             TextSwitch {
                 id: lineSwitch
                 checked: model.checked
@@ -42,14 +42,14 @@ Dialog {
                 text: model.line
                 // Avoid wrapping description.
                 width: 3*page.width
-                Component.onCompleted: gridView.cellHeight = lineSwitch.height;
-                onCheckedChanged: gridView.model.setProperty(
+                Component.onCompleted: view.cellHeight = lineSwitch.height;
+                onCheckedChanged: view.model.setProperty(
                     model.index, "checked", lineSwitch.checked);
             }
             OpacityRampEffect {
                 // Try to match Label with TruncationMode.Fade.
                 direction: OpacityRamp.LeftToRight
-                offset: (gridView.cellWidth - Theme.paddingLarge) / lineSwitch.width
+                offset: (view.cellWidth - Theme.paddingLarge) / lineSwitch.width
                 slope: lineSwitch.width / Theme.paddingLarge
                 sourceItem: lineSwitch
             }
@@ -57,19 +57,19 @@ Dialog {
         header: DialogHeader {}
         model: ListModel {}
         PullDownMenu {
-            visible: !page.loading && gridView.model.count > 0
+            visible: !page.loading && view.model.count > 0
             MenuItem {
                 text: qsTr("Mark all")
                 onClicked: {
-                    for (var i = 0; i < gridView.model.count; i++)
-                        gridView.model.setProperty(i, "checked", true);
+                    for (var i = 0; i < view.model.count; i++)
+                        view.model.setProperty(i, "checked", true);
                 }
             }
             MenuItem {
                 text: qsTr("Unmark all")
                 onClicked: {
-                    for (var i = 0; i < gridView.model.count; i++)
-                        gridView.model.setProperty(i, "checked", false);
+                    for (var i = 0; i < view.model.count; i++)
+                        view.model.setProperty(i, "checked", false);
                 }
             }
         }
@@ -87,21 +87,21 @@ Dialog {
     onAccepted: {
         // Construct an array out of unchecked lines.
         page.skip = [];
-        for (var i = 0; i < gridView.model.count; i++) {
-            var item = gridView.model.get(i);
+        for (var i = 0; i < view.model.count; i++) {
+            var item = view.model.get(i);
             item.checked || page.skip.push(item.line);
         }
     }
     function populate() {
         // Load lines from the Python backend.
-        gridView.model.clear();
+        view.model.clear();
         py.call("hts.query.find_lines", [page.codes], function(results) {
             if (results && results.error && results.message) {
                 busy.error = qsTr(results.message);
             } else if (results && results.length > 0) {
                 for (var i = 0; i < results.length; i++) {
                     results[i].checked = page.skip.indexOf(results[i].line) < 0;
-                    gridView.model.append(results[i]);
+                    view.model.append(results[i]);
                 }
             } else {
                 busy.error = qsTr("No lines found");

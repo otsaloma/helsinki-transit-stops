@@ -42,7 +42,7 @@ CoverBackground {
         width: parent.width
     }
     SilicaListView {
-        id: listView
+        id: view
         anchors.centerIn: parent
         width: parent.width
         delegate: Item {
@@ -71,7 +71,7 @@ CoverBackground {
                 width: parent.width/2 - Theme.paddingLarge/2
             }
             Component.onCompleted: {
-                listView.height = listView.model.count * listItem.height;
+                view.height = view.model.count * listItem.height;
             }
         }
         model: ListModel {}
@@ -90,28 +90,28 @@ CoverBackground {
         // Pre-fill list view model with blank entries.
         // XXX: Item count should depend on screen size.
         for (var i = 0; i < 5; i++)
-            listView.model.append({"line": "", "time": ""});
+            view.model.append({"line": "", "time": ""});
         app.pageStack.onCurrentPageChanged.connect(cover.update);
     }
     function clear() {
         // Clear the visible list of departures.
-        for (var i = 0; i < listView.model.count; i++) {
-            listView.model.setProperty(i, "line", "");
-            listView.model.setProperty(i, "time", "");
+        for (var i = 0; i < view.model.count; i++) {
+            view.model.setProperty(i, "line", "");
+            view.model.setProperty(i, "time", "");
         }
     }
     function copyFrom(model) {
         // Copy departure items from given model.
         var row = 0;
-        for (var i = 0; i < model.count && row < listView.model.count; i++) {
+        for (var i = 0; i < model.count && row < view.model.count; i++) {
             if (!model.get(i).visible) continue;
-            listView.model.setProperty(row, "line", model.get(i).line);
-            listView.model.setProperty(row, "time", model.get(i).time);
+            view.model.setProperty(row, "line", model.get(i).line);
+            view.model.setProperty(row, "time", model.get(i).time);
             row++;
         }
-        for (var i = row; i < listView.model.count; i++) {
-            listView.model.setProperty(i, "line", "");
-            listView.model.setProperty(i, "time", "");
+        for (var i = row; i < view.model.count; i++) {
+            view.model.setProperty(i, "line", "");
+            view.model.setProperty(i, "time", "");
         }
     }
     function update() {

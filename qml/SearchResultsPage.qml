@@ -28,7 +28,7 @@ Page {
     property var results: {}
     property string title: ""
     SilicaListView {
-        id: listView
+        id: view
         anchors.fill: parent
         delegate: StopListItem {
             onClicked: app.pageStack.push("StopPage.qml", {"props": model});
@@ -45,7 +45,7 @@ Page {
         if (page.populatedQuery === app.searchQuery) {
             return;
         } else if (page.status === PageStatus.Activating) {
-            listView.model.clear();
+            view.model.clear();
             page.loading = true;
             page.title = "";
             busy.text = qsTr("Searching")
@@ -56,7 +56,7 @@ Page {
     function populate(query) {
         // Load stops from the Python backend.
         py.call_sync("hts.app.history.add", [query]);
-        listView.model.clear();
+        view.model.clear();
         var x = gps.position.coordinate.longitude || 0;
         var y = gps.position.coordinate.latitude || 0;
         py.call("hts.query.find_stops", [query, x, y], function(results) {
@@ -67,7 +67,7 @@ Page {
                 page.results = results;
                 page.title = qsTr("%n Stops", "", results.length);
                 for (var i = 0; i < results.length; i++)
-                    listView.model.append(results[i]);
+                    view.model.append(results[i]);
             } else {
                 page.title = "";
                 busy.error = qsTr("No stops found");

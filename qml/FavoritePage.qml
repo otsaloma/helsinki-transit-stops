@@ -34,7 +34,7 @@ Page {
     property int lineWidth: 0
     property int timeWidth: 0
     SilicaListView {
-        id: listView
+        id: view
         anchors.fill: parent
         delegate: DepartureListItem {}
         header: PageHeader { title: page.title }
@@ -53,8 +53,8 @@ Page {
                     dialog.accepted.connect(function() {
                         var setSkip = "hts.app.favorites.set_skip_lines";
                         py.call_sync(setSkip, [page.props.key, dialog.skip]);
-                        for (var i = 0; i < listView.model.count; i++) {
-                            var item = listView.model.get(i);
+                        for (var i = 0; i < view.model.count; i++) {
+                            var item = view.model.get(i);
                             item.visible = dialog.skip.indexOf(item.line) < 0;
                         }
                         page.update();
@@ -83,7 +83,7 @@ Page {
         if (page.populated) {
             return;
         } else if (page.status === PageStatus.Activating) {
-            listView.model.clear();
+            view.model.clear();
             page.loading = true;
             page.title = "";
             busy.text = qsTr("Loading")
@@ -93,11 +93,11 @@ Page {
     }
     function getModel() {
         // Return list view model with current departures.
-        return listView.model;
+        return view.model;
     }
     function populate() {
         // Load departures from the Python backend.
-        listView.model.clear();
+        view.model.clear();
         page.lineWidth = 0;
         page.timeWidth = 0;
         var key = page.props.key;
@@ -112,7 +112,7 @@ Page {
                 for (var i = 0; i < results.length; i++) {
                     results[i].color = "#aaaaaa";
                     results[i].visible = skip.indexOf(results[i].line) < 0;
-                    listView.model.append(results[i]);
+                    view.model.append(results[i]);
                 }
             } else {
                 page.title = "";
@@ -130,8 +130,8 @@ Page {
     }
     function updateTimes() {
         // Update colors and times remaining to departure.
-        for (var i = listView.model.count-1; i >= 0; i--) {
-            var item = listView.model.get(i);
+        for (var i = view.model.count-1; i >= 0; i--) {
+            var item = view.model.get(i);
             var dist = gps.position.coordinate.distanceTo(
                 QtPositioning.coordinate(item.y, item.x));
             var getTime = "hts.util.format_departure_time";
@@ -139,15 +139,15 @@ Page {
             item.time = py.call_sync(getTime, [item.unix_time]);
             item.color = py.call_sync(getColor, [dist, item.unix_time]);
             // Remove departures already passed.
-            item.time || listView.model.remove(i);
+            item.time || view.model.remove(i);
         }
     }
     function updateWidths() {
         // Update column widths based on visible items.
         var lineWidth = 0;
         var timeWidth = 0;
-        for (var i = 0; i < listView.model.count; i++) {
-            var item = listView.model.get(i);
+        for (var i = 0; i < view.model.count; i++) {
+            var item = view.model.get(i);
             if (item.visible && item.lineWidth)
                 lineWidth = Math.max(lineWidth, item.lineWidth);
             if (item.visible && item.timeWidth)

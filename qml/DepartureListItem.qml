@@ -37,7 +37,7 @@ ListItem {
         Component.onCompleted: lineLabel.updateWidth();
         function updateWidth() {
             var width = lineLabel.implicitWidth;
-            listView.model.setProperty(model.index, "lineWidth", width);
+            view.model.setProperty(model.index, "lineWidth", width);
             page.lineWidth = Math.max(page.lineWidth, model.visible * width);
         }
     }
@@ -53,7 +53,7 @@ ListItem {
         onTextChanged: timeLabel.updateWidth();
         function updateWidth() {
             var width = timeLabel.implicitWidth;
-            listView.model.setProperty(model.index, "timeWidth", width);
+            view.model.setProperty(model.index, "timeWidth", width);
             page.timeWidth = Math.max(page.timeWidth, model.visible * width);
         }
     }

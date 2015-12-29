@@ -25,7 +25,7 @@ Page {
     id: page
     allowedOrientations: app.defaultAllowedOrientations
     SilicaListView {
-        id: listView
+        id: view
         anchors.fill: parent
         delegate: FavoriteListItem {
             id: listItem
@@ -44,8 +44,8 @@ Page {
                                     "hts.app.favorites.remove_stop",
                                     [model.key, dialog.removals[i]]);
                             var i = model.index;
-                            listView.model.setProperty(i, "name", dialog.name);
-                            listView.model.setProperty(i, "color", py.call_sync(
+                            view.model.setProperty(i, "name", dialog.name);
+                            view.model.setProperty(i, "color", py.call_sync(
                                 "hts.app.favorites.get_color", [model.key]));
                             py.call("hts.app.save", [], null);
                         });
@@ -56,7 +56,7 @@ Page {
                     onClicked: {
                         remorseAction(qsTr("Removing"), function() {
                             py.call_sync("hts.app.favorites.remove", [model.key]);
-                            listView.model.remove(index);
+                            view.model.remove(index);
                         });
                     }
                 }
@@ -116,7 +116,7 @@ Page {
         interval: 5000
         repeat: true
         running: app.applicationActive && gps.ready &&
-            listView.model.count > 0
+            view.model.count > 0
         triggeredOnStart: true
         onTriggered: page.update();
     }
@@ -134,22 +134,22 @@ Page {
     }
     function populate() {
         // Load favorites from the Python backend.
-        listView.model.clear();
+        view.model.clear();
         var favorites = py.evaluate("hts.app.favorites.favorites");
         for (var i = 0; i < favorites.length; i++) {
             favorites[i].near = false;
-            listView.model.append(favorites[i]);
+            view.model.append(favorites[i]);
         }
-        if (listView.model.count === 0)
+        if (view.model.count === 0)
             onboardLabel.visible = true;
     }
     function update() {
         // Update distances based on positioning.
-        if (listView.model.count === 0) return;
+        if (view.model.count === 0) return;
         var threshold = app.conf.get("favorite_highlight_radius");
         var favorites = py.evaluate("hts.app.favorites.favorites");
-        for (var i = 0; i < listView.model.count; i++) {
-            var item = listView.model.get(i);
+        for (var i = 0; i < view.model.count; i++) {
+            var item = view.model.get(i);
             var dist = gps.position.coordinate.distanceTo(
                 QtPositioning.coordinate(item.y, item.x));
             item.near = dist < threshold;

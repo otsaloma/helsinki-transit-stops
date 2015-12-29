@@ -26,7 +26,7 @@ Page {
     canNavigateForward: app.searchQuery.length > 0
     property var history: []
     SilicaListView {
-        id: listView
+        id: view
         anchors.fill: parent
         // Prevent list items from stealing focus.
         currentIndex: -1
@@ -36,7 +36,7 @@ Page {
             menu: contextMenu
             visible: model.visible
             ListItemLabel {
-                anchors.leftMargin: listView.searchField.textLeftMargin
+                anchors.leftMargin: view.searchField.textLeftMargin
                 color: listItem.highlighted ? Theme.highlightColor : Theme.primaryColor
                 height: Theme.itemSizeSmall
                 text: model.text
@@ -47,7 +47,7 @@ Page {
                     text: qsTr("Remove")
                     onClicked: {
                         py.call_sync("hts.app.history.remove", [model.name]);
-                        listView.model.remove(index);
+                        view.model.remove(index);
                     }
                 }
             }
@@ -75,7 +75,7 @@ Page {
                     page.filterHistory();
                 }
             }
-            Component.onCompleted: listView.searchField = searchField;
+            Component.onCompleted: view.searchField = searchField;
         }
         model: ListModel {}
         property var searchField
@@ -89,31 +89,31 @@ Page {
     }
     function filterHistory() {
         // Filter search history for current search field text.
-        var query = listView.searchField.text.toLowerCase();
+        var query = view.searchField.text.toLowerCase();
         var found = [], n = 0;
         for (var i = 0; i < page.history.length; i++) {
             var item = page.history[i].toLowerCase();
             if (query.length > 0 && item.indexOf(query) === 0) {
                 found[n++] = page.history[i];
-                if (found.length >= listView.count) break;
+                if (found.length >= view.count) break;
             } else if (query.length === 0 || item.indexOf(query) > 0) {
                 found[found.length] = page.history[i];
-                if (found.length >= listView.count) break;
+                if (found.length >= view.count) break;
             }
         }
         for (var i = 0; i < found.length; i++) {
             var text = Theme.highlightText(found[i], query, Theme.highlightColor);
-            listView.model.setProperty(i, "name", found[i]);
-            listView.model.setProperty(i, "text", text);
-            listView.model.setProperty(i, "visible", true);
+            view.model.setProperty(i, "name", found[i]);
+            view.model.setProperty(i, "text", text);
+            view.model.setProperty(i, "visible", true);
         }
-        for (var i = found.length; i < listView.count; i++)
-            listView.model.setProperty(i, "visible", false);
+        for (var i = found.length; i < view.count; i++)
+            view.model.setProperty(i, "visible", false);
     }
     function loadHistory() {
         // Load search history and preallocate list items.
         page.history = py.evaluate("hts.app.history.names");
-        while (listView.model.count < 50)
-            listView.model.append({"name": "", "text": "", "visible": false});
+        while (view.model.count < 50)
+            view.model.append({"name": "", "text": "", "visible": false});
     }
 }

@@ -29,7 +29,7 @@ Dialog {
     property var nameField
     property var removals: []
     SilicaListView {
-        id: listView
+        id: view
         anchors.fill: parent
         // Prevent list items from stealing focus.
         currentIndex: -1
@@ -68,7 +68,7 @@ Dialog {
                     onClicked: {
                         // Mark stop to be removed once dialog is accepted.
                         page.removals.push(model.code);
-                        listView.model.remove(index);
+                        view.model.remove(index);
                     }
                 }
             }
@@ -105,10 +105,10 @@ Dialog {
     }
     Component.onCompleted: {
         // Load stops from the Python backend.
-        listView.model.clear();
+        view.model.clear();
         var stops = py.call_sync("hts.app.favorites.get_stops", [page.key]);
         for (var i = 0; i < stops.length; i++)
-            listView.model.append(stops[i]);
+            view.model.append(stops[i]);
     }
     onAccepted: {
         // Save name to use for renaming.
