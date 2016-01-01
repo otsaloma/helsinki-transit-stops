@@ -64,6 +64,19 @@ Page {
                 }
             }
             MenuItem {
+                text: qsTr("Reload")
+                onClicked: {
+                    view.model.clear();
+                    page.loading = true;
+                    page.populated = false;
+                    page.title = "";
+                    busy.text = qsTr("Loading");
+                    page.populate();
+                    view.forceLayout();
+                    page.update();
+                }
+            }
+            MenuItem {
                 text: qsTr("Filter lines")
                 onClicked: {
                     var dialog = pageStack.push("LineFilterPage.qml", {
@@ -104,7 +117,7 @@ Page {
             view.model.clear();
             page.loading = true;
             page.title = "";
-            busy.text = qsTr("Loading")
+            busy.text = qsTr("Loading");
         } else if (page.status === PageStatus.Active) {
             page.populate();
         }

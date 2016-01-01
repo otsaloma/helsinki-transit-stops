@@ -64,16 +64,22 @@
     <name>FavoritePage</name>
     <message>
         <location filename="qml/FavoritePage.qml" line="45"/>
-        <source>Filter lines</source>
-        <translation>Valitse linjat</translation>
+        <source>Reload</source>
+        <translation>Lataa uudelleen</translation>
     </message>
     <message>
-        <location filename="qml/FavoritePage.qml" line="89"/>
+        <location filename="qml/FavoritePage.qml" line="51"/>
+        <location filename="qml/FavoritePage.qml" line="102"/>
         <source>Loading</source>
         <translation>Ladataan</translation>
     </message>
     <message>
-        <location filename="qml/FavoritePage.qml" line="119"/>
+        <location filename="qml/FavoritePage.qml" line="58"/>
+        <source>Filter lines</source>
+        <translation>Valitse linjat</translation>
+    </message>
+    <message>
+        <location filename="qml/FavoritePage.qml" line="132"/>
         <source>No departures found</source>
         <translation>Ei löytynyt lähtöjä</translation>
     </message>
@@ -251,16 +257,22 @@
     </message>
     <message>
         <location filename="qml/StopPage.qml" line="67"/>
-        <source>Filter lines</source>
-        <translation>Valitse linjat</translation>
+        <source>Reload</source>
+        <translation>Lataa uudelleen</translation>
     </message>
     <message>
-        <location filename="qml/StopPage.qml" line="107"/>
+        <location filename="qml/StopPage.qml" line="73"/>
+        <location filename="qml/StopPage.qml" line="120"/>
         <source>Loading</source>
         <translation>Ladataan</translation>
     </message>
     <message>
-        <location filename="qml/StopPage.qml" line="136"/>
+        <location filename="qml/StopPage.qml" line="80"/>
+        <source>Filter lines</source>
+        <translation>Valitse linjat</translation>
+    </message>
+    <message>
+        <location filename="qml/StopPage.qml" line="149"/>
         <source>No departures found</source>
         <translation>Ei löytynyt lähtöjä</translation>
     </message>
