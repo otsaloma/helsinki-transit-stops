@@ -77,9 +77,7 @@ CoverBackground {
         model: ListModel {}
     }
     Timer {
-        // Assuming we have only schedule data, i.e. not real-time,
-        // it is sufficient to download data only once, then update
-        // time remaining and colors periodically.
+        // Update times remaining periodically.
         interval: 30000
         repeat: true
         running: app.running

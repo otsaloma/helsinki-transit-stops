@@ -42,19 +42,6 @@ Page {
         PullDownMenu {
             visible: !page.loading || false
             MenuItem {
-                text: qsTr("Reload")
-                onClicked: {
-                    view.model.clear();
-                    page.loading = true;
-                    page.populated = false;
-                    page.title = "";
-                    busy.text = qsTr("Loading");
-                    page.populate();
-                    view.forceLayout();
-                    page.update();
-                }
-            }
-            MenuItem {
                 text: qsTr("Filter lines")
                 onClicked: {
                     var getCodes = "hts.app.favorites.get_stop_codes";
@@ -83,14 +70,22 @@ Page {
         running: page.loading
     }
     Timer {
-        // Assuming we have only schedule data, i.e. not real-time,
-        // it is sufficient to download data only once, then update
-        // time remaining and colors periodically.
+        // Update times remaining and colors periodically.
         interval: 30000
         repeat: true
         running: app.running && page.populated
         triggeredOnStart: true
         onTriggered: page.update();
+    }
+    Timer {
+        // Load more departures from the API periodically.
+        // TODO: If the API at some point provides real-time data,
+        // we need to drop this interval to around 1-3 minutes.
+        interval: 600000
+        repeat: true
+        running: app.running && page.populated
+        triggeredOnStart: false
+        onTriggered: page.populate(true);
     }
     onStatusChanged: {
         if (page.populated) {
@@ -108,17 +103,21 @@ Page {
         // Return list view model with current departures.
         return view.model;
     }
-    function populate() {
+    function populate(silent) {
         // Load departures from the Python backend.
-        view.model.clear();
-        page.lineWidth = 0;
-        page.timeWidth = 0;
+        silent = silent || false;
+        silent || view.model.clear();
         var key = page.props.key;
         py.call("hts.app.favorites.find_departures", [key], function(results) {
             if (results && results.error && results.message) {
-                page.title = "";
-                busy.error = qsTr(results.message);
+                if (!silent) {
+                    page.title = "";
+                    busy.error = qsTr(results.message);
+                }
             } else if (results && results.length > 0) {
+                view.model.clear();
+                page.lineWidth = 0;
+                page.timeWidth = 0;
                 page.results = results;
                 page.title = page.props.name;
                 var skip = py.call_sync("hts.app.favorites.get_skip_lines", [key]);
@@ -128,11 +127,15 @@ Page {
                     view.model.append(results[i]);
                 }
             } else {
-                page.title = "";
-                busy.error = qsTr("No departures found");
+                if (!silent) {
+                    page.title = "";
+                    busy.error = qsTr("No departures found");
+                }
             }
             page.loading = false;
             page.populated = true;
+            view.forceLayout();
+            page.update();
         });
         app.cover.update();
     }

@@ -63,11 +63,6 @@
 <context>
     <name>FavoritePage</name>
     <message>
-        <location filename="qml/FavoritePage.qml" line="45"/>
-        <source>Reload</source>
-        <translation>Lataa uudelleen</translation>
-    </message>
-    <message>
         <location filename="qml/FavoritePage.qml" line="51"/>
         <location filename="qml/FavoritePage.qml" line="102"/>
         <source>Loading</source>
@@ -254,11 +249,6 @@
         <location filename="qml/StopPage.qml" line="46"/>
         <source>Add to favorites</source>
         <translation>Lisää suosikkeihin</translation>
-    </message>
-    <message>
-        <location filename="qml/StopPage.qml" line="67"/>
-        <source>Reload</source>
-        <translation>Lataa uudelleen</translation>
     </message>
     <message>
         <location filename="qml/StopPage.qml" line="73"/>
