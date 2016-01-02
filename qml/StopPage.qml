@@ -25,6 +25,7 @@ Page {
     id: page
     allowedOrientations: app.defaultAllowedOrientations
     property bool canCover: true
+    property var downloadTime: -1
     property bool loading: false
     property bool populated: false
     property var props: {}
@@ -88,22 +89,11 @@ Page {
         running: page.loading
     }
     Timer {
-        // Update times remaining and colors periodically.
         interval: 30000
         repeat: true
         running: app.running && page.populated
         triggeredOnStart: true
         onTriggered: page.update();
-    }
-    Timer {
-        // Load more departures from the API periodically.
-        // TODO: If the API at some point provides real-time data,
-        // we need to drop this interval to around 1-3 minutes.
-        interval: 600000
-        repeat: true
-        running: app.running && page.populated
-        triggeredOnStart: false
-        onTriggered: page.populate(true);
     }
     onStatusChanged: {
         if (page.populated) {
@@ -149,6 +139,7 @@ Page {
                     busy.error = qsTr("No departures found");
                 }
             }
+            page.downloadTime = Date.now();
             page.loading = false;
             page.populated = true;
             view.forceLayout();
@@ -157,9 +148,14 @@ Page {
         app.cover.update();
     }
     function update() {
-        page.updateTimes();
-        page.updateWidths();
-        app.cover.update();
+        if (Date.now() - page.downloadTime > 600000) {
+            // Load new departures from the API.
+            page.populate(true);
+        } else {
+            page.updateTimes();
+            page.updateWidths();
+            app.cover.update();
+        }
     }
     function updateTimes() {
         // Update colors and times remaining to departure.
