@@ -148,7 +148,7 @@ Page {
         app.cover.update();
     }
     function update() {
-        if (Date.now() - page.downloadTime > 600000) {
+        if (Date.now() - page.downloadTime > 300000) {
             // Load new departures from the API.
             page.populate(true);
         } else {
