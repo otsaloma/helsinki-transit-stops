@@ -94,10 +94,10 @@ Page {
         for (var i = 0; i < page.history.length; i++) {
             var item = page.history[i].toLowerCase();
             if (query.length > 0 && item.indexOf(query) === 0) {
-                found[n++] = page.history[i];
+                found.splice(n++, 0, page.history[i]);
                 if (found.length >= view.count) break;
             } else if (query.length === 0 || item.indexOf(query) > 0) {
-                found[found.length] = page.history[i];
+                found.push(page.history[i]);
                 if (found.length >= view.count) break;
             }
         }
