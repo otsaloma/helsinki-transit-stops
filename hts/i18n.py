@@ -19,9 +19,13 @@
 
 import gettext
 import hts
+import locale
 
 _translation = gettext.translation(
-    "hts", hts.LOCALE_DIR, fallback=True)
+    "hts",
+    localedir=hts.LOCALE_DIR,
+    languages=[locale.getdefaultlocale()[0] or ""],
+    fallback=True)
 
 
 def dgettext(domain, message):

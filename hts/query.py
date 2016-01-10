@@ -36,7 +36,7 @@ gt = hts.i18n.gettext
 
 def get_default_language():
     """Return the system default language code."""
-    language, encoding = locale.getdefaultlocale()
+    language = locale.getdefaultlocale()[0] or ""
     with hts.util.silent(Exception):
         for prefix in ("fi", "sv", "en"):
             if language.startswith(prefix):
