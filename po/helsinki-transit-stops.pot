@@ -1,0 +1,160 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-01-10 19:09+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: hts/query.py:68
+msgid "Connection timed out"
+msgstr ""
+
+#: qml/AboutPage.qml:32
+msgid "About Helsinki Transit Stops"
+msgstr ""
+
+#: qml/AboutPage.qml:36
+msgid "version %1"
+msgstr ""
+
+#: qml/AboutPage.qml:57
+msgid ""
+"Helsinki Transit Stops is free software released under the GNU General "
+"Public License (GPL), version 3 or later."
+msgstr ""
+
+#: qml/AddFavoritePage.qml:55
+msgid "Favorite"
+msgstr ""
+
+#: qml/AddFavoritePage.qml:57
+msgid "Create new"
+msgstr ""
+
+#: qml/AddFavoritePage.qml:58
+msgid "Add to existing"
+msgstr ""
+
+#: qml/AddFavoritePage.qml:74 qml/EditFavoritePage.qml:88
+msgid "Name"
+msgstr ""
+
+#: qml/EditFavoritePage.qml:67 qml/MenuPage.qml:55 qml/SearchPage.qml:47
+msgid "Remove"
+msgstr ""
+
+#: qml/EditFavoritePage.qml:93
+msgid "Stops"
+msgstr ""
+
+#: qml/FavoritePage.qml:46 qml/StopPage.qml:68
+msgid "Filter lines"
+msgstr ""
+
+#: qml/FavoritePage.qml:87 qml/LineFilterPage.qml:84 qml/StopPage.qml:105
+msgid "Loading"
+msgstr ""
+
+#: qml/FavoritePage.qml:122 qml/StopPage.qml:139
+msgid "No departures found"
+msgstr ""
+
+#: qml/LineFilterPage.qml:62
+msgid "Mark all"
+msgstr ""
+
+#: qml/LineFilterPage.qml:69
+msgid "Unmark all"
+msgstr ""
+
+#: qml/LineFilterPage.qml:107
+msgid "No lines found"
+msgstr ""
+
+#: qml/MenuPage.qml:35
+msgid "Edit"
+msgstr ""
+
+#: qml/MenuPage.qml:57
+msgid "Removing"
+msgstr ""
+
+#: qml/MenuPage.qml:78
+msgid "About"
+msgstr ""
+
+#: qml/MenuPage.qml:82 qml/PreferencesPage.qml:32
+msgid "Preferences"
+msgstr ""
+
+#: qml/MenuPage.qml:86 qml/SearchPage.qml:65
+msgid "Search"
+msgstr ""
+
+#: qml/MenuPage.qml:94
+msgid "Nearby"
+msgstr ""
+
+#: qml/MenuPage.qml:101
+msgid ""
+"Once added, favorites appear here. Pull down to search for nearby stops or "
+"stops by name or number."
+msgstr ""
+
+#: qml/NearbyPage.qml:51 qml/SearchResultsPage.qml:51
+msgid "Searching"
+msgstr ""
+
+#: qml/NearbyPage.qml:67 qml/SearchResultsPage.qml:68
+msgid "%1 Stops"
+msgstr ""
+
+#: qml/NearbyPage.qml:72 qml/SearchResultsPage.qml:73
+msgid "No stops found"
+msgstr ""
+
+#: qml/PreferencesPage.qml:33
+msgid "Favorites"
+msgstr ""
+
+#: qml/PreferencesPage.qml:38
+msgid "Highlight nearby favorites"
+msgstr ""
+
+#: qml/PreferencesPage.qml:51
+msgid "Highlight radius"
+msgstr ""
+
+#: qml/PreferencesPage.qml:71
+msgid "Departures"
+msgstr ""
+
+#: qml/PreferencesPage.qml:75
+msgid ""
+"Show minutes remaining to departure instead of departure time when departure "
+"is sooner than cutoff."
+msgstr ""
+
+#: qml/PreferencesPage.qml:82
+msgid "Departure time cutoff"
+msgstr ""
+
+#: qml/SearchPage.qml:69
+msgid "Stop name or number"
+msgstr ""
+
+#: qml/StopPage.qml:47
+msgid "Add to favorites"
+msgstr ""

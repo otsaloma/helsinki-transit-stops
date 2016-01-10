@@ -29,13 +29,13 @@ Page {
         Column {
             id: column
             anchors.fill: parent
-            PageHeader { title: qsTr("Preferences") }
-            SectionHeader { text: qsTr("Favorites") }
+            PageHeader { title: qsTranslate("", "Preferences") }
+            SectionHeader { text: qsTranslate("", "Favorites") }
             TextSwitch {
                 id: highlightSwitch
                 anchors.left: parent.left
                 anchors.right: parent.right
-                text: qsTr("Highlight nearby favorites")
+                text: qsTranslate("", "Highlight nearby favorites")
                 property bool ready: false
                 Component.onCompleted: {
                     var radius = app.conf.get("favorite_highlight_radius") / 1000;
@@ -48,7 +48,7 @@ Page {
                 id: highlightSlider
                 anchors.left: parent.left
                 anchors.right: parent.right
-                label: qsTr("Highlight radius")
+                label: qsTranslate("", "Highlight radius")
                 maximumValue: 5
                 minimumValue: 0
                 stepSize: 0.1
@@ -68,18 +68,18 @@ Page {
                     app.conf.set("favorite_highlight_radius", radius * 1000);
                 }
             }
-            SectionHeader { text: qsTr("Departures") }
+            SectionHeader { text: qsTranslate("", "Departures") }
             ListItemLabel {
                 color: Theme.secondaryColor
                 font.pixelSize: Theme.fontSizeSmall
-                text: qsTr("Show minutes remaining to departure instead of departure time when departure is sooner than cutoff.")
+                text: qsTranslate("", "Show minutes remaining to departure instead of departure time when departure is sooner than cutoff.")
                 wrapMode: Text.WordWrap
             }
             Slider {
                 id: timeSlider
                 anchors.left: parent.left
                 anchors.right: parent.right
-                label: qsTr("Departure time cutoff")
+                label: qsTranslate("", "Departure time cutoff")
                 maximumValue: 60
                 minimumValue: 0
                 stepSize: 1

@@ -48,7 +48,7 @@ Page {
             view.model.clear();
             page.loading = true;
             page.title = "";
-            busy.text = qsTr("Searching")
+            busy.text = qsTranslate("", "Searching")
         } else if (page.status === PageStatus.Active) {
             page.populate(app.searchQuery);
         }
@@ -62,15 +62,15 @@ Page {
         py.call("hts.query.find_stops", [query, x, y], function(results) {
             if (results && results.error && results.message) {
                 page.title = "";
-                busy.error = qsTr(results.message);
+                busy.error = results.message;
             } else if (results && results.length > 0) {
                 page.results = results;
-                page.title = qsTr("%n Stops", "", results.length);
+                page.title = qsTranslate("", "%1 Stops").arg(results.length);
                 for (var i = 0; i < results.length; i++)
                     view.model.append(results[i]);
             } else {
                 page.title = "";
-                busy.error = qsTr("No stops found");
+                busy.error = qsTranslate("", "No stops found");
             }
             page.loading = false;
             page.populatedQuery = query;

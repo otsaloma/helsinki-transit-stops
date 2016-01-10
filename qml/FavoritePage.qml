@@ -43,7 +43,7 @@ Page {
         PullDownMenu {
             visible: !page.loading || false
             MenuItem {
-                text: qsTr("Filter lines")
+                text: qsTranslate("", "Filter lines")
                 onClicked: {
                     var getCodes = "hts.app.favorites.get_stop_codes";
                     var getSkip = "hts.app.favorites.get_skip_lines";
@@ -84,7 +84,7 @@ Page {
             view.model.clear();
             page.loading = true;
             page.title = "";
-            busy.text = qsTr("Loading");
+            busy.text = qsTranslate("", "Loading");
         } else if (page.status === PageStatus.Active) {
             page.populate();
         }
@@ -102,7 +102,7 @@ Page {
             if (results && results.error && results.message) {
                 if (!silent) {
                     page.title = "";
-                    busy.error = qsTr(results.message);
+                    busy.error = results.message;
                 }
             } else if (results && results.length > 0) {
                 view.model.clear();
@@ -119,7 +119,7 @@ Page {
             } else {
                 if (!silent) {
                     page.title = "";
-                    busy.error = qsTr("No departures found");
+                    busy.error = qsTranslate("", "No departures found");
                 }
             }
             page.downloadTime = Date.now();

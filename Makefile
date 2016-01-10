@@ -2,9 +2,8 @@
 
 NAME       = harbour-helsinki-transit-stops
 VERSION    = 1.3
-LANGS      = $(basename $(notdir $(filter-out \
-    translations/helsinki-transit-stops.ts,\
-    $(wildcard translations/*.ts))))
+LANGS      = $(basename $(notdir $(wildcard po/*.po)))
+POT_FILE   = po/helsinki-transit-stops.pot
 
 DESTDIR    =
 PREFIX     = /usr
@@ -21,14 +20,23 @@ clean:
 	rm -rf dist
 	rm -rf .cache */.cache */*/.cache
 	rm -rf __pycache__ */__pycache__ */*/__pycache__
+	rm -f po/*.ts po/*~
 	rm -f rpm/*.rpm
-	rm -f translations/*.qm
 
 dist:
 	$(MAKE) clean
 	mkdir -p dist/$(NAME)-$(VERSION)
 	cp -r `cat MANIFEST` dist/$(NAME)-$(VERSION)
 	tar -C dist -cJf dist/$(NAME)-$(VERSION).tar.xz $(NAME)-$(VERSION)
+
+define install-translations =
+# GNU gettext translations for Python use.
+mkdir -p $(DATADIR)/locale/$(1)/LC_MESSAGES
+msgfmt po/$(1).po -o $(DATADIR)/locale/$(1)/LC_MESSAGES/hts.mo
+# Qt linguist translations for QML use.
+mkdir -p $(DATADIR)/translations
+lconvert -o $(DATADIR)/translations/$(NAME)-$(1).qm po/$(1).po
+endef
 
 install:
 	@echo "Installing Python files..."
@@ -40,9 +48,7 @@ install:
 	cp qml/[ABCDEFGHIJKLMNOPQRSTUVXYZ]*.qml $(DATADIR)/qml
 	cp qml/icons/*.png $(DATADIR)/qml/icons
 	@echo "Installing translations..."
-	mkdir -p $(DATADIR)/translations
-	$(foreach lang,$(LANGS),lrelease translations/$(lang).ts \
-	    -qm $(DATADIR)/translations/$(NAME)-$(lang).qm;)
+	$(foreach lang,$(LANGS),$(call install-translations,$(lang)))
 	@echo "Installing desktop file..."
 	mkdir -p $(DESKTOPDIR)
 	cp data/$(NAME).desktop $(DESKTOPDIR)
@@ -68,24 +74,22 @@ rpm:
 test:
 	py.test hts
 
-define merge-translations =
-lconvert \
-    --source-language en \
-    --target-language $(1) \
-    --no-obsolete \
-    -o translations/$(1).ts \
-    $(2) translations/$(1).ts
-endef
-
 translations:
-	lupdate qml/*.qml -ts qml.ts
-	pylupdate5 -verbose hts/*.py -ts py.ts
-	lupdate -pluralonly qml/*.qml -ts plural.ts
-	rm -f translations/helsinki-transit-stops.ts
-	lconvert -o translations/helsinki-transit-stops.ts qml.ts py.ts
-	$(call merge-translations,en,plural.ts)
-	$(foreach lang,$(filter-out en,$(LANGS)),$(call \
-	    merge-translations,$(lang),translations/helsinki-transit-stops.ts))
-	rm -f qml.ts py.ts plural.ts
+	truncate -s0 $(POT_FILE)
+	xgettext \
+	 --output=$(POT_FILE) \
+	 --language=Python \
+	 --from-code=UTF-8 \
+	 --join-existing \
+	 --keyword=gt \
+	 hts/*.py
+	xgettext \
+	 --output=$(POT_FILE) \
+	 --language=JavaScript \
+	 --from-code=UTF-8 \
+	 --join-existing \
+	 --keyword=qsTr \
+	 qml/*.qml
+	cd po && for X in *.po; do msgmerge -UN $$X *.pot; done
 
 .PHONY: check clean dist install rpm test translations

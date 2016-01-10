@@ -32,6 +32,7 @@ except ImportError:
     sys.modules["pyotherside"] = pyotherside()
 
 from hts.paths import *
+from hts import i18n
 from hts import util
 from hts import http
 from hts import query

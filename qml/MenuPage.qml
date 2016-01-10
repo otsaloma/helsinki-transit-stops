@@ -32,7 +32,7 @@ Page {
             menu: ContextMenu {
                 id: contextMenu
                 MenuItem {
-                    text: qsTr("Edit")
+                    text: qsTranslate("", "Edit")
                     onClicked: {
                         var dialog = pageStack.push("EditFavoritePage.qml", {
                             "key": model.key, "name": model.name});
@@ -52,9 +52,9 @@ Page {
                     }
                 }
                 MenuItem {
-                    text: qsTr("Remove")
+                    text: qsTranslate("", "Remove")
                     onClicked: {
-                        remorseAction(qsTr("Removing"), function() {
+                        remorseAction(qsTranslate("", "Removing"), function() {
                             py.call_sync("hts.app.favorites.remove", [model.key]);
                             view.model.remove(index);
                         });
@@ -75,15 +75,15 @@ Page {
         model: ListModel {}
         PullDownMenu {
             MenuItem {
-                text: qsTr("About")
+                text: qsTranslate("", "About")
                 onClicked: app.pageStack.push("AboutPage.qml");
             }
             MenuItem {
-                text: qsTr("Preferences")
+                text: qsTranslate("", "Preferences")
                 onClicked: app.pageStack.push("PreferencesPage.qml");
             }
             MenuItem {
-                text: qsTr("Search")
+                text: qsTranslate("", "Search")
                 onClicked: {
                     app.pageStack.push("SearchPage.qml");
                     app.pageStack.pushAttached("SearchResultsPage.qml");
@@ -91,14 +91,14 @@ Page {
             }
             MenuItem {
                 enabled: gps.ready
-                text: qsTr("Nearby")
+                text: qsTranslate("", "Nearby")
                 onClicked: app.pageStack.push("NearbyPage.qml");
             }
         }
         ViewPlaceholder {
             id: viewPlaceholder
             enabled: false
-            text: qsTr("Once added, favorites appear here. Pull down to search for nearby stops or stops by name or number.")
+            text: qsTranslate("", "Once added, favorites appear here. Pull down to search for nearby stops or stops by name or number.")
         }
         VerticalScrollDecorator {}
     }

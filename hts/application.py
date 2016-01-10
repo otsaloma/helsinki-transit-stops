@@ -19,7 +19,9 @@
 
 __all__ = ("Application",)
 
+import gettext
 import hts
+import locale
 
 
 class Application:
@@ -30,6 +32,20 @@ class Application:
         """Initialize an :class:`Application` instance."""
         self.favorites = hts.Favorites()
         self.history = hts.HistoryManager()
+        self._init_gettext()
+
+    def _init_gettext(self):
+        """Initialize translation settings."""
+        with hts.util.silent(Exception):
+            # Might fail with misconfigured locales.
+            locale.setlocale(locale.LC_ALL, "")
+        d = hts.LOCALE_DIR
+        with hts.util.silent(Exception):
+            # Not available on all platforms.
+            locale.bindtextdomain("hts", d)
+            locale.textdomain("hts")
+        gettext.bindtextdomain("hts", d)
+        gettext.textdomain("hts")
 
     def quit(self):
         """Quit the application."""

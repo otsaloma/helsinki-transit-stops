@@ -59,14 +59,14 @@ Dialog {
         PullDownMenu {
             visible: !page.loading && view.model.count > 0
             MenuItem {
-                text: qsTr("Mark all")
+                text: qsTranslate("", "Mark all")
                 onClicked: {
                     for (var i = 0; i < view.model.count; i++)
                         view.model.setProperty(i, "checked", true);
                 }
             }
             MenuItem {
-                text: qsTr("Unmark all")
+                text: qsTranslate("", "Unmark all")
                 onClicked: {
                     for (var i = 0; i < view.model.count; i++)
                         view.model.setProperty(i, "checked", false);
@@ -81,7 +81,7 @@ Dialog {
     }
     Component.onCompleted: {
         page.loading = true;
-        busy.text = qsTr("Loading")
+        busy.text = qsTranslate("", "Loading")
         page.populate();
     }
     onAccepted: {
@@ -97,14 +97,14 @@ Dialog {
         view.model.clear();
         py.call("hts.query.find_lines", [page.codes], function(results) {
             if (results && results.error && results.message) {
-                busy.error = qsTr(results.message);
+                busy.error = results.message;
             } else if (results && results.length > 0) {
                 for (var i = 0; i < results.length; i++) {
                     results[i].checked = page.skip.indexOf(results[i].line) < 0;
                     view.model.append(results[i]);
                 }
             } else {
-                busy.error = qsTr("No lines found");
+                busy.error = qsTranslate("", "No lines found");
             }
             page.loading = false;
         });

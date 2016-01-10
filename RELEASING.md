@@ -2,12 +2,7 @@ Releasing a New Version
 =======================
 
 * Update translations
-    - `make translations`
-    - `virtaal translations/en.ts`
-    - `virtaal translations/fi.ts`
-    - XXX: lconvert fucks shit up, check manually:
-    - `make translations`
-    - `meld translations/helsinki-transit-stops.ts translations/fi.ts`
+    - `XXX`
 * Do final quality checks
     - `make check`
     - `make test`

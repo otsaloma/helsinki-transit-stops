@@ -64,7 +64,7 @@ Dialog {
             ContextMenu {
                 id: contextMenu
                 MenuItem {
-                    text: qsTr("Remove")
+                    text: qsTranslate("", "Remove")
                     onClicked: {
                         // Mark stop to be removed once dialog is accepted.
                         page.removals.push(model.code);
@@ -85,12 +85,12 @@ Dialog {
                 anchors.leftMargin: Theme.paddingLarge
                 anchors.right: parent.right
                 anchors.rightMargin: Theme.paddingLarge
-                label: qsTr("Name")
+                label: qsTranslate("", "Name")
                 text: page.name
                 EnterKey.enabled: text.length > 0
                 EnterKey.onClicked: nameField.focus = false;
             }
-            SectionHeader { text: qsTr("Stops") }
+            SectionHeader { text: qsTranslate("", "Stops") }
             Component.onCompleted: page.nameField = nameField;
         }
         model: ListModel {}

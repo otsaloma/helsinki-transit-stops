@@ -52,10 +52,10 @@ Dialog {
                 anchors.right: parent.right
                 anchors.rightMargin: Theme.paddingLarge
                 currentIndex: 0
-                label: qsTr("Favorite")
+                label: qsTranslate("", "Favorite")
                 menu: ContextMenu {
-                    MenuItem { text: qsTr("Create new") }
-                    MenuItem { text: qsTr("Add to existing") }
+                    MenuItem { text: qsTranslate("", "Create new") }
+                    MenuItem { text: qsTranslate("", "Add to existing") }
                 }
                 onCurrentIndexChanged: {
                     // Show either nameField or view.
@@ -71,7 +71,7 @@ Dialog {
                 anchors.right: parent.right
                 anchors.rightMargin: Theme.paddingLarge
                 height: visible ? implicitHeight : 0
-                label: qsTr("Name")
+                label: qsTranslate("", "Name")
                 text: page.name
                 EnterKey.enabled: text.length > 0
                 EnterKey.onClicked: page.accept();
