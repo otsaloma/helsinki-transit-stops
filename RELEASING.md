@@ -2,7 +2,11 @@ Releasing a New Version
 =======================
 
 * Update translations
-    - `XXX`
+    - `tx pull`
+    - `make translate`
+    - `virtaal po/fi.po`
+    - `tx push -stf`
+    - `git commit -a -m "Update translations for X.Y.Z."`
 * Do final quality checks
     - `make check`
     - `make test`

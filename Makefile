@@ -88,7 +88,7 @@ translations:
 	 --language=JavaScript \
 	 --from-code=UTF-8 \
 	 --join-existing \
-	 --keyword=qsTr \
+	 --keyword=qsTranslate:2 \
 	 qml/*.qml
 	cd po && for X in *.po; do msgmerge -UN $$X *.pot; done
 
