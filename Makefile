@@ -81,7 +81,7 @@ translations:
 	 --language=Python \
 	 --from-code=UTF-8 \
 	 --join-existing \
-	 --keyword=gt \
+	 --keyword=_ \
 	 hts/*.py
 	xgettext \
 	 --output=$(POT_FILE) \

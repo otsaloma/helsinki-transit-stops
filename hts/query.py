@@ -31,7 +31,8 @@ import re
 import socket
 import traceback
 import urllib.parse
-gt = hts.i18n.gettext
+
+from hts.i18n import _
 
 
 def get_default_language():
@@ -65,7 +66,7 @@ def api_query(fallback):
                 # a traceback and return blank of correct type.
                 return function(*args, **kwargs)
             except socket.timeout:
-                return dict(error=True, message=gt("Connection timed out"))
+                return dict(error=True, message=_("Connection timed out"))
             except Exception:
                 traceback.print_exc()
                 return copy.deepcopy(fallback)

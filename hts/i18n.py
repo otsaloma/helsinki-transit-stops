@@ -28,14 +28,14 @@ _translation = gettext.translation(
     fallback=True)
 
 
-def dgettext(domain, message):
-    """Return the localized translation of `message` from `domain`."""
-    return gettext.dgettext(domain, message)
-
-def gettext(message):
+def _(message):
     """Return the localized translation of `message`."""
     return _translation.gettext(message)
 
-def ngettext(singular, plural, n):
+def d_(domain, message):
+    """Return the localized translation of `message` from `domain`."""
+    return gettext.dgettext(domain, message)
+
+def n_(singular, plural, n):
     """Return the localized translation of `singular` or `plural`."""
     return _translation.ngettext(singular, plural, n)
