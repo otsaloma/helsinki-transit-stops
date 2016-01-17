@@ -6,7 +6,7 @@ Releasing a New Version
     - `make translate`
     - `virtaal po/fi.po`
     - `tx push -stf`
-    - `git commit -a -m "Update translations for X.Y.Z."`
+    - `git commit -a -m "Update translations for X.Y.Z"`
 * Do final quality checks
     - `make check`
     - `make test`
