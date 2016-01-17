@@ -1,3 +1,12 @@
+Helsinki Transit Stops 1.4
+==========================
+
+* Add preferences dialog with time display and highlight radius options
+* Silently load more departures from the API every five minutes
+* Redesign favorite listing, move Search and Nearby to the pulldown menu
+* Fix search history filtering
+* Use gettext and Transifex for translations
+
 Helsinki Transit Stops 1.3
 ==========================
 
