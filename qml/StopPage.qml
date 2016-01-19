@@ -130,7 +130,7 @@ Page {
                 page.title = page.props.name;
                 for (var i = 0; i < results.length; i++) {
                     results[i].color = "#aaaaaa";
-                    results[i].visible = true;
+                    results[i].visible = page.skip.indexOf(results[i].line) < 0;
                     view.model.append(results[i]);
                 }
             } else {
