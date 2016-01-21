@@ -1,3 +1,8 @@
+Helsinki Transit Stops 1.4.1
+============================
+
+* Fix line filtering for new departures loaded in the background
+
 Helsinki Transit Stops 1.4
 ==========================
 
