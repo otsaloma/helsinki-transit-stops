@@ -23,7 +23,7 @@ class TestModule(hts.test.TestCase):
     def test_find_departures(self):
         # Departures might be empty at night time,
         # in which case query should return a blank list.
-        departures = hts.query.find_departures("1020444")
+        departures = hts.query.find_departures("1301103")
         assert isinstance(departures, list)
         for departure in departures:
             assert departure["destination"]
