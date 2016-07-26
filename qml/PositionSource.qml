@@ -27,6 +27,7 @@ PositionSource {
     onPositionChanged: {
         // Nearby stops are looked for with a 1000 meter radius.
         gps.ready = (gps.position.coordinate.longitude &&
+                     gps.position.coordinate.latitude &&
                      gps.position.horizontalAccuracy > 0 &&
                      gps.position.horizontalAccuracy < 1000) || false;
 
