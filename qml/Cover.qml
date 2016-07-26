@@ -28,6 +28,7 @@ CoverBackground {
         anchors.centerIn: parent
         height: width/sourceSize.width * sourceSize.height
         opacity: 0.1
+        smooth: true
         source: "icons/cover.png"
         width: 1.5 * parent.width
     }
@@ -52,27 +53,29 @@ CoverBackground {
             Label {
                 id: lineLabel
                 anchors.left: parent.left
+                anchors.right: parent.horizontalCenter
+                anchors.rightMargin: Theme.paddingLarge/2
                 font.pixelSize: Theme.fontSizeLarge
                 height: implicitHeight + 2*Theme.paddingSmall
                 horizontalAlignment: Text.AlignRight
                 text: model.line
                 truncationMode: TruncationMode.Fade
                 verticalAlignment: Text.AlignVCenter
-                width: parent.width/2 - Theme.paddingLarge/2
             }
             Label {
+                id: timeLabel
                 anchors.baseline: lineLabel.baseline
+                anchors.left: parent.horizontalCenter
+                anchors.leftMargin: Theme.paddingLarge/2
                 anchors.right: parent.right
+                font.pixelSize: Theme.fontSizeMedium
                 height: implicitHeight + 2*Theme.paddingSmall
                 horizontalAlignment: Text.AlignLeft
                 text: model.time
                 truncationMode: TruncationMode.Fade
                 verticalAlignment: Text.AlignVCenter
-                width: parent.width/2 - Theme.paddingLarge/2
             }
-            Component.onCompleted: {
-                view.height = view.model.count * listItem.height;
-            }
+            Component.onCompleted: view.height = view.model.count * listItem.height;
         }
         model: ListModel {}
     }
@@ -86,7 +89,6 @@ CoverBackground {
     }
     Component.onCompleted: {
         // Pre-fill list view model with blank entries.
-        // XXX: Item count should depend on screen size.
         for (var i = 0; i < 5; i++)
             view.model.append({"line": "", "time": ""});
         app.pageStack.onCurrentPageChanged.connect(cover.update);
@@ -100,16 +102,11 @@ CoverBackground {
     }
     function copyFrom(model) {
         // Copy departure items from given model.
-        var row = 0;
-        for (var i = 0; i < model.count && row < view.model.count; i++) {
+        for (var i = 0, j = 0; i < model.count && j < view.model.count; i++) {
             if (!model.get(i).visible) continue;
-            view.model.setProperty(row, "line", model.get(i).line);
-            view.model.setProperty(row, "time", model.get(i).time);
-            row++;
-        }
-        for (var i = row; i < view.model.count; i++) {
-            view.model.setProperty(i, "line", "");
-            view.model.setProperty(i, "time", "");
+            view.model.setProperty(j, "line", model.get(i).line);
+            view.model.setProperty(j, "time", model.get(i).time);
+            j++;
         }
     }
     function update() {
@@ -126,6 +123,7 @@ CoverBackground {
             }
             if (model && countVisible > 0) {
                 // Show the first few departures.
+                cover.clear();
                 cover.copyFrom(model);
                 image.opacity = 0.05;
                 title.visible = false;
