@@ -114,7 +114,7 @@ class Favorites:
     def _read(self):
         """Read list of favorites from file."""
         if os.path.isfile(self._path):
-            with hts.util.silent(Exception):
+            with hts.util.silent(Exception, tb=True):
                 self._favorites = hts.util.read_json(self._path)
         for favorite in self._favorites:
             # Stop grouping added in version 0.2.
@@ -193,5 +193,5 @@ class Favorites:
 
     def write(self):
         """Write list of favorites to file."""
-        with hts.util.silent(Exception):
+        with hts.util.silent(Exception, tb=True):
             hts.util.write_json(self._favorites, self._path)

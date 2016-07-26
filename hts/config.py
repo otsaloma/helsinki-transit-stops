@@ -61,10 +61,10 @@ class ConfigurationStore(AttrDict):
             path = os.path.join(hts.CONFIG_HOME_DIR, "helsinki-transit-stops.json")
         if not os.path.isfile(path): return
         values = {}
-        with hts.util.silent(Exception):
+        with hts.util.silent(Exception, tb=True):
             values = hts.util.read_json(path)
         for option, value in values.items():
-            with hts.util.silent(Exception):
+            with hts.util.silent(Exception, tb=True):
                 self.set(option, value)
 
     def set(self, option, value):
@@ -79,5 +79,5 @@ class ConfigurationStore(AttrDict):
             path = os.path.join(hts.CONFIG_HOME_DIR, "helsinki-transit-stops.json")
         out = dict((x, self.get(x)) for x in DEFAULTS)
         out["version"] = hts.__version__
-        with hts.util.silent(Exception):
+        with hts.util.silent(Exception, tb=True):
             hts.util.write_json(out, path)

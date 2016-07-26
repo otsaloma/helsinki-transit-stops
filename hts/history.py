@@ -49,7 +49,7 @@ class HistoryManager:
     def _read(self):
         """Read list of names from file."""
         if os.path.isfile(self._path):
-            with hts.util.silent(Exception):
+            with hts.util.silent(Exception, tb=True):
                 self._names = hts.util.read_json(self._path)
 
     def remove(self, name):
@@ -62,5 +62,5 @@ class HistoryManager:
     def write(self):
         """Write list of names to file."""
         names = self._names[:self._max_size]
-        with hts.util.silent(Exception):
+        with hts.util.silent(Exception, tb=True):
             hts.util.write_json(names, self._path)

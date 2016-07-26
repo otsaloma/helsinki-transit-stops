@@ -28,6 +28,7 @@ import shutil
 import stat
 import sys
 import time
+import traceback
 
 
 @contextlib.contextmanager
@@ -106,7 +107,6 @@ def format_departure_time(departure):
 
 def format_distance(meters, n=2):
     """Format `meters` to `n` significant digits and unit label."""
-    # XXX: We might need to support for non-SI units here.
     if meters > 1000:
         distance = meters/1000
         units = "km"
@@ -159,12 +159,12 @@ def read_json(path):
         raise # Exception
 
 @contextlib.contextmanager
-def silent(*exceptions):
+def silent(*exceptions, tb=False):
     """Try to execute body, ignoring `exceptions`."""
     try:
         yield
     except exceptions:
-        pass
+        if tb: traceback.print_exc()
 
 def types_to_color(*types):
     """Return color based on vehicle `types`."""
