@@ -47,7 +47,9 @@ Page {
                     text: qsTranslate("", "Remove")
                     onClicked: {
                         py.call_sync("hts.app.history.remove", [model.name]);
-                        view.model.remove(index);
+                        var index = page.history.indexOf(model.name);
+                        index > -1 && page.history.splice(index, 1);
+                        view.model.setProperty(model.index, "visible", false);
                     }
                 }
             }
