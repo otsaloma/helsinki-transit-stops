@@ -193,7 +193,7 @@ def find_stops(name, x, y):
         result["color"] = hts.util.types_to_color(result["type"])
         result["dist"] = hts.util.format_distance(
             hts.util.calculate_distance(x, y, result["x"], result["y"]))
-    return results
+    return sort_stops(results)
 
 def guess_type(codes):
     """Guess stop type from line `codes`."""
@@ -266,6 +266,17 @@ def parse_unix_time(departure):
     if departure < now.timestamp() - 3600:
         departure = departure + 86400
     return departure
+
+def sort_stops(stops):
+    """Sort stops of same name by short code."""
+    for i, stop in enumerate(stops):
+        stop["sort_key"] = [i, stop["short_code"]]
+        if i > 0 and stop["name"] == stops[i-1]["name"]:
+            stop["sort_key"][0] = stops[i-1]["sort_key"][0]
+    stops.sort(key=lambda x: x["sort_key"])
+    for stop in stops:
+        del stop["sort_key"]
+    return stops
 
 def unique_lines(lines):
     """Return `lines` with duplicates discarded."""
