@@ -139,7 +139,7 @@ def find_nearby_stops(x, y):
     if not output: return []
     results = [dict(
         name=parse_name(result.get("shortName", result["name"])),
-        address=result["details"]["address"],
+        address=result["details"].get("address", "???"),
         x=float(result["coords"].split(",")[0]),
         y=float(result["coords"].split(",")[1]),
         code=result["details"]["code"],
@@ -174,7 +174,7 @@ def find_stops(name, x, y):
     if not output: return []
     results = [dict(
         name=parse_name(result.get("shortName", result["name"])),
-        address=result["details"]["address"],
+        address=result["details"].get("address", "???"),
         x=float(result["coords"].split(",")[0]),
         y=float(result["coords"].split(",")[1]),
         code=result["details"]["code"],
