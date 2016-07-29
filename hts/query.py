@@ -138,7 +138,7 @@ def find_nearby_stops(x, y):
     output = hts.http.request_json(url)
     if not output: return []
     results = [dict(
-        name=parse_name(result.get("shortName", result["name"])),
+        name=parse_name(result["details"].get("short_name", result["name"])),
         address=result["details"].get("address", "???"),
         x=float(result["coords"].split(",")[0]),
         y=float(result["coords"].split(",")[1]),
@@ -153,8 +153,6 @@ def find_nearby_stops(x, y):
               result["details"]["lines"])]),
     ) for result in output]
     for result in results:
-        # Strip trailing municipality from stop name.
-        result["name"] = re.sub(r",[^,]*$", "", result["name"])
         result["type"] = guess_type(
             [line.pop("code") for line in result["lines"]])
         result["color"] = hts.util.types_to_color(result["type"])
@@ -173,7 +171,7 @@ def find_stops(name, x, y):
     output = hts.http.request_json(url)
     if not output: return []
     results = [dict(
-        name=parse_name(result.get("shortName", result["name"])),
+        name=parse_name(result["details"].get("short_name", result["name"])),
         address=result["details"].get("address", "???"),
         x=float(result["coords"].split(",")[0]),
         y=float(result["coords"].split(",")[1]),
@@ -245,7 +243,12 @@ def parse_line(code):
 def parse_name(name):
     """Parse human readable stop name."""
     # Fix inconsistent naming of stops at metro stations.
-    return re.sub(r"(\S)\(", r"\1 (", name)
+    name = re.sub(r"(\S)\(", r"\1 (", name)
+    # Only a part of the API endpoints return short names for stops,
+    # we need to strip municipalities and (faux) platform numbers
+    # from the rest ourselves.
+    name = re.sub(r",.*$", "", name)
+    return name
 
 def parse_time(departure):
     """Parse human readable time from `departure`."""
