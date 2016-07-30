@@ -36,6 +36,7 @@ Page {
         delegate: FavoriteListItem {
             id: listItem
             contentHeight: view.cellHeight
+            enabled: !view.menuOpen
             width: view.cellWidth
             menu: ContextMenu {
                 id: contextMenu
@@ -68,6 +69,7 @@ Page {
                         });
                     }
                 }
+                onActiveChanged: view.menuOpen = contextMenu.active;
             }
             ListView.onRemove: animateRemoval(listItem);
             onClicked: app.pageStack.push("FavoritePage.qml", {"props": model});
@@ -81,6 +83,7 @@ Page {
             }
         }
         model: ListModel {}
+        property bool menuOpen: false
         PullDownMenu {
             MenuItem {
                 text: qsTranslate("", "About")
