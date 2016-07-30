@@ -24,11 +24,19 @@ import "."
 Page {
     id: page
     allowedOrientations: app.defaultAllowedOrientations
-    SilicaListView {
+    SilicaGridView {
         id: view
         anchors.fill: parent
+        cellHeight: Theme.itemSizeMedium
+        cellWidth: {
+            // Use a dynamic column count based on available screen width.
+            var width = page.isPortrait ? Screen.width : Screen.height;
+            return width / Math.floor(width / (Theme.pixelRatio*400));
+        }
         delegate: FavoriteListItem {
             id: listItem
+            contentHeight: view.cellHeight
+            width: view.cellWidth
             menu: ContextMenu {
                 id: contextMenu
                 MenuItem {

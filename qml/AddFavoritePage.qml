@@ -34,6 +34,7 @@ Dialog {
         // Prevent list items from stealing focus.
         currentIndex: -1
         delegate: FavoriteListItem {
+            contentHeight: Theme.itemSizeMedium
             onClicked: {
                 // Accept clicked existing favorite.
                 page.canAccept = true;
@@ -48,9 +49,9 @@ Dialog {
             ComboBox {
                 id: favoriteCombo
                 anchors.left: parent.left
-                anchors.leftMargin: Theme.paddingLarge + Theme.paddingSmall
+                anchors.leftMargin: Theme.paddingSmall + Theme.paddingLarge
                 anchors.right: parent.right
-                anchors.rightMargin: Theme.paddingLarge
+                anchors.rightMargin: Theme.horizontalPageMargin
                 currentIndex: 0
                 label: qsTranslate("", "Favorite")
                 menu: ContextMenu {
@@ -67,9 +68,9 @@ Dialog {
             TextField {
                 id: nameField
                 anchors.left: parent.left
-                anchors.leftMargin: Theme.paddingLarge + Theme.paddingSmall
+                anchors.leftMargin: Theme.paddingSmall + Theme.paddingLarge
                 anchors.right: parent.right
-                anchors.rightMargin: Theme.paddingLarge
+                anchors.rightMargin: Theme.horizontalPageMargin
                 height: visible ? implicitHeight : 0
                 label: qsTranslate("", "Name")
                 text: page.name

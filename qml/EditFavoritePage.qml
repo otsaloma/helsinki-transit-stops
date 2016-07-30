@@ -37,29 +37,31 @@ Dialog {
             id: listItem
             contentHeight: Theme.itemSizeSmall
             menu: contextMenu
-            ListItemLabel {
-                id: nameLabel
-                anchors.leftMargin: 2*Theme.paddingLarge + Theme.paddingSmall
-                color: listItem.highlighted ? Theme.highlightColor : Theme.primaryColor
-                height: Theme.itemSizeSmall
-                text: model.name
-                Component.onCompleted: {
-                    if (model.short_code && model.short_code.length > 0) {
-                        nameLabel.textFormat = Text.RichText;
-                        nameLabel.text += " (%1)".arg(model.short_code);
-                    }
-                }
-            }
             Rectangle {
+                id: bar
                 anchors.bottom: nameLabel.bottom
                 anchors.bottomMargin: Theme.paddingMedium
-                anchors.right: nameLabel.left
-                anchors.rightMargin: Theme.paddingLarge
+                anchors.left: parent.left
+                anchors.leftMargin: Theme.horizontalPageMargin
                 anchors.top: nameLabel.top
                 anchors.topMargin: Theme.paddingMedium
                 color: model.color
-                radius: Theme.paddingSmall/3
+                radius: width/3
                 width: Theme.paddingSmall
+            }
+            Label {
+                id: nameLabel
+                anchors.left: bar.right
+                anchors.leftMargin: Theme.paddingLarge
+                anchors.right: parent.right
+                anchors.rightMargin: Theme.horizontalPageMargin
+                color: listItem.highlighted ? Theme.highlightColor : Theme.primaryColor
+                height: Theme.itemSizeSmall
+                horizontalAlignment: Text.AlignLeft
+                text: model.short_code && model.short_code.length > 0 ?
+                    "%1 (%2)".arg(model.name).arg(model.short_code) : model.name
+                truncationMode: TruncationMode.Fade
+                verticalAlignment: Text.AlignVCenter
             }
             ContextMenu {
                 id: contextMenu
@@ -82,15 +84,18 @@ Dialog {
             TextField {
                 id: nameField
                 anchors.left: parent.left
-                anchors.leftMargin: Theme.paddingLarge
+                anchors.leftMargin: Theme.horizontalPageMargin
                 anchors.right: parent.right
-                anchors.rightMargin: Theme.paddingLarge
+                anchors.rightMargin: Theme.horizontalPageMargin
                 label: qsTranslate("", "Name")
                 text: page.name
                 EnterKey.enabled: text.length > 0
                 EnterKey.onClicked: nameField.focus = false;
             }
-            SectionHeader { text: qsTranslate("", "Stops") }
+            SectionHeader {
+                id: titleLabel
+                text: qsTranslate("", "Stops")
+            }
             Component.onCompleted: page.nameField = nameField;
         }
         model: ListModel {}

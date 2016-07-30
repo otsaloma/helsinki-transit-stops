@@ -27,10 +27,22 @@ Page {
     property string populatedQuery: ""
     property var results: {}
     property string title: ""
-    SilicaListView {
+    SilicaGridView {
         id: view
         anchors.fill: parent
+        cellHeight: Theme.itemSizeMedium
+        cellWidth: {
+            // Use a dynamic column count based on available screen width.
+            var width = page.isPortrait ? Screen.width : Screen.height;
+            return width / Math.floor(width / (Theme.pixelRatio*400));
+        }
         delegate: StopListItem {
+            id: listItem
+            width: view.cellWidth
+            Component.onCompleted: {
+                view.cellHeight = Math.max(view.cellHeight, listItem.contentHeight);
+                listItem.contentHeight = view.cellHeight;
+            }
             onClicked: app.pageStack.push("StopPage.qml", {"props": model});
         }
         header: PageHeader { title: page.title }

@@ -29,7 +29,15 @@ Dialog {
     SilicaGridView {
         id: view
         anchors.fill: parent
-        cellWidth: (page.width - Theme.paddingLarge) / 3
+        anchors.leftMargin: Theme.horizontalPageMargin
+        cellWidth: {
+            // Use a dynamic column count based on available screen width.
+            var width = page.isPortrait ? Screen.width : Screen.height;
+            width = width - 2*Theme.horizontalPageMargin;
+            return width / Math.floor(width / (Theme.pixelRatio*160));
+        }
+        // Prevent list items from stealing focus.
+        currentIndex: -1
         delegate: ListItem {
             id: listItem
             clip: true
@@ -47,7 +55,7 @@ Dialog {
                     model.index, "checked", lineSwitch.checked);
             }
             OpacityRampEffect {
-                // Try to match Label with TruncationMode.Fade.
+                // Try to match appearance of Label with TruncationMode.Fade.
                 direction: OpacityRamp.LeftToRight
                 offset: (view.cellWidth - Theme.paddingLarge) / lineSwitch.width
                 slope: lineSwitch.width / Theme.paddingLarge

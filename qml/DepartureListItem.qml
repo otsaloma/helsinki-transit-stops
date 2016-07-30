@@ -21,40 +21,38 @@ import Sailfish.Silica 1.0
 
 ListItem {
     id: listItem
-    contentHeight: visible ? Theme.itemSizeExtraSmall : 0
+    contentHeight: visible ? Theme.itemSizeSmall : 0
+    enabled: false
     visible: model.visible
     property var result: page.results[index]
+    Rectangle {
+        id: bar
+        anchors.bottom: lineLabel.bottom
+        anchors.bottomMargin: Theme.paddingMedium
+        anchors.left: parent.left
+        anchors.leftMargin: Theme.horizontalPageMargin
+        anchors.top: lineLabel.top
+        anchors.topMargin: Theme.paddingMedium
+        color: model.color
+        radius: width/3
+        width: Theme.paddingSmall
+    }
     Label {
         id: lineLabel
-        anchors.left: parent.left
-        anchors.leftMargin: 2*Theme.paddingLarge + Theme.paddingSmall
+        anchors.left: bar.right
+        anchors.leftMargin: Theme.paddingLarge
         font.pixelSize: Theme.fontSizeLarge
-        height: Theme.itemSizeExtraSmall
+        height: Theme.itemSizeSmall
         horizontalAlignment: Text.AlignRight
         text: model.line
         verticalAlignment: Text.AlignVCenter
         width: page.lineWidth
         Component.onCompleted: lineLabel.updateWidth();
+        onTextChanged: lineLabel.updateWidth();
         function updateWidth() {
             var width = lineLabel.implicitWidth;
             view.model.setProperty(model.index, "lineWidth", width);
             page.lineWidth = Math.max(page.lineWidth, model.visible * width);
-        }
-    }
-    Label {
-        id: timeLabel
-        anchors.baseline: lineLabel.baseline
-        anchors.right: parent.right
-        anchors.rightMargin: Theme.paddingLarge
-        horizontalAlignment: Text.AlignRight
-        text: model.time
-        width: page.timeWidth
-        Component.onCompleted: timeLabel.updateWidth();
-        onTextChanged: timeLabel.updateWidth();
-        function updateWidth() {
-            var width = timeLabel.implicitWidth;
-            view.model.setProperty(model.index, "timeWidth", width);
-            page.timeWidth = Math.max(page.timeWidth, model.visible * width);
         }
     }
     Label {
@@ -78,16 +76,21 @@ ListItem {
             }
         }
     }
-    Rectangle {
-        anchors.bottom: lineLabel.bottom
-        anchors.bottomMargin: Theme.paddingMedium
-        anchors.right: lineLabel.left
-        anchors.rightMargin: Theme.paddingLarge
-        anchors.top: lineLabel.top
-        anchors.topMargin: Theme.paddingMedium
-        color: model.color
-        radius: Theme.paddingSmall/3
-        width: Theme.paddingSmall
+    Label {
+        id: timeLabel
+        anchors.baseline: lineLabel.baseline
+        anchors.right: parent.right
+        anchors.rightMargin: Theme.horizontalPageMargin
+        horizontalAlignment: Text.AlignRight
+        text: model.time
+        width: page.timeWidth
+        Component.onCompleted: timeLabel.updateWidth();
+        onTextChanged: timeLabel.updateWidth();
+        function updateWidth() {
+            var width = timeLabel.implicitWidth;
+            view.model.setProperty(model.index, "timeWidth", width);
+            page.timeWidth = Math.max(page.timeWidth, model.visible * width);
+        }
     }
     ListView.onRemove: animateRemoval(listItem);
 }

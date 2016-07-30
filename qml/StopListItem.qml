@@ -26,48 +26,63 @@ ListItem {
     property var result: page.results[index]
     // Column width to be set based on data.
     property int lineWidth: 0
-    ListItemLabel {
-        id: nameLabel
-        anchors.leftMargin: 2*Theme.paddingLarge + Theme.paddingSmall
-        color: listItem.highlighted ? Theme.highlightColor : Theme.primaryColor;
-        height: implicitHeight + Theme.paddingMedium
-        text: model.name
-        verticalAlignment: Text.AlignBottom
-        Component.onCompleted: {
-            if (model.short_code && model.short_code.length > 0) {
-                nameLabel.textFormat = Text.RichText;
-                nameLabel.text += " (%1)".arg(model.short_code);
-            }
-        }
+    Rectangle {
+        id: bar
+        anchors.bottom: repeater.bottom
+        anchors.bottomMargin: 1.5*Theme.paddingMedium
+        anchors.left: parent.left
+        anchors.leftMargin: Theme.horizontalPageMargin
+        anchors.top: nameLabel.top
+        anchors.topMargin: 1.5*Theme.paddingMedium
+        color: model.color;
+        radius: width/3
+        width: Theme.paddingSmall
     }
-    ListItemLabel {
+    Label {
+        id: nameLabel
+        anchors.left: bar.right
+        anchors.leftMargin: Theme.paddingLarge
+        anchors.right: parent.right
+        anchors.rightMargin: Theme.horizontalPageMargin
+        color: listItem.highlighted ? Theme.highlightColor : Theme.primaryColor;
+        height: implicitHeight + Theme.paddingLarge
+        text: model.short_code && model.short_code.length > 0 ?
+            "%1 (%2)".arg(model.name).arg(model.short_code) : model.name
+        truncationMode: TruncationMode.Fade
+        verticalAlignment: Text.AlignBottom
+    }
+    Label {
         id: addressLabel
-        anchors.leftMargin: 2*Theme.paddingLarge + Theme.paddingSmall
+        anchors.left: bar.right
+        anchors.leftMargin: Theme.paddingLarge
+        anchors.right: parent.right
+        anchors.rightMargin: Theme.horizontalPageMargin
         anchors.top: nameLabel.bottom
         color: Theme.secondaryColor
         font.pixelSize: Theme.fontSizeSmall
         height: implicitHeight + Theme.paddingSmall
         text: "%1 · %2".arg(model.address).arg(model.dist)
+        truncationMode: TruncationMode.Fade
         verticalAlignment: Text.AlignVCenter
     }
     Repeater {
-        // List at most three lines using the stop along with their
-        // destinations to understand which stop and on which side
-        // of the street it is located on.
+        // List at most three lines using the stop along with their destinations
+        // to clarify which stop and on which side of the street it is located on.
         id: repeater
+        anchors.left: addressLabel.left
         anchors.top: addressLabel.bottom
-        height: Theme.paddingMedium
+        height: Theme.paddingLarge
         model: listItem.result ? Math.min(3, listItem.result.lines.length) : 0
         width: parent.width
         Item {
             id: row
+            anchors.left: repeater.left
             height: lineLabel.height
             width: listItem.width
             property var line: listItem.result.lines[index]
             Label {
                 id: lineLabel
-                anchors.left: parent.left
-                anchors.leftMargin: 2*Theme.paddingLarge + Theme.paddingSmall
+                anchors.left: row.left
                 color: Theme.secondaryColor
                 font.pixelSize: Theme.fontSizeSmall
                 height: implicitHeight + Theme.paddingSmall
@@ -82,8 +97,8 @@ ListItem {
             Label {
                 id: destinationLabel
                 anchors.left: lineLabel.right
-                anchors.right: parent.right
-                anchors.rightMargin: Theme.paddingLarge
+                anchors.right: row.right
+                anchors.rightMargin: Theme.horizontalPageMargin
                 anchors.top: lineLabel.top
                 color: Theme.secondaryColor
                 font.pixelSize: Theme.fontSizeSmall
@@ -96,16 +111,5 @@ ListItem {
             }
             Component.onCompleted: repeater.height += row.height;
         }
-    }
-    Rectangle {
-        anchors.bottom: repeater.bottom
-        anchors.bottomMargin: 1.5*Theme.paddingMedium
-        anchors.right: nameLabel.left
-        anchors.rightMargin: Theme.paddingLarge
-        anchors.top: nameLabel.top
-        anchors.topMargin: 1.5*Theme.paddingMedium
-        color: model.color;
-        radius: Theme.paddingSmall/3
-        width: Theme.paddingSmall
     }
 }

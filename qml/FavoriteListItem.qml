@@ -21,16 +21,29 @@ import Sailfish.Silica 1.0
 
 ListItem {
     id: listItem
-    contentHeight: nameLabel.height + linesLabel.height
+    Rectangle {
+        id: bar
+        anchors.bottom: linesLabel.bottom
+        anchors.bottomMargin: Theme.paddingMedium
+        anchors.left: parent.left
+        anchors.leftMargin: Theme.horizontalPageMargin
+        anchors.top: nameLabel.top
+        anchors.topMargin: Theme.paddingMedium
+        color: model.color
+        opacity: model.near ? 1 : 0
+        radius: width/3
+        width: Theme.paddingSmall
+    }
     Label {
         id: nameLabel
-        anchors.left: parent.left
-        anchors.leftMargin: 2*Theme.paddingLarge + Theme.paddingSmall
+        anchors.bottom: parent.verticalCenter
+        anchors.left: bar.right
+        anchors.leftMargin: Theme.paddingLarge
         anchors.right: parent.right
-        anchors.rightMargin: Theme.paddingLarge
+        anchors.rightMargin: Theme.horizontalPageMargin
+        anchors.top: parent.top
         color: listItem.highlighted ? Theme.highlightColor : (
             model.near ? Theme.primaryColor : Theme.secondaryColor)
-        height: implicitHeight + Theme.paddingMedium
         horizontalAlignment: Text.AlignLeft
         text: model.name
         truncationMode: TruncationMode.Fade
@@ -38,30 +51,18 @@ ListItem {
     }
     Label {
         id: linesLabel
-        anchors.left: parent.left
-        anchors.leftMargin: 2*Theme.paddingLarge + Theme.paddingSmall
+        anchors.bottom: parent.bottom
+        anchors.left: bar.right
+        anchors.leftMargin: Theme.paddingLarge
         anchors.right: parent.right
-        anchors.rightMargin: Theme.paddingLarge
-        anchors.top: nameLabel.bottom
+        anchors.rightMargin: Theme.horizontalPageMargin
+        anchors.top: parent.verticalCenter
         color: listItem.highlighted ? Theme.highlightColor : (
             model.near ? Theme.primaryColor : Theme.secondaryColor)
         font.pixelSize: Theme.fontSizeSmall
-        height: implicitHeight + Theme.paddingMedium
         horizontalAlignment: Text.AlignLeft
         text: model.lines_label || "—"
         truncationMode: TruncationMode.Fade
         verticalAlignment: Text.AlignTop
-    }
-    Rectangle {
-        anchors.bottom: linesLabel.bottom
-        anchors.bottomMargin: Theme.paddingMedium
-        anchors.right: nameLabel.left
-        anchors.rightMargin: Theme.paddingLarge
-        anchors.top: nameLabel.top
-        anchors.topMargin: Theme.paddingMedium
-        color: model.color
-        opacity: model.near ? 1 : 0
-        radius: Theme.paddingSmall/3
-        width: Theme.paddingSmall
     }
 }
