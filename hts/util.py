@@ -18,6 +18,7 @@
 """Miscellaneous helper functions."""
 
 import contextlib
+import copy
 import functools
 import hts
 import json
@@ -25,11 +26,34 @@ import math
 import os
 import random
 import shutil
+import socket
 import stat
 import sys
 import time
 import traceback
 
+from hts.i18n import _
+
+
+def api_query(fallback):
+    """Decorator for API requests with graceful error handling."""
+    def outer_wrapper(function):
+        @functools.wraps(function)
+        def inner_wrapper(*args, **kwargs):
+            try:
+                # function can fail due to connection errors or errors
+                # in parsing the received data. Notify the user of some
+                # common errors by returning a dictionary with the error
+                # message to be displayed. With unexpected errors, print
+                # a traceback and return blank of correct type.
+                return function(*args, **kwargs)
+            except socket.timeout:
+                return dict(error=True, message=_("Connection timed out"))
+            except Exception:
+                traceback.print_exc()
+                return copy.deepcopy(fallback)
+        return inner_wrapper
+    return outer_wrapper
 
 @contextlib.contextmanager
 def atomic_open(path, mode="w", *args, **kwargs):

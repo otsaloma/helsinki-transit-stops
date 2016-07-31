@@ -21,18 +21,12 @@ Query stops and departures from the HSL Journey Planner API.
 http://developer.reittiopas.fi/pages/en/http-get-interface-version-2.php
 """
 
-import copy
 import datetime
-import functools
 import hts
 import locale
 import math
 import re
-import socket
-import traceback
 import urllib.parse
-
-from hts.i18n import _
 
 
 def get_default_language():
@@ -53,27 +47,7 @@ URL_PREFIX = ("http://api.reittiopas.fi/hsl/prod/"
               "&epsg_out=4326"
               "&lang={LANG}").format(LANG=get_default_language())
 
-def api_query(fallback):
-    """Decorator for API requests with graceful error handling."""
-    def outer_wrapper(function):
-        @functools.wraps(function)
-        def inner_wrapper(*args, **kwargs):
-            try:
-                # function can fail due to connection errors or errors
-                # in parsing the received data. Notify the user of some
-                # common errors by returning a dictionary with the error
-                # message to be displayed. With unexpected errors, print
-                # a traceback and return blank of correct type.
-                return function(*args, **kwargs)
-            except socket.timeout:
-                return dict(error=True, message=_("Connection timed out"))
-            except Exception:
-                traceback.print_exc()
-                return copy.deepcopy(fallback)
-        return inner_wrapper
-    return outer_wrapper
-
-@api_query(fallback=[])
+@hts.util.api_query(fallback=[])
 def _find_departures(code):
     """Return a list of departures from stop matching `code`."""
     url = URL_PREFIX + ("&request=stop"
@@ -125,7 +99,7 @@ def find_lines(codes):
     lines.sort(key=lambda x: line_to_sort_key(x["line"]))
     return lines
 
-@api_query(fallback=[])
+@hts.util.api_query(fallback=[])
 def find_nearby_stops(x, y):
     """Return a list of stops near given coordinates."""
     url = URL_PREFIX + ("&request=reverse_geocode"
@@ -160,7 +134,7 @@ def find_nearby_stops(x, y):
             hts.util.calculate_distance(x, y, result["x"], result["y"]))
     return results
 
-@api_query(fallback=[])
+@hts.util.api_query(fallback=[])
 def find_stops(name, x, y):
     """Return a list of stops matching `name`."""
     url = URL_PREFIX + ("&request=geocode"
