@@ -262,4 +262,5 @@ def unique_lines(lines):
     for i in range(len(lines)):
         if not lines[i]["line"] in ll[:i]:
             ulines.append(lines[i])
+    ulines = [x for x in ulines if x["line"] != "?"]
     return ulines
