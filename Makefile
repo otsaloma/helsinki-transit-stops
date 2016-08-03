@@ -11,7 +11,8 @@ DATADIR    = $(DESTDIR)$(PREFIX)/share/$(NAME)
 DESKTOPDIR = $(DESTDIR)$(PREFIX)/share/applications
 ICONDIR    = $(DESTDIR)$(PREFIX)/share/icons/hicolor
 
-export PATH := $(PATH):/usr/lib/qt5/bin
+# XXX: lconvert on a Debian Desktop system.
+LCONVERT = /usr/lib/x86_64-linux-gnu/qt5/bin/lconvert
 
 check:
 	pyflakes hts
@@ -35,7 +36,7 @@ mkdir -p $(DATADIR)/locale/$(1)/LC_MESSAGES
 msgfmt po/$(1).po -o $(DATADIR)/locale/$(1)/LC_MESSAGES/hts.mo
 # Qt linguist translations for QML use.
 mkdir -p $(DATADIR)/translations
-lconvert -o $(DATADIR)/translations/$(NAME)-$(1).qm po/$(1).po
+$(LCONVERT) -o $(DATADIR)/translations/$(NAME)-$(1).qm po/$(1).po
 endef
 
 install:
