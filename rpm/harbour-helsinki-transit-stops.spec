@@ -5,7 +5,7 @@
 %define __provides_exclude_from ^%{_datadir}/.*$
 
 Name: harbour-helsinki-transit-stops
-Version: 1.4.1
+Version: 1.5
 Release: 1
 Summary: Departures from HSL public transportation stops
 License: GPLv3+

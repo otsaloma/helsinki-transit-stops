@@ -1,3 +1,13 @@
+2016-08-04: Helsinki Transit Stops 1.5
+======================================
+
+* Fix layouts, padding and spacing to work better across different
+  size and different pixel density screens
+* Redraw tram shape in icon
+* Raise API connection timeout to 15 seconds
+* Consistently use short names for stops
+* Handle stops with no address
+
 Helsinki Transit Stops 1.4.1
 ============================
 
