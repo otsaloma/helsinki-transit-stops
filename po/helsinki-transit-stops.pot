@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-01-17 17:54+0200\n"
+"POT-Creation-Date: 2016-08-04 21:55+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: hts/query.py:69
+#: hts/util.py:51
 msgid "Connection timed out"
 msgstr ""
 
@@ -29,33 +29,33 @@ msgstr ""
 msgid "version %1"
 msgstr ""
 
-#: qml/AboutPage.qml:57
+#: qml/AboutPage.qml:60
 msgid ""
 "Helsinki Transit Stops is free software released under the GNU General "
 "Public License (GPL), version 3 or later."
 msgstr ""
 
-#: qml/AddFavoritePage.qml:55
+#: qml/AddFavoritePage.qml:56
 msgid "Favorite"
 msgstr ""
 
-#: qml/AddFavoritePage.qml:57
+#: qml/AddFavoritePage.qml:58
 msgid "Create new"
 msgstr ""
 
-#: qml/AddFavoritePage.qml:58
+#: qml/AddFavoritePage.qml:59
 msgid "Add to existing"
 msgstr ""
 
-#: qml/AddFavoritePage.qml:74 qml/EditFavoritePage.qml:88
+#: qml/AddFavoritePage.qml:75 qml/EditFavoritePage.qml:90
 msgid "Name"
 msgstr ""
 
-#: qml/EditFavoritePage.qml:67 qml/MenuPage.qml:55 qml/SearchPage.qml:47
+#: qml/EditFavoritePage.qml:69 qml/MenuPage.qml:64 qml/SearchPage.qml:47
 msgid "Remove"
 msgstr ""
 
-#: qml/EditFavoritePage.qml:93
+#: qml/EditFavoritePage.qml:97
 msgid "Stops"
 msgstr ""
 
@@ -63,7 +63,7 @@ msgstr ""
 msgid "Filter lines"
 msgstr ""
 
-#: qml/FavoritePage.qml:87 qml/LineFilterPage.qml:84 qml/StopPage.qml:105
+#: qml/FavoritePage.qml:87 qml/LineFilterPage.qml:91 qml/StopPage.qml:105
 msgid "Loading"
 msgstr ""
 
@@ -71,57 +71,57 @@ msgstr ""
 msgid "No departures found"
 msgstr ""
 
-#: qml/LineFilterPage.qml:62
+#: qml/LineFilterPage.qml:69
 msgid "Mark all"
 msgstr ""
 
-#: qml/LineFilterPage.qml:69
+#: qml/LineFilterPage.qml:76
 msgid "Unmark all"
 msgstr ""
 
-#: qml/LineFilterPage.qml:107
+#: qml/LineFilterPage.qml:114
 msgid "No lines found"
 msgstr ""
 
-#: qml/MenuPage.qml:35
+#: qml/MenuPage.qml:44
 msgid "Edit"
 msgstr ""
 
-#: qml/MenuPage.qml:57
+#: qml/MenuPage.qml:66
 msgid "Removing"
 msgstr ""
 
-#: qml/MenuPage.qml:78
+#: qml/MenuPage.qml:89
 msgid "About"
 msgstr ""
 
-#: qml/MenuPage.qml:82 qml/PreferencesPage.qml:32
+#: qml/MenuPage.qml:93 qml/PreferencesPage.qml:32
 msgid "Preferences"
 msgstr ""
 
-#: qml/MenuPage.qml:86 qml/SearchPage.qml:65
+#: qml/MenuPage.qml:97 qml/SearchPage.qml:67
 msgid "Search"
 msgstr ""
 
-#: qml/MenuPage.qml:94
+#: qml/MenuPage.qml:105
 msgid "Nearby"
 msgstr ""
 
-#: qml/MenuPage.qml:101
+#: qml/MenuPage.qml:112
 msgid ""
 "Once added, favorites appear here. Pull down to search for nearby stops or "
 "stops by name or number."
 msgstr ""
 
-#: qml/NearbyPage.qml:51 qml/SearchResultsPage.qml:51
+#: qml/NearbyPage.qml:63 qml/SearchResultsPage.qml:63
 msgid "Searching"
 msgstr ""
 
-#: qml/NearbyPage.qml:67 qml/SearchResultsPage.qml:68
+#: qml/NearbyPage.qml:79 qml/SearchResultsPage.qml:80
 msgid "%1 Stops"
 msgstr ""
 
-#: qml/NearbyPage.qml:72 qml/SearchResultsPage.qml:73
+#: qml/NearbyPage.qml:84 qml/SearchResultsPage.qml:85
 msgid "No stops found"
 msgstr ""
 
@@ -151,7 +151,7 @@ msgstr ""
 msgid "Departure time cutoff"
 msgstr ""
 
-#: qml/SearchPage.qml:69
+#: qml/SearchPage.qml:71
 msgid "Stop name or number"
 msgstr ""
 
