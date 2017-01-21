@@ -2,9 +2,9 @@ Releasing a New Version
 =======================
 
 * Update translations
-    - `tx pull`
+    - `tx pull -a [--minimum-perc=95]`
     - `make translate`
-    - `virtaal po/fi.po`
+    - `emacs po/fi.po`
     - `tx push -s`
     - `tx push -tf -l fi`
     - `git commit -a -m "Update translations for X.Y.Z"`
