@@ -53,7 +53,7 @@ Page {
                     });
                     dialog.accepted.connect(function() {
                         var setSkip = "hts.app.favorites.set_skip_lines";
-                        py.call(setSkip, [page.props.key, dialog.skip], null);
+                        py.call_sync(setSkip, [page.props.key, dialog.skip]);
                         for (var i = 0; i < view.model.count; i++) {
                             var item = view.model.get(i);
                             item.visible = dialog.skip.indexOf(item.line) < 0;
