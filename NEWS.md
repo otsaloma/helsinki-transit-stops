@@ -1,3 +1,9 @@
+2017-02-15: Helsinki Transit Stops 1.5.1
+========================================
+
+* Work around PyOtherSide's call_sync being broken in Sailfish OS
+  2.1.0.9 "Iijoki"
+
 2016-08-04: Helsinki Transit Stops 1.5
 ======================================
 

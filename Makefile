@@ -1,7 +1,7 @@
 # -*- coding: us-ascii-unix -*-
 
 NAME       = harbour-helsinki-transit-stops
-VERSION    = 1.5
+VERSION    = 1.5.1
 LANGS      = $(basename $(notdir $(wildcard po/*.po)))
 POT_FILE   = po/helsinki-transit-stops.pot
 
