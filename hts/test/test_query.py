@@ -34,7 +34,7 @@ class TestModule(hts.test.TestCase):
             assert departure["y"]
 
     def test_find_lines(self):
-        lines = hts.query.find_lines(["1020601"])
+        lines = hts.query.find_lines(["1121132"])
         assert isinstance(lines, list)
         assert len(lines) > 0
         for line in lines:
