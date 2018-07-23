@@ -1,8 +1,7 @@
 Helsinki Transit Stops
 ======================
 
-[![Build Status](https://travis-ci.org/otsaloma/helsinki-transit-stops.svg)](
-https://travis-ci.org/otsaloma/helsinki-transit-stops)
+![Not Maintained](https://img.shields.io/maintenance/no/2017.svg)
 
 Helsinki Transit Stops is an application for Sailfish OS to view
 departures from Helsinki Region Transport (HSL) public transportation
